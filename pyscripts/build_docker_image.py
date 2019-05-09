@@ -134,7 +134,7 @@ def tag_images(tags):
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     print("Adding tags")
     for image_tag in tags.image_tags:
-        print("Adding " + image_tag)
+        print("Adding " + tags.docker_image_name + " : " + image_tag)
         api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag)
 
 
