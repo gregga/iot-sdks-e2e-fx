@@ -123,8 +123,8 @@ def build_image(tags):
     ):
         try:
             sys.stdout.write(json.loads(line.decode("utf-8"))["stream"])
-        except KeyError:
-            print_filtered_docker_line(line)
+        except:
+            print(line)
 
 
 def tag_images(tags):
