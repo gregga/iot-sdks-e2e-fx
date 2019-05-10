@@ -124,7 +124,7 @@ def build_image(tags):
         try:
             sys.stdout.write(json.loads(line.decode("utf-8"))["stream"])
         except:
-            print('.')
+            print_filtered_docker_line(line)
 
     print(get_dockerfile_directory(tags))
     print(tags.docker_image_name)
