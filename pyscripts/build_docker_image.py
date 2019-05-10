@@ -127,7 +127,7 @@ def build_image(tags):
             try:
                 print_filtered_docker_line(line)
             except:
-                print(''.join([i if ord(i) < 128 else '#' for i in out_line]))
+                print(''.join([i if ord(i) < 128 else '#' for i in line]))
 
     print(get_dockerfile_directory(tags))
     print(tags.docker_image_name)
