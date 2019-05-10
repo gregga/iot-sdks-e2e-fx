@@ -139,6 +139,7 @@ def tag_images(tags):
     print("Adding tags")
     for image_tag in tags.image_tags:
         print("Adding " + tags.docker_image_name + " : " + image_tag)
+        print("Full Image " + tags.docker_full_image_name)
         api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
 
 
