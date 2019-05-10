@@ -140,7 +140,7 @@ def tag_images(tags):
     for image_tag in tags.image_tags:
         print("Adding " + tags.docker_image_name + " : " + image_tag)
         print("Full Image " + tags.docker_full_image_name)
-        api_client.tag(tags.docker_image_name, "" , image_tag.lower())
+        api_client.tag(tags.docker_image_name, "node-e2e-v3" , image_tag.lower())
         #api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
 
 
