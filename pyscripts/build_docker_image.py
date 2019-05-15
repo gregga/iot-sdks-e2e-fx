@@ -154,7 +154,7 @@ def tag_images(tags):
 
 def get_var(varname):
     ret = None
-    import subprocess, PIPE
+    import subprocess
     CMD = 'echo $(source myscript.sh; echo $%s)' % varname
     print("CMD: " + CMD)
     try:

@@ -6,6 +6,9 @@ parameters:
   job_tag: 'linux'
   variant: ''
 
+variables:
+- group: edge-e2e-node
+
 jobs:
 - job: 'build_${{ parameters.job_tag }}_container'
   steps:
