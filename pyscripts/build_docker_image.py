@@ -167,7 +167,7 @@ def push_images(tags):
     print("IOTHUB_E2E_REPO_USER: ", os.environ["IOTHUB_E2E_REPO_USER"])
     print("IOTHUB_E2E_REPO_PASSWORD: ", os.environ["IOTHUB_E2E_REPO_PASSWORD"])
 
-    ieru = os.environ["IOTHUB_E2E_REPO_USER"])
+    ieru = os.environ["IOTHUB_E2E_REPO_USER"]
     repo_user = get_var(ieru)
     print("repo_user: " + repo_user)
     
