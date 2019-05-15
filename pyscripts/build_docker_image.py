@@ -161,7 +161,7 @@ def get_var(varname):
         p = subprocess.Popen(CMD, stdout=subprocess.PIPE, shell=True, executable='/bin/bash')
         ret = p.stdout.readlines()[0].strip()
     except:
-	print("Nope")
+        print("Nope")
     return ret
 
 def push_images(tags):
