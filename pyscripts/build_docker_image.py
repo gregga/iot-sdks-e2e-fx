@@ -152,6 +152,12 @@ def tag_images(tags):
         print("OUT:image_tag", image_tag)
         api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
 
+def get_var(varname):
+    import subprocess
+    CMD = 'echo $(source myscript.sh; echo $%s)' % varname
+    p = subprocess.Popen(CMD, stdout=subprocess.PIPE, shell=True, executable='/bin/bash')
+    return p.stdout.readlines()[0].strip()
+
 def push_images(tags):
     print(print_separator)
     print("PUSHING IMAGE")
@@ -161,6 +167,10 @@ def push_images(tags):
     print("IOTHUB_E2E_REPO_USER: ", os.environ["IOTHUB_E2E_REPO_USER"])
     print("IOTHUB_E2E_REPO_PASSWORD: ", os.environ["IOTHUB_E2E_REPO_PASSWORD"])
 
+    ieru = os.environ["IOTHUB_E2E_REPO_USER"])
+    repo_user = get_var(ieru)
+    print("repo_user: " + repo_user)
+    
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image_tag in tags.image_tags:
         print("Pushing {}:{}".format(tags.docker_full_image_name, image_tag))
