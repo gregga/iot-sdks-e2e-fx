@@ -154,7 +154,8 @@ def tag_images(tags):
 
 def get_var(varname):
     import subprocess
-    CMD = "echo $(source myscript.sh; echo $%s)" % varname
+    CMD = 'echo $(source myscript.sh; echo $%s)' % varname
+    print("CMD: " + CMD)
     p = subprocess.Popen(CMD, stdout=subprocess.PIPE, shell=True, executable='/bin/bash')
     return p.stdout.readlines()[0].strip()
 
