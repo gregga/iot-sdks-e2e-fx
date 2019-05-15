@@ -174,12 +174,6 @@ def push_images(tags):
     #print("IOTHUB-E2E-REPO-USER: ", os.environ["IOTHUB-E2E-REPO-USER"])
     print("IOTHUB_E2E_REPO_PASSWORD: ", os.environ["IOTHUB_E2E_REPO_PASSWORD"])
 
-    ieru = os.environ["IOTHUB_E2E_REPO_USER"]
-    #repo_user = get_var(ieru)
-    repo_user = get_var('IOTHUB_E2E_REPO_USER')
-    repo_user2 = repo_user.decode() 
-    print("repo_user: " + repo_user2)
-    
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image_tag in tags.image_tags:
         print("Pushing {}:{}".format(tags.docker_full_image_name, image_tag))
