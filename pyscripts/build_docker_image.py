@@ -146,7 +146,7 @@ def tag_images(tags):
         print("IN:tags.docker_full_image_name", tags.docker_full_image_name)
         print("IN:image_tag", image_tag)
         tags.docker_full_image_name = "iotsdke2e.azurecr.io/node-e2e-v3"
-        if 'iotsdke2e' in tags.docker_full_image_name
+        if 'iotsdke2e' in tags.docker_full_image_name:
             iotsdke2e in tags.docker_full_image_name.replace('iotsdke2e', 'hortone2eacr')
         image_tag = image_tag.lower()
         print("OUT:tags.docker_image_name=", tags.docker_image_name)
