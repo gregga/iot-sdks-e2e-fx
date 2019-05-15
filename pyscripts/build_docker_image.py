@@ -156,6 +156,7 @@ def push_images(tags):
     print(print_separator)
     print("PUSHING IMAGE")
     print(print_separator)
+    print("U:{}::P:{}".format(auth_config.username,auth_config.password))
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image_tag in tags.image_tags:
         print("Pushing {}:{}".format(tags.docker_full_image_name, image_tag))
