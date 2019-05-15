@@ -153,11 +153,16 @@ def tag_images(tags):
         api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
 
 def get_var(varname):
-    import subprocess
+    ret = None
+    import subprocess, PIPE
     CMD = 'echo $(source myscript.sh; echo $%s)' % varname
     print("CMD: " + CMD)
-    p = subprocess.Popen(CMD, stdout=subprocess.PIPE, shell=True, executable='/bin/bash')
-    return p.stdout.readlines()[0].strip()
+    try:
+        p = subprocess.Popen(CMD, stdout=subprocess.PIPE, shell=True, executable='/bin/bash')
+        ret = p.stdout.readlines()[0].strip()
+    except:
+	print("Nope")
+    return ret
 
 def push_images(tags):
     print(print_separator)
@@ -166,6 +171,7 @@ def push_images(tags):
     print("tags.docker_full_image_name: ",tags.docker_full_image_name)
 
     print("IOTHUB_E2E_REPO_USER: ", os.environ["IOTHUB_E2E_REPO_USER"])
+    print("IOTHUB-E2E-REPO-USER: ", os.environ["IOTHUB-E2E-REPO-USER"])
     print("IOTHUB_E2E_REPO_PASSWORD: ", os.environ["IOTHUB_E2E_REPO_PASSWORD"])
 
     ieru = os.environ["IOTHUB_E2E_REPO_USER"]
