@@ -171,7 +171,7 @@ def push_images(tags):
     print("tags.docker_full_image_name: ",tags.docker_full_image_name)
 
     print("IOTHUB_E2E_REPO_USER: ", os.environ["IOTHUB_E2E_REPO_USER"])
-    print("IOTHUB-E2E-REPO-USER: ", os.environ["IOTHUB-E2E-REPO-USER"])
+    #print("IOTHUB-E2E-REPO-USER: ", os.environ["IOTHUB-E2E-REPO-USER"])
     print("IOTHUB_E2E_REPO_PASSWORD: ", os.environ["IOTHUB_E2E_REPO_PASSWORD"])
 
     ieru = os.environ["IOTHUB_E2E_REPO_USER"]
