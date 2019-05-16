@@ -130,11 +130,6 @@ def build_image(tags):
                 out_line = ''.format("{}",line)
                 print(''.join([i if ord(i) < 128 else '#' for i in out_line]))
 
-    print(get_dockerfile_directory(tags))
-    print(tags.docker_image_name)
-    print(dockerfile)
-
-
 def tag_images(tags):
     print(print_separator)
     print("TAGGING IMAGE")
@@ -142,25 +137,15 @@ def tag_images(tags):
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     print("Adding tags")
     for image_tag in tags.image_tags:
-        #print("IN:tags.docker_image_name=", tags.docker_image_name)
-        #print("IN:tags.docker_full_image_name", tags.docker_full_image_name)
-        #print("IN:image_tag", image_tag)
-
-        #if 'iotsdke2e' in tags.docker_full_image_name:
-        #    tags.docker_full_image_name.replace('iotsdke2e', 'hortone2eacr')
-
-        image_tag = image_tag.lower()
-        #print("OUT:tags.docker_image_name=", tags.docker_image_name)
-        #print("OUT:tags.docker_full_image_name", tags.docker_full_image_name)
-        #print("OUT:image_tag", image_tag)
+        #image_tag = image_tag.lower()
+        print("Adding " + image_tag)
         api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
 
 def push_images(tags):
     print(print_separator)
     print("PUSHING IMAGE")
     print(print_separator)
-    print("tags.docker_full_image_name: ",tags.docker_full_image_name)
-
+    #print("tags.docker_full_image_name: ",tags.docker_full_image_name)
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image_tag in tags.image_tags:
         print("Pushing {}:{}".format(tags.docker_full_image_name, image_tag))
