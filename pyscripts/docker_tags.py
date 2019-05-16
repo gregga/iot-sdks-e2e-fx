@@ -33,8 +33,8 @@ def image_tag_prefix():
         image_tag_prefix.prefix = "{}-{}-dockerV{}".format(
             version["Os"], version["Arch"], version["Version"].split(".")[0]
         )
+    print("###image_tag_prefix.prefix: " + image_tag_prefix.prefix)
     return image_tag_prefix.prefix
-
 
 def shorten_sha(str):
     """
