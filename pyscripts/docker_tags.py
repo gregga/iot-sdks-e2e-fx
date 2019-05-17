@@ -36,7 +36,6 @@ def image_tag_prefix():
     print("###image_tag_prefix.prefix: " + image_tag_prefix.prefix)
     return image_tag_prefix.prefix
 
-
 def shorten_sha(str):
     """
     return the short (7-character) version of a git sha
@@ -80,7 +79,7 @@ def get_docker_tags_from_commit(language, repo, commit, variant):
     )
     tags.language = language
     tags.repo = repo
-    tags.commit_name = get_commit_name(commit).lower()
+    tags.commit_name = get_commit_name(commit)
     tags.commit_sha = github.get_sha_from_commit(repo, commit)
 
     default_variant = get_default_variant(language)

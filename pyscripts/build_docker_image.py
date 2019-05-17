@@ -130,11 +130,6 @@ def build_image(tags):
                 out_line = ''.format("{}",line)
                 print(''.join([i if ord(i) < 128 else '#' for i in out_line]))
 
-    print(get_dockerfile_directory(tags))
-    print(tags.docker_image_name)
-    print(dockerfile)
-
-
 def tag_images(tags):
     print(print_separator)
     print("TAGGING IMAGE")
@@ -142,20 +137,21 @@ def tag_images(tags):
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     print("Adding tags")
     for image_tag in tags.image_tags:
-        print("Adding " + tags.docker_image_name + " : " + image_tag)
-        print("Full Image " + tags.docker_full_image_name)
-        #api_client.tag(tags.docker_image_name, "/node-e2e-v3" , image_tag.lower())
-        api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
-
+        print("Adding " + image_tag)
+        #api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
+        api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag)
 
 def push_images(tags):
     print(print_separator)
     print("PUSHING IMAGE")
     print(print_separator)
+    #print("tags.docker_full_image_name: ",tags.docker_full_image_name)
     api_client = docker.APIClient(base_url="unix://var/run/docker.sock")
     for image_tag in tags.image_tags:
         print("Pushing {}:{}".format(tags.docker_full_image_name, image_tag))
+        print("image_tag: :", image_tag)
         for line in api_client.push(
+            #tags.docker_full_image_name.lower(), image_tag.lower(), stream=True, auth_config=auth_config
             tags.docker_full_image_name, image_tag, stream=True, auth_config=auth_config
         ):
             print_filtered_docker_line(line)
