@@ -14,7 +14,7 @@ import sys
 
 ensure_edge_environment_variables()
 
-print("_-_" + os.environ)
+print(os.environ)
 
 if "IOTHUB-E2E-CONNECTION_STRING" not in os.environ:
     print(
