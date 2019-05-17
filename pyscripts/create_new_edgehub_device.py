@@ -14,13 +14,13 @@ import sys
 
 ensure_edge_environment_variables()
 
-if "IOTHUB-E2E-CONNECTION-STRING" not in os.environ:
+if "IOTHUB_E2E-CONNECTION_STRING" not in os.environ:
     print(
         "ERROR: Iothub connection string not set in IOTHUB_E2E_CONNECTION_STRING environment variable."
     )
     sys.exit(1)
 
-service_connection_string = os.environ["IOTHUB-E2E-CONNECTION-STRING"]
+service_connection_string = os.environ["IOTHUB_E2E_CONNECTION_STRING"]
 print("----scs: " + service_connection_string)
 host = connection_string_to_sas_token(service_connection_string)["host"]
 print("Creating new device on hub {}".format(host))
