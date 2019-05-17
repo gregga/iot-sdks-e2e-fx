@@ -16,6 +16,8 @@ ensure_edge_environment_variables()
 
 for name, value in globals().copy().items():
     print(name, value)
+for name, value in globals().deepcopy().items():
+    print("___", name, value)
 
 if "IOTHUB-E2E-CONNECTION_STRING" not in os.environ:
     print(
