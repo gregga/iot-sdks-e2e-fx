@@ -158,6 +158,7 @@ def push_images(tags):
 
 
 def prefetch_cached_images(tags):
+    print(os.environ)
     if docker_tags.running_on_azure_pipelines():
         print(print_separator)
         print(Fore.YELLOW + "PREFETCHING IMAGE")
