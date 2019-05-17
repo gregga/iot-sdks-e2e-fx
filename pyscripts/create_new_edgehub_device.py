@@ -21,6 +21,7 @@ if "IOTHUB_E2E_CONNECTION_STRING" not in os.environ:
     sys.exit(1)
 
 service_connection_string = os.environ["IOTHUB_E2E_CONNECTION_STRING"]
+print("----scs: " + service_connection_string)
 host = connection_string_to_sas_token(service_connection_string)["host"]
 print("Creating new device on hub {}".format(host))
 
