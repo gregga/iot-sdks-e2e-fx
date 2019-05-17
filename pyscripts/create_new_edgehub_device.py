@@ -17,7 +17,7 @@ ensure_edge_environment_variables()
 print(os.environ)
 print(os.environ["IOTHUB_E2E_CONNECTION_STRING"])
 
-if "IOTHUB-E2E-CONNECTION_STRING" not in os.environ:
+if "IOTHUB_E2E_CONNECTION_STRING" not in os.environ:
     print(
         "ERROR:: Iothub connection string not set in IOTHUB_E2E_CONNECTION_STRING environment variable."
     )
