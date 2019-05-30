@@ -180,6 +180,7 @@ def push_images(tags):
                     out_line = ''.format("{}",line)
                     print(''.join([i if ord(i) < 128 else '#' for i in out_line]))
 
+
 def prefetch_cached_images(tags):
     if docker_tags.running_on_azure_pipelines():
         print(print_separator)
@@ -216,6 +217,7 @@ def prefetch_cached_images(tags):
                 return
             except docker.errors.APIError:
                 print(Fore.YELLOW + "Image not found in repository")
+
 
 tags = docker_tags.get_docker_tags_from_commit(
     args.language, args.repo, args.commit, args.variant
