@@ -35,7 +35,6 @@ def image_tag_prefix():
         )
     return image_tag_prefix.prefix
 
-
 def shorten_sha(str):
     """
     return the short (7-character) version of a git sha
