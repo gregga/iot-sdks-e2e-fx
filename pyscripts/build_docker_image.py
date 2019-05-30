@@ -154,7 +154,6 @@ def tag_images(tags):
         print("Adding " + image_tag)
         api_client.tag(tags.docker_image_name, tags.docker_full_image_name, image_tag.lower())
 
-
 def push_images(tags):
     print(print_separator)
     print("PUSHING IMAGE")
@@ -179,7 +178,6 @@ def push_images(tags):
                 except:
                     out_line = ''.format("{}",line)
                     print(''.join([i if ord(i) < 128 else '#' for i in out_line]))
-
 
 def prefetch_cached_images(tags):
     if docker_tags.running_on_azure_pipelines():

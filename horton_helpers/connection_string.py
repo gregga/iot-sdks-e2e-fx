@@ -30,7 +30,6 @@ def connection_string_to_dictionary(str):
     parse a connection string and return a dictionary of values
     """
     cn = {}
-    print("#### CS: " + str)
     for pair in str.split(";"):
         (key, value) = pair.rstrip("=").split("=")
         cn[key] = value
