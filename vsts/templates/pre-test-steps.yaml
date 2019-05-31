@@ -22,7 +22,7 @@ steps:
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - powershell: $(Horton.FrameworkRoot) 'setup/setup-python36.ps1'
-    displayName: 'POWERSHELL: install python libs'
+  displayName: 'POWERSHELL: install python libs'
 
 - script: |
     $(Horton.FrameworkRoot)/scripts/setup/setup-iotedge.sh
