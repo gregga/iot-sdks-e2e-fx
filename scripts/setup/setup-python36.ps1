@@ -73,8 +73,13 @@ function SearchForPythonVersion()
 }
 
 function Which([string] $cmd) {
-    $path = (($Env:Path).Split(";") | Select -uniq | Where { $_.Length } | Where { Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
-    return $path
+    try {
+        $path = (($Env:Path).Split(";") | Select -uniq | Where { $_.Length } | Where { Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
+        return $path
+    }
+    catch {
+        return $null
+    }
 }
 
 
