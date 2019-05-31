@@ -31,13 +31,13 @@ function SearchForPythonVersion()
     Write-Host "Checking for python version (minimum): $PythonMinVersionMajor.$PythonMinVersionMinor" -ForegroundColor Yellow
 
     try {
-        $PyVerCmd = & python3 -V 2>&1
+        $PyVerCmd = & xpython3 -V 2>&1
         $PyParts = $PyVerCmd.split(' ')
         return CheckVerString($PyParts[1])
     }
     catch {
         try {
-            $PyVerCmd = & python -V 2>&1
+            $PyVerCmd = & xpython -V 2>&1
             $PyParts = $PyVerCmd.split(' ')
             return CheckVerString($PyParts[1])
         }
@@ -83,15 +83,17 @@ function Which([string] $cmd) {
 }
 
 function IsWin32 {
+    $IsW32 = $false
     try {
         if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $IsW32 = $true
         }
     }
     catch {
-        return $false
+        $IsW32 =  $false
     }
+    return $IsW32
 }
 
 
@@ -110,6 +112,16 @@ if(!$foundPy)
     else {
         Write-Host "Installing python 3.6..." -ForegroundColor Green
     }
+}
+
+$Pip3Path = Which("pip3*")
+if($Pip3Path)
+{
+    foreach($pip in $Pip3Path)
+    {
+        Write-Host $pip -ForegroundColor Yellow
+    }
+
 }
 
 Write-Host "setup-python 3.6 SUCCESS" -ForegroundColor Green
