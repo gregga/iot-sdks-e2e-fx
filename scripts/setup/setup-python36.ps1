@@ -46,7 +46,7 @@ function SearchForPythonVersion()
         }
     }
     
-    $PyPath = Which("python*")
+    $PyPath = Which("xpython*")
     $prog = '.'
     if ($PyPath) {
         foreach($PyFile in $PyPath)
@@ -82,6 +82,18 @@ function Which([string] $cmd) {
     }
 }
 
+function IsWin32 {
+    try {
+        if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
+            Write-Host "IsWin32" -ForegroundColor Yellow
+            return $true
+        }
+    }
+    catch {
+        return $false
+    }
+}
+
 
 $PythonMinVersionMajor = 3
 $PythonMinVersionMinor = 5
@@ -91,7 +103,7 @@ $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor
 
 if(!$foundPy)
 {
-    if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
+    if (IsWin32) {
         Write-Host "NEED to install python 3.6 on Windows." -ForegroundColor Red
         exit 1
     }
