@@ -42,7 +42,7 @@ function SearchForPythonVersion()
             return CheckVerString($PyParts[1])
         }
         catch {
-            Write-Host "Searching path for python..." -ForegroundColor Yellow
+            Write-Host "Continuing" -ForegroundColor Yellow
         }
     }
     
@@ -61,7 +61,7 @@ function SearchForPythonVersion()
                 }
             }
             catch {
-                Write-Host $prog -ForegroundColor Yellow
+                Write-Host "Continuing." -ForegroundColor Yellow
             }
         }
     }
@@ -71,12 +71,12 @@ function which([string]$cmd) {
     Write-Host "Looking for $cmd in path..." -ForegroundColor Yellow
     $path = (Get-Command $cmd).Path
     if($path){
-        foreach($p in $path) {
-            Write-Host "Found $cmd in $p" -ForegroundColor Green
-        }
+        #foreach($p in $path) {
+        #    Write-Host "Found $cmd in $p" -ForegroundColor Green
+        #}
     }
     else {
-        Write-Host "Command $cmd NOT FOUND" -ForegroundColor Red
+        Write-Host "Command $cmd NOT FOUND in path" -ForegroundColor Red
     }
     return $path
 }
