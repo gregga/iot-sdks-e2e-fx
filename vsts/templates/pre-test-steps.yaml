@@ -14,6 +14,7 @@ steps:
   inputs:
     versionSpec: '3.x'
     architecture: 'x64'
+    pwsh
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
   
 - script: |
@@ -21,8 +22,8 @@ steps:
   displayName: 'install python libs'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powerhell: |
-    ./setup/setup-python36.ps1
+- powerhell:
+    filepath: $(Horton.FrameworkRoot)/setup/setup-python36.ps1
     workingDirectory: $(Horton.FrameworkRoot)
     displayName: 'POWERSHELL: install python libs'
 
