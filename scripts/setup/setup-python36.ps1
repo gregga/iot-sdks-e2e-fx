@@ -31,13 +31,13 @@ function SearchForPythonVersion()
     Write-Host "Checking for python version (minimum): $PythonMinVersionMajor.$PythonMinVersionMinor" -ForegroundColor Yellow
 
     try {
-        $PyVerCmd = & xpython3 -V 2>&1
+        $PyVerCmd = & python3 -V 2>&1
         $PyParts = $PyVerCmd.split(' ')
         return CheckVerString($PyParts[1])
     }
     catch {
         try {
-            $PyVerCmd = & xpython -V 2>&1
+            $PyVerCmd = & python -V 2>&1
             $PyParts = $PyVerCmd.split(' ')
             return CheckVerString($PyParts[1])
         }
