@@ -42,12 +42,12 @@ function SearchForPythonVersion()
             return CheckVerString($PyParts[1])
         }
         catch {
-            Write-Host "Looking for python in path..." -ForegroundColor Yellow
+            Write-Host "Searching path for python..." -ForegroundColor Yellow
         }
     }
     
     $PyPath = Which("python*")
-    $prog = '.'
+    $pyVerFound = $false
     if ($PyPath) {
         foreach($PyFile in $PyPath)
         {
@@ -57,19 +57,15 @@ function SearchForPythonVersion()
                 if($pyFound)
                 {
                     Write-Host $PyFile -ForegroundColor Green
-                    return $true
+                    $pyVerFound = $true
                 }
             }
             catch {
                 Write-Host $prog -ForegroundColor Yellow
             }
-            $prog += '.'
         }
     }
-    else {
-        Write-Host "python not found" -ForegroundColor Red
-        return $false
-    }    
+    return $pyVerFound
 }
 function which([string]$cmd) {
     Write-Host "Looking for $cmd in path..." -ForegroundColor Yellow
@@ -83,21 +79,6 @@ function which([string]$cmd) {
         Write-Host "Command $cmd NOT FOUND" -ForegroundColor Red
     }
     return $path
-}
-
-function Which2([string] $cmd) {
-    try {
-        $path = (($Env:Path).Split(";") | Select-Object -uniq | Where-Object { $_.Length } | Where-Object { Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
-        #$path = (($Env:Path).Split(";") | Select-Object -uniq | Where-Object {  Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
-        foreach($p in $path)
-        {
-            Write-Host $p
-        }
-        return $path
-    }
-    catch {
-        return $null
-    }
 }
 
 function IsWin32 {
@@ -114,6 +95,7 @@ function IsWin32 {
     return $IsW32
 }
 
+#### Script Starts Here ####
 
 $PythonMinVersionMajor = 3
 $PythonMinVersionMinor = 5
@@ -123,8 +105,9 @@ $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor
 
 if(!$foundPy)
 {
+    Write-Host "Python version not found" -ForegroundColor Red
     if (IsWin32) {
-        Write-Host "NEED to install python 3.6 on Windows." -ForegroundColor Red
+        Write-Host "Please install python 3.6 on Windows." -ForegroundColor Red
         exit 1
     }
     else {
