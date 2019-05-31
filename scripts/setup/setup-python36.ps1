@@ -74,7 +74,12 @@ function SearchForPythonVersion()
 
 function Which([string] $cmd) {
     try {
-        $path = (($Env:Path).Split(";") | Select -uniq | Where { $_.Length } | Where { Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
+        $path = (($Env:Path).Split(";") | Select-Object -uniq | Where-Object { $_.Length } | Where-Object { Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
+        #$path = (($Env:Path).Split(";") | Select-Object -uniq | Where-Object {  Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
+        foreach($p in $path)
+        {
+            Write-Host $p
+        }
         return $path
     }
     catch {
@@ -114,6 +119,7 @@ if(!$foundPy)
     }
 }
 
+Write-Host "Looking for Pip3" -ForegroundColor Yellow
 $Pip3Path = Which("pip3*")
 if($Pip3Path)
 {
