@@ -15,16 +15,16 @@ steps:
     versionSpec: '3.x'
     architecture: 'x64'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
-
-- PowerShell: |
-    ./setup/setup-python36.ps1
-    workingDirectory: $(Horton.FrameworkRoot)
-    displayName: 'POWERSHELL: install python libs'
-
+  
 - script: |
     $(Horton.FrameworkRoot)/scripts/setup/setup-python36.sh
   displayName: 'install python libs'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
+
+- powerhell: |
+    ./setup/setup-python36.ps1
+    workingDirectory: $(Horton.FrameworkRoot)
+    displayName: 'POWERSHELL: install python libs'
 
 - script: |
     $(Horton.FrameworkRoot)/scripts/setup/setup-iotedge.sh
