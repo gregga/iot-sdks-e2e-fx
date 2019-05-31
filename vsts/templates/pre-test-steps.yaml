@@ -16,10 +16,9 @@ steps:
     architecture: 'x64'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
- - task: PowerShell@2
-  inputs:
-    filePath: ../../../scripts/setup/setup-python36.ps1
-    architecture: 'x64'
+- script: |
+    powershell $(Horton.FrameworkRoot)/scripts/setup/setup-python36.ps1
+  displayName: 'POWERSHELL: install python libs'
 
 - script: |
     $(Horton.FrameworkRoot)/scripts/setup/setup-python36.sh
