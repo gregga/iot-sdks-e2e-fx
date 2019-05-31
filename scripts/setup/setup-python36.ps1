@@ -81,12 +81,12 @@ function which([string]$cmd) {
     return $path
 }
 
-function IsWin32 {
+function IsWin32os {
     $IsW32 = $false
     try {
         if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            $IsW32 = $true
+            return $true
         }
     }
     catch {
@@ -115,15 +115,22 @@ if(!$foundPy)
     }
 }
 
-Write-Host "Looking for Pip3" -ForegroundColor Yellow
+# Write-Host "Looking for Pip3" -ForegroundColor Yellow
 $Pip3Path = Which("pip3*")
 if($Pip3Path)
 {
-    foreach($pip in $Pip3Path)
-    {
-        Write-Host $pip -ForegroundColor Yellow
+    Write-Host "Pip3 not found" -ForegroundColor Red
+    $osVerW32 = IsWin32os
+    if($osVerW32) {
+        Write-Host "Please install Pip3 on Windows." -ForegroundColor Red
+        exit 1
     }
+    else {
+        Write-Host "Installing pip3..." -ForegroundColor Green
+        $PyCmd = & apt-get install -y python3-pip 2>&1
+        Write-Host $PyCmd -ForegroundColor Yellow
 
+    }
 }
 
 Write-Host "setup-python 3.6 SUCCESS" -ForegroundColor Green
