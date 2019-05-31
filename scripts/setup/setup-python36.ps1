@@ -31,13 +31,13 @@ function SearchForPythonVersion()
     Write-Host "Checking for python version (minimum): $PythonMinVersionMajor.$PythonMinVersionMinor" -ForegroundColor Yellow
 
     try {
-        $PyVerCmd = & python3x -V 2>&1
+        $PyVerCmd = & python3 -V 2>&1
         $PyParts = $PyVerCmd.split(' ')
         return CheckVerString($PyParts[1])
     }
     catch {
         try {
-            $PyVerCmd = & pythonx -V 2>&1
+            $PyVerCmd = & python -V 2>&1
             $PyParts = $PyVerCmd.split(' ')
             return CheckVerString($PyParts[1])
         }
@@ -46,7 +46,7 @@ function SearchForPythonVersion()
         }
     }
     
-    $PyPath = Which("xpython*")
+    $PyPath = Which("python*")
     $prog = '.'
     if ($PyPath) {
         foreach($PyFile in $PyPath)
