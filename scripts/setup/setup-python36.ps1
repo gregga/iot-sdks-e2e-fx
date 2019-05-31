@@ -71,8 +71,14 @@ function SearchForPythonVersion()
         return $false
     }    
 }
+function which([string]$cmd) {
+    #Get-Content -ErrorAction "SilentlyContinue" $cmd | Format-Table Definition}
+    #$path = Get-Content -ErrorAction "SilentlyContinue" $cmd
+    $path = (Get-Command $cmd).Path
+    return $path
+}
 
-function Which([string] $cmd) {
+function Which2([string] $cmd) {
     try {
         $path = (($Env:Path).Split(";") | Select-Object -uniq | Where-Object { $_.Length } | Where-Object { Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
         #$path = (($Env:Path).Split(";") | Select-Object -uniq | Where-Object {  Test-Path $_ } | Get-ChildItem -filter $cmd).FullName
