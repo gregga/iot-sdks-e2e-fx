@@ -72,9 +72,16 @@ function SearchForPythonVersion()
     }    
 }
 function which([string]$cmd) {
-    #Get-Content -ErrorAction "SilentlyContinue" $cmd | Format-Table Definition}
-    #$path = Get-Content -ErrorAction "SilentlyContinue" $cmd
+    Write-Host "Looking for $cmd in path..." -ForegroundColor Yellow
     $path = (Get-Command $cmd).Path
+    if($path){
+        foreach($p in $path) {
+            Write-Host "Found $cmd in $p" -ForegroundColor Green
+        }
+    }
+    else {
+        Write-Host "Command $cmd NOT FOUND" -ForegroundColor Red
+    }
     return $path
 }
 
