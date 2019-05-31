@@ -21,7 +21,7 @@ steps:
   displayName: 'install python libs'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: './setup/setup-python36.ps1'
+- powershell: $(Horton.FrameworkRoot)/scripts/setup/setup-python36.ps1
   workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'POWERSHELL: install python libs'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))

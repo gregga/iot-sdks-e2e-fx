@@ -11,10 +11,6 @@ function Which([string] $cmd) {
     return $path
   }
 
-  
-
-
-
 Write-Host "checking for python 3.5+" -ForegroundColor Yellow
 
 $PyPath = Which("python*")
@@ -33,9 +29,11 @@ if ($PyPath)
         $PyVer = (Get-Item $PyFile).VersionInfo
         Write-Host $PyFile "::VER::" $PyVer.FileVersion -ForegroundColor Green
     }
+    exit 0
 }
 else {
     Write-Host "python not found" -ForegroundColor Yellow
+    exit 1
 }
 
 
