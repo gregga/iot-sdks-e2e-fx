@@ -283,7 +283,7 @@ else{
     #$out = sudo python3 -m pip uninstall pip
     #$out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
     $out  = sudo -H -E apt install -y python3-pip
-    $out += sudo -H -E python3 -m pip install --user --upgrade pip
+    $out2 = sudo -H -E python3 -m pip install --user --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -324,12 +324,14 @@ else
 if($IsWin32) {
     $out  = python -m pip install --upgrade pip
     $out2 = python -m pip install --user setuptools
-    $out3 = python -m pip install --user -e python_glue
+    $out3 = python -m pip install --user msrestazure
+    $out4 = python -m pip install --user -e python_glue
 }
 else{
     $out  = sudo -H -E python3 -m pip install --upgrade pip
     $out2 = sudo -H -E python3 -m pip install --user setuptools
-    $out3 = sudo -H -E python3 -m pip install --user -e python_glue
+    $out3 = sudo -H -E python3 -m pip install --user msrestazure
+    $out4 = sudo -H -E python3 -m pip install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -343,6 +345,11 @@ if($out2.Length -gt 0){
 }
 if($out3.Length -gt 0){
     foreach($o in $out3){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($out4.Length -gt 0){
+    foreach($o in $out4){
         Write-Host $o -ForegroundColor Blue
     }
 }
