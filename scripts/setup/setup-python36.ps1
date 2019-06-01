@@ -313,7 +313,7 @@ if($IsWin32) {
     $out = python -m $pipcmd install -r requirements.txt
 }
 else{
-    $out = python3 -m $pipcmd iinstall -r requirements.txt
+    $out = python3 -m $pipcmd install -r requirements.txt
 }
 if($out.Length -gt 0){
     foreach($o in $out){
