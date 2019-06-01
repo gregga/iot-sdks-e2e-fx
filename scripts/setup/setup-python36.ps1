@@ -104,7 +104,15 @@ $IsWin32 = IsWindows
 $pipTestOpts = ' --upgrade --no-deps --force-reinstall '
 
 $script_dir = $pwd.Path
-$root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
+$path = $MyInvocation.MyCommand.Path
+if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+if ( $path) {$path = split-path $path -Parent}
+set-location $path
+
+Write-Host "RealPath $path" -ForegroundColor Yellow
+
+#$root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
+$root_dir = Join-Path -Path $path -ChildPath '/../..' -Resolve
 
 Write-Host "POWERSHELL SCRIPT in Setup-Python36" -ForegroundColor Red -BackgroundColor Yellow
 Write-Host "RootDir: $root_dir" -ForegroundColor Magenta
