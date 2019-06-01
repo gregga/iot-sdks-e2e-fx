@@ -321,7 +321,7 @@ if($IsWin32) {
     $out = python -m pip install --user -e python_glue
 }
 else{
-    $out = sudo python3 -m pip install --user -e python_glue
+    $out = sudo -H -E python3 -m pip install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -360,7 +360,7 @@ if($IsWin32) {
     $out = python -m pip install --user -e horton_helpers
 }
 else{
-    $out = sudo python3 -m pip install --user -e horton_helpers
+    $out = sudo -H -E python3 -m pip install --user -e horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -401,7 +401,7 @@ if($IsWin32) {
     $out = python -m pip install --user -r requirements.txt
 }
 else{
-    $out = python3 -m pip install --user -r requirements.txt
+    $out = sudo -H -E python3 -m pip install --user -r requirements.txt
 }
 if($out.Length -gt 0){
     foreach($o in $out){
