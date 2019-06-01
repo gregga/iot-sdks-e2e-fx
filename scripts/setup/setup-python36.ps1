@@ -205,10 +205,10 @@ if($gotPip3) {
     #$out = python.exe -m pip install --upgrade pip
     #python -m pip install flask
     if($IsWin32) {
-        $out = python -m $pipcmd install -y --upgrade flask
+        $out = python -m $pipcmd install -y --upgrade Flask
     }
     else{
-        $out = python3 -m pip install -y --upgrade flask
+        $out = python3 -m pip install -y --upgrade Flask
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -271,15 +271,15 @@ else {
 
 Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
 if($IsWin32) {
-    $out = python -m ensurepip; pip install --upgrade pip 
+    $out = python -m ensurepip; pip3 install --upgrade pip 
     #$out =  python -m pip uninstall -y pip
     #$out += apt install -y python3-pip --reinstall
     #$out += python -m pip install -y python3-pip --reinstall
 }
 else{
     #$out = sudo pip3 install --upgrade pip
-    $out = sudo python3 -m pip uninstall -y pip
-    $out+= sudo apt install -y python3-pip --reinstall; pip install --upgrade pip
+    #$out = sudo python3 -m pip uninstall pip
+    $out = sudo apt install -y python3-pip --reinstall; pip install --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -318,7 +318,7 @@ else
 #write-host "Cmd: $runCmd" -ForegroundColor Yellow
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
-    $out = python -m $pipcmd install python_glue
+    $out = python -m pip install python_glue
 }
 else{
     $out = python3 -m $pipcmd install python_glue
