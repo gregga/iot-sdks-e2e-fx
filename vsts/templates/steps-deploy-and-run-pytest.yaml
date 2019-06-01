@@ -151,7 +151,7 @@ steps:
 
 - template: steps-ensure-e2e-fx-repo.yaml
 
-- template: pre-test-steps.yaml
+- template: pre-test-steps-pwsh.yaml
   parameters:
     language: ${{ parameters.language }}
     test_image: $(testImage)
