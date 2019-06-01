@@ -201,14 +201,14 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
 
 if($gotPip3) {
     Write-Host "Pip3 already installed" -ForegroundColor Green
-    Write-Host "Updating flask" -ForegroundColor Yellow
+    Write-Host "Updating pip" -ForegroundColor Yellow
     #$out = python.exe -m pip install --upgrade pip
     #python -m pip install flask
     if($IsWin32) {
-        $out = python -m $pipcmd install -y --upgrade Flask
+        $out = pip install --upgrade pip
     }
     else{
-        $out = python3 -m pip install -y --upgrade Flask
+        $out = pip install --upgrade pip
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -217,12 +217,12 @@ if($gotPip3) {
     }
     if($LASTEXITCODE -eq 0)
     {
-        Write-Host "flask installed successfully" -ForegroundColor Green
+        Write-Host "pip updated successfully" -ForegroundColor Green
     } 
     else 
     {
-        Write-Host "flask install failed"  -ForegroundColor Red
-        exit 1
+        Write-Host "pip update failed"  -ForegroundColor Red
+        #exit 1
     }
 
     Write-Host "Updating Pip3" -ForegroundColor Yellow 
@@ -245,7 +245,7 @@ if($gotPip3) {
     else 
     {
         Write-Host "pip3 updated failed"  -ForegroundColor Red
-        exit 1
+        #exit 1
     }
 }
 
@@ -293,7 +293,7 @@ if($LASTEXITCODE -eq 0)
 else 
 {
     Write-Host "python3-pip FAIL"  -ForegroundColor Red
-    exit 1
+    #exit 1
 }
 
 Write-Host "Installing python libraries" -ForegroundColor Yellow
@@ -318,10 +318,10 @@ else
 #write-host "Cmd: $runCmd" -ForegroundColor Yellow
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
-    $out = python -m pip install python_glue
+    $out = python -m pip install -e python_glue
 }
 else{
-    $out = sudo python3 -m pip install python_glue
+    $out = sudo python3 -m pip install -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -357,10 +357,10 @@ cd $root_dir
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 #$out = $pycmd -m $pipcmd install horton_helpers
 if($IsWin32) {
-    $out = python -m $pipcmd install horton_helpers
+    $out = python -m pip install -e horton_helpers
 }
 else{
-    $out = sudo python3 -m pip install horton_helpers
+    $out = sudo python3 -m pip install -e horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
