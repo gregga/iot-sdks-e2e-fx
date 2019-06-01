@@ -321,11 +321,13 @@ else
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
     $out  = python -m pip install --upgrade pip
-    $out2 = python -m pip install --user -e python_glue
+    $out2 = python -m pip install --user setuptools
+    $out3 = python -m pip install --user -e python_glue
 }
 else{
     $out  = sudo -H -E python3 -m pip install --upgrade pip
-    $out2 = sudo -H -E python3 -m pip install --user -e python_glue
+    $out2 = sudo -H -E python3 -m pip install --user setuptools
+    $out3 = sudo -H -E python3 -m pip install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -334,6 +336,11 @@ if($out.Length -gt 0){
 }
 if($out2.Length -gt 0){
     foreach($o in $out2){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($out3.Length -gt 0){
+    foreach($o in $out3){
         Write-Host $o -ForegroundColor Blue
     }
 }
