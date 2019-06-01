@@ -107,6 +107,7 @@ $script_dir = $pwd.Path
 $root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
 
 Write-Host "POWERSHELL SCRIPT in Setup-Python36" -ForegroundColor Red -BackgroundColor Yellow
+Write-Host "RootDir: $root_dir" -ForegroundColor Magenta
 $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor)
 
 if(!$foundPy)
@@ -188,24 +189,25 @@ else {
 #fi
 
 Write-Host "Installing python libraries" -ForegroundColor Yellow
-cd $root_dir/ci-wrappers/pythonpreview/wrapper
+#cd $root_dir/ci-wrappers/pythonpreview/wrapper
+$out = cd $root_dir/ci-wrappers/pythonpreview/wrapper
 #$runCmd = "cd $root_dir/ci-wrappers/pythonpreview/wrapper"
 #write-host "Cmd: $runCmd" -ForegroundColor Magenta
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-#if($out.Length -gt 0){
-#    foreach($o in $out){
-#        Write-Host $o -ForegroundColor Blue
-#    }
-#}
-#if($LASTEXITCODE -eq 0)
-#{
-#    Write-Host "$runCmd Success" -ForegroundColor Green
-#} 
-#else 
-#{
-#    Write-Host "$runCmd FAIL"  -ForegroundColor Red
-#    exit 1
-#}
+if($out.Length -gt 0){
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($LASTEXITCODE -eq 0)
+{
+    Write-Host "$runCmd Success" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "$runCmd FAIL"  -ForegroundColor Red
+    exit 1
+}
 
 #$runCmd = "python -m $pipcmd install -e python_glue"
 #$runCmd = "python -m $pipcmd install python_glue"
