@@ -124,16 +124,18 @@ Write-Host "POWERSHELL SCRIPT in Setup-Python36" -ForegroundColor Red -Backgroun
 Write-Host "RootDir: $root_dir" -ForegroundColor Magenta
 $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor)
 
-if(!$foundPy)
+#if(!$foundPy)
+if($foundPy)
 {
     Write-Host "Python version not found" -ForegroundColor Red
     if ($IsWin32) {
         Write-Host "Please install python 3.6 on Windows." -ForegroundColor Red
-        exit 1
+        #exit 1
     }
     else {
         Write-Host "Installing python 3.6..." -ForegroundColor Yellow
-        $out = sudo apt-get install -y python3; if ($LASTEXITCODE -ne 0) { $out }
+        #$out = sudo -H -E apt-get install -y python3; if ($LASTEXITCODE -ne 0) { $out }
+        $out = sudo -H -E apt-get install -y python3
         if($out.Length -gt 0){
             foreach($o in $out){
                 Write-Host $o -ForegroundColor Blue
