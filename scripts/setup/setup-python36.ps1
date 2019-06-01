@@ -335,7 +335,7 @@ if($LASTEXITCODE -eq 0)
 else 
 {
     Write-Host "python libraries install failed"  -ForegroundColor Red
-    exit 1
+    #exit 1
 }
 
 #cd ${root_dir} &&  \
