@@ -171,6 +171,9 @@ $pipcmd = 'pip3'
 if($IsWin32){
     $pipcmd = 'pip'
 }
+else {
+    $pipcmd = 'pip'
+}
 
 #colorecho $_yellow "Installing python libraries"
 #cd ${root_dir}/ci-wrappers/pythonpreview/wrapper  &&  \
