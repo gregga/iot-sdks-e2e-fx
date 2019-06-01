@@ -321,7 +321,7 @@ if($IsWin32) {
     $out = python -m pip install python_glue
 }
 else{
-    $out = python3 -m $pipcmd install python_glue
+    $out = sudo python3 -m pip install python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -360,7 +360,7 @@ if($IsWin32) {
     $out = python -m $pipcmd install horton_helpers
 }
 else{
-    $out = python3 -m $pipcmd install horton_helpers
+    $out = python3 -m pip install horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
