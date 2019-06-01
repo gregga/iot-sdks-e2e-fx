@@ -282,8 +282,9 @@ else{
     #$out = sudo pip3 install --upgrade pip
     #$out = sudo python3 -m pip uninstall pip
     #$out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
+    #sudo apt-get install -y python3-pip
     $out  = sudo -H -E apt install -y python3-pip
-    $out2 = sudo -H -E pip3 install --user --upgrade pip
+    $out2 = sudo -H -E python3 -m pip install --user --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -323,22 +324,17 @@ else
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
     $out  = python -m pip install --upgrade pip
-    $out2 = python -m pip install --user setuptools
-    $out3 = python -m pip install --user msrest
-    $out4 = python -m pip install --user msrestazure
-    $out5 = python -m pip install --user -e python_glue
+    #$out2 = python -m pip install --user setuptools
+    #$out3 = python -m pip install --user msrest
+    #$out4 = python -m pip install --user msrestazure
+    #$out5 = python -m pip install --user -e python_glue
 }
 else{
-    $out  = sudo -H -E python3 -m pip install --upgrade pip
-    $out2 = sudo -H -E pip3 install --user setuptools
-    $out3 = sudo -H -E pip3 install --user msrest
-    $out4 = sudo -H -E pip3 install --user msrestazure
-    $out5 = sudo -H -E pip3 install --user -e python_glue
-}
-if($out.Length -gt 0){
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
+    #$out  = sudo -H -E python3 -m pip install --upgrade pip
+    $out2 = sudo -H -E python3 -m pip install --user setuptools
+    $out3 = sudo -H -E python3 -m pip install --user msrest
+    $out4 = sudo -H -E python3 -m pip install --user msrestazure
+    $out5 = sudo -H -E python3 -m pip install --user -e python_glue
 }
 if($out2.Length -gt 0){
     foreach($o in $out2){
