@@ -145,7 +145,7 @@ if(!$foundPy)
     }
 }
 
-$gotPip3 = $true
+$gotPip3 = $false
 $Pip3Path = Which("pip3")
 if($Pip3Path.Length -lt 1)
 {
@@ -157,7 +157,7 @@ if($Pip3Path.Length -lt 1)
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
         #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
-        $out = sudo apt-get install -y
+        $out = sudo apt-get install -y pip setuptools wheel
         if($out.Length -gt 0){
             foreach($o in $out){
                 Write-Host $o -ForegroundColor Blue
@@ -208,7 +208,7 @@ if($gotPip3) {
         $out = python -m pip install --upgrade pip setuptools wheel
     }
     else{
-        $out = python3 -m $pipcmd install --upgrade  pip setuptools wheel
+        $out = python3 -m pip install --upgrade  pip setuptools wheel
     }
     if($out.Length -gt 0){
         foreach($o in $out){
