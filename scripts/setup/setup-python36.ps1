@@ -185,7 +185,7 @@ if($gotPip3) {
         $out = python -m $pipcmd install --upgrade flask
     }
     else{
-        $out = python3 -m $pipcmd install --upgrade flask
+        $out = python3 -m pip install --upgrade flask
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -201,7 +201,7 @@ if($gotPip3) {
         Write-Host "flask install failed"  -ForegroundColor Red
         exit 1
     }
-    
+
     Write-Host "Updating Pip3" -ForegroundColor Yellow 
     if($IsWin32) {
         #$out = python -m $pipcmd install --upgrade pip3
