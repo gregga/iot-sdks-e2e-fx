@@ -168,11 +168,13 @@ else {
 }
 
 $pipcmd = 'pip3'
+$Mypycmd = 'python'
 if($IsWin32){
     $pipcmd = 'pip'
 }
 else {
     $pipcmd = 'pip'
+    $Mypycmd = 'python3'
 }
 
 #colorecho $_yellow "Installing python libraries"
@@ -209,7 +211,12 @@ cd $root_dir/ci-wrappers/pythonpreview/wrapper
 #$runCmd = "python -m $pipcmd install python_glue"
 #write-host "Cmd: $runCmd" -ForegroundColor Yellow
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-$out = python -m $pipcmd install python_glue
+if($IsWin32) {
+    $out = python -m $pipcmd install python_glue
+}
+else{
+    $out = python3 -m $pipcmd install python_glue
+}
 #$out = python -m $pipcmd install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -243,7 +250,13 @@ cd $root_dir
 #$runCmd = "python -m $pipcmd install -e horton_helpers"
 #write-host "Cmd: $runCmd" -ForegroundColor Magenta
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-$out = python -m $pipcmd install horton_helpers
+#$out = $pycmd -m $pipcmd install horton_helpers
+if($IsWin32) {
+    $out = python -m $pipcmd install horton_helpers
+}
+else{
+    $out = python3 -m $pipcmd install horton_helpers
+}
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -294,8 +307,14 @@ cd $root_dir/test-runner
 #$runCmd = "python -m $pipcmd install -r requirements.txt"
 #write-host "Cmd: $runCmd" -ForegroundColor Magenta
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-$out = python -m pip install -r requirements.txt
+#$out = $pycmd -m pip install -r requirements.txt
 #; if ($LASTEXITCODE -ne 0) { $out }
+if($IsWin32) {
+    $out = python -m $pipcmd install -r requirements.txt
+}
+else{
+    $out = python3 -m $pipcmd iinstall -r requirements.txt
+}
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
