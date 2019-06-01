@@ -391,23 +391,6 @@ Write-Host "Installing requirements for Horton test runner" -ForegroundColor Yel
 #cd $root_dir/test-runner
 #$runCmd = "cd $root_dir/test-runner"
 cd $root_dir/test-runner
-#write-host "root_dir: $root_dir" -ForegroundColor Red
-#write-host "Cmd: $runCmd" -ForegroundColor Magenta
-#$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-#if($out.Length -gt 0){
-#    foreach($o in $out){
-#        Write-Host $o -ForegroundColor Blue
-#    }
-#}
-#if($LASTEXITCODE -eq 0)
-#{
-#    Write-Host "$runCmd Success" -ForegroundColor Green
-#} 
-#else 
-#{
-#    Write-Host "$runCmd FAIL"  -ForegroundColor Red
-#    exit 1
-#}
 #$runCmd = "python -m $pipcmd install --user -r requirements.txt"
 #$runCmd = "python -m $pipcmd install -r requirements.txt"
 #write-host "Cmd: $runCmd" -ForegroundColor Magenta
