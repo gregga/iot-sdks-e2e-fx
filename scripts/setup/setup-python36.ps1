@@ -182,8 +182,28 @@ if($IsWin32){
 #fi
 
 Write-Host "Installing python libraries" -ForegroundColor Yellow
-cd $root_dir/ci-wrappers/pythonpreview/wrapper
-$out = python -m $pipcmd install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
+$runCmd = "cd $root_dir/ci-wrappers/pythonpreview/wrapper"
+write-host "Cmd: $runCmd" -ForegroundColor Magenta
+$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
+if($out.Length -gt 0){
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($LASTEXITCODE -eq 0)
+{
+    Write-Host "$runCmd Success" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "$runCmd FAIL"  -ForegroundColor Red
+    exit 1
+}
+
+$runCmd = "python -m $pipcmd install -e python_glue"
+write-host "Cmd: $runCmd" -ForegroundColor Magenta
+$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
+#$out = python -m $pipcmd install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -210,7 +230,10 @@ else
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
 cd $root_dir
-$out = python -m $pipcmd install --user -e horton_helpers; if ($LASTEXITCODE -ne 0) { $out }
+$runCmd = "python -m $pipcmd install --user -e horton_helpers"
+write-host "Cmd: $runCmd" -ForegroundColor Magenta
+$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
+#$out = python -m $pipcmd install --user -e horton_helpers; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -236,7 +259,7 @@ else
 #    [ $? -eq 0 ] || { colorecho $_red "pip install requirements.txt failed"; exit 1; }
 #fi
 
-Write-Host "Installing requirements for our test runner" -ForegroundColor Yellow
+Write-Host "Installing requirements for Horton test runner" -ForegroundColor Yellow
 cd $root_dir/test-runner
 $out = python -m $pipcmd install --user -r requirements.txt; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
@@ -246,11 +269,11 @@ if($out.Length -gt 0){
 }
 if($LASTEXITCODE -eq 0)
 {
-    Write-Host "test runner requirements installed successfully" -ForegroundColor Green
+    Write-Host "Horton test runner requirements installed successfully" -ForegroundColor Green
 } 
 else 
 {
-    Write-Host "test runner requirements install failed"  -ForegroundColor Red
+    Write-Host "Horton test runner requirements install failed"  -ForegroundColor Red
     exit 1
 }
 
