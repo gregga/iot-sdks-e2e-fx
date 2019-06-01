@@ -180,7 +180,7 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
         #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
-        $out = sudo apt-get install -y pip setuptools wheel
+        $out = sudo apt-get install pip
         if($out.Length -gt 0){
             foreach($o in $out){
                 Write-Host $o -ForegroundColor Blue
@@ -205,10 +205,10 @@ if($gotPip3) {
     #$out = python.exe -m pip install --upgrade pip
     #python -m pip install flask
     if($IsWin32) {
-        $out = pip install --upgrade pip
+        $out = pip install --user --upgrade pip
     }
     else{
-        $out = pip install --upgrade pip
+        $out = pip install --user --upgrade pip
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -228,10 +228,10 @@ if($gotPip3) {
     Write-Host "Updating Pip3" -ForegroundColor Yellow 
     if($IsWin32) {
         #$out = python -m $pipcmd install --upgrade pip3
-        $out = python -m pip install -y --upgrade pip setuptools wheel
+        $out = python -m pip install -y --upgrade pip3
     }
     else{
-        $out = python3 -m pip install -y --upgrade  pip setuptools wheel
+        $out = python3 -m pip install -y --upgrade pip3
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -271,7 +271,7 @@ else {
 
 Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
 if($IsWin32) {
-    $out = python -m ensurepip; pip3 install --upgrade pip 
+    $out = python -m ensurepip; pip install --user --upgrade pip
     #$out =  python -m pip uninstall -y pip
     #$out += apt install -y python3-pip --reinstall
     #$out += python -m pip install -y python3-pip --reinstall
@@ -279,7 +279,7 @@ if($IsWin32) {
 else{
     #$out = sudo pip3 install --upgrade pip
     #$out = sudo python3 -m pip uninstall pip
-    $out = sudo apt install -y python3-pip --reinstall; pip install --upgrade pip
+    $out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -318,10 +318,10 @@ else
 #write-host "Cmd: $runCmd" -ForegroundColor Yellow
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
-    $out = python -m pip install -e python_glue
+    $out = python -m pip install --user -e python_glue
 }
 else{
-    $out = sudo python3 -m pip install -e python_glue
+    $out = sudo python3 -m pip install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -357,10 +357,10 @@ cd $root_dir
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 #$out = $pycmd -m $pipcmd install horton_helpers
 if($IsWin32) {
-    $out = python -m pip install -e horton_helpers
+    $out = python -m pip install --user -e horton_helpers
 }
 else{
-    $out = sudo python3 -m pip install -e horton_helpers
+    $out = sudo python3 -m pip install --user -e horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -415,10 +415,10 @@ cd $root_dir/test-runner
 #$out = $pycmd -m pip install -r requirements.txt
 #; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
-    $out = python -m $pipcmd install -r requirements.txt
+    $out = python -m pip install --user -r requirements.txt
 }
 else{
-    $out = python3 -m $pipcmd install -r requirements.txt
+    $out = python3 -m pip install --user -r requirements.txt
 }
 if($out.Length -gt 0){
     foreach($o in $out){
