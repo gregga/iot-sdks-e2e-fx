@@ -101,6 +101,7 @@ $PythonMinVersionMajor = 3
 $PythonMinVersionMinor = 5
 
 $IsWin32 = IsWindows
+$pipTestOpts = ' --upgrade --no-deps --force-reinstall '
 
 $script_dir = $pwd.Path
 $root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
@@ -230,7 +231,9 @@ else
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
 cd $root_dir
-$runCmd = "python -m $pipcmd install --user -e horton_helpers"
+#$runCmd = "python -m $pipcmd install --user -e horton_helpers"
+$runCmd = "python -m $pipcmd $pipTestOpts -e horton_helpers"
+#$runCmd = "python -m $pipcmd install -e horton_helpers"
 write-host "Cmd: $runCmd" -ForegroundColor Magenta
 $out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
@@ -278,7 +281,8 @@ else
     Write-Host "$runCmd FAIL"  -ForegroundColor Red
     exit 1
 }
-$runCmd = "python -m $pipcmd install --user -r requirements.txt"
+#$runCmd = "python -m $pipcmd install --user -r requirements.txt"
+$runCmd = "python -m $pipcmd install -r requirements.txt"
 write-host "Cmd: $runCmd" -ForegroundColor Magenta
 $out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
