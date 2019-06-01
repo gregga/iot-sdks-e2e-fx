@@ -271,7 +271,7 @@ else {
 
 Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
 if($IsWin32) {
-    $out = python -m ensurepip
+    $out = python -m ensurepip; pip install --upgrade pip 
     #$out =  python -m pip uninstall -y pip
     #$out += apt install -y python3-pip --reinstall
     #$out += python -m pip install -y python3-pip --reinstall
@@ -279,7 +279,7 @@ if($IsWin32) {
 else{
     #$out = sudo pip3 install --upgrade pip
     $out = sudo python3 -m pip uninstall -y pip
-    $out+= sudo apt install -y python3-pip --reinstall
+    $out+= sudo apt install -y python3-pip --reinstall; pip install --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
