@@ -112,7 +112,7 @@ set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 
 #$root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
-$root_dir = Join-Path -Path $path -ChildPath '/../..' -Resolve
+$root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
 
 Write-Host "POWERSHELL SCRIPT in Setup-Python36" -ForegroundColor Red -BackgroundColor Yellow
 Write-Host "RootDir: $root_dir" -ForegroundColor Magenta
@@ -145,6 +145,7 @@ if(!$foundPy)
     }
 }
 
+$gotPip3 = $true
 $Pip3Path = Which("pip3")
 if($Pip3Path.Length -lt 1)
 {
@@ -164,16 +165,62 @@ if($Pip3Path.Length -lt 1)
         if($LASTEXITCODE -eq 0)
         {
             Write-Host "pip3 installed successfully" -ForegroundColor Green
+            $gotPip3 = $true
         } 
         else 
         {
             Write-Host "pip3 install failed"  -ForegroundColor Red
             exit 1
         }
-            }
+    }
 }
-else {
+if($gotPip3) {
     Write-Host "Pip3 already installed" -ForegroundColor Green
+    Write-Host "Updating flask" -ForegroundColor Yellow
+    #$out = python.exe -m pip install --upgrade pip
+    #python -m pip install flask
+    if($IsWin32) {
+        $out = python -m $pipcmd install flask
+    }
+    else{
+        $out = python3 -m $pipcmd install flask
+    }
+    if($out.Length -gt 0){
+        foreach($o in $out){
+            Write-Host $o -ForegroundColor Blue
+        }
+    }
+    if($LASTEXITCODE -eq 0)
+    {
+        Write-Host "flask installed successfully" -ForegroundColor Green
+    } 
+    else 
+    {
+        Write-Host "flask install failed"  -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Updating Pip3" -ForegroundColor Yellow 
+    if($IsWin32) {
+        #$out = python -m $pipcmd install --upgrade pip3
+        $out = python -m pip install --upgrade pip setuptools wheel
+    }
+    else{
+        $out = python3 -m $pipcmd install --upgrade  pip setuptools wheel
+    }
+    if($out.Length -gt 0){
+        foreach($o in $out){
+            Write-Host $o -ForegroundColor Blue
+        }
+    }
+    if($LASTEXITCODE -eq 0)
+    {
+        Write-Host "pip3 updated successfully" -ForegroundColor Green
+    } 
+    else 
+    {
+        Write-Host "pip3 updated failed"  -ForegroundColor Red
+        exit 1
+    }
 }
 
 $pipcmd = 'pip3'
@@ -227,7 +274,6 @@ if($IsWin32) {
 else{
     $out = python3 -m $pipcmd install python_glue
 }
-#$out = python -m $pipcmd install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
