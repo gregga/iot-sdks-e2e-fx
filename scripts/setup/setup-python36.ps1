@@ -246,12 +246,30 @@ else {
 #    [ $? -eq 0 ] || { colorecho $_red "install python_glue failed"; exit 1; }
 #fi
 
+Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
+if($IsWin32) {
+    $out = pip3 install --upgrade pip
+}
+else{
+    $out = sudo pip3 install --upgrade pip
+}
+if($out.Length -gt 0){
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($LASTEXITCODE -eq 0)
+{
+    Write-Host "$runCmd Success" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "$runCmd FAIL"  -ForegroundColor Red
+    exit 1
+}
+
 Write-Host "Installing python libraries" -ForegroundColor Yellow
-#cd $root_dir/ci-wrappers/pythonpreview/wrapper
 $out = cd $root_dir/ci-wrappers/pythonpreview/wrapper
-#$runCmd = "cd $root_dir/ci-wrappers/pythonpreview/wrapper"
-#write-host "Cmd: $runCmd" -ForegroundColor Magenta
-#$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
