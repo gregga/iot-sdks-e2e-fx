@@ -156,7 +156,8 @@ if($Pip3Path.Length -lt 1)
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
-        $out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
+        #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
+        $out = sudo apt-get install -y
         if($out.Length -gt 0){
             foreach($o in $out){
                 Write-Host $o -ForegroundColor Blue
@@ -174,16 +175,17 @@ if($Pip3Path.Length -lt 1)
         }
     }
 }
+
 if($gotPip3) {
     Write-Host "Pip3 already installed" -ForegroundColor Green
     Write-Host "Updating flask" -ForegroundColor Yellow
     #$out = python.exe -m pip install --upgrade pip
     #python -m pip install flask
     if($IsWin32) {
-        $out = python -m $pipcmd install flask
+        $out = python -m $pipcmd install --upgrade flask
     }
     else{
-        $out = python3 -m $pipcmd install flask
+        $out = python3 -m $pipcmd install --upgrade flask
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -199,6 +201,7 @@ if($gotPip3) {
         Write-Host "flask install failed"  -ForegroundColor Red
         exit 1
     }
+    
     Write-Host "Updating Pip3" -ForegroundColor Yellow 
     if($IsWin32) {
         #$out = python -m $pipcmd install --upgrade pip3
