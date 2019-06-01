@@ -139,7 +139,7 @@ if($Pip3Path.Length -lt 1)
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
-        $PyCmd = & sudo apt-get install -y python3-pip 2>&1
+        $PyCmd = & sudo apt-get install -y 2>&1
         Write-Host $PyCmd -ForegroundColor Yellow
         if($LASTEXITCODE -eq 0)
         {
@@ -157,6 +157,11 @@ else {
     Write-Host "Pip3 already installed" -ForegroundColor Green
 }
 
+$pipcmd = 'pip3'
+if(IsWin32){
+    $pipcmd = 'pip'
+}
+
 #colorecho $_yellow "Installing python libraries"
 #cd ${root_dir}/ci-wrappers/pythonpreview/wrapper  &&  \
 #   python3 -m pip install --user -e python_glue
@@ -169,7 +174,7 @@ else {
 
 Write-Host "Installing python libraries" -ForegroundColor Yellow
 cd $root_dir/ci-wrappers/pythonpreview/wrapper
-$out = python -m pip install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
+$out = python -m $pipcmd install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -196,7 +201,7 @@ else
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
 cd $root_dir
-$out = python -m pip install --user -e horton_helpers; if ($LASTEXITCODE -ne 0) { $out }
+$out = python -m $pipcmd install --user -e horton_helpers; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -224,7 +229,7 @@ else
 
 Write-Host "Installing requirements for our test runner" -ForegroundColor Yellow
 cd $root_dir/test-runner
-$out = python -m pip install --user -r requirements.txt; if ($LASTEXITCODE -ne 0) { $out }
+$out = python -m $pipcmd install --user -r requirements.txt; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
