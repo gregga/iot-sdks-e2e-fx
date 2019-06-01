@@ -279,7 +279,9 @@ if($IsWin32) {
 else{
     #$out = sudo pip3 install --upgrade pip
     #$out = sudo python3 -m pip uninstall pip
-    $out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
+    #$out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
+    $out  = sudo -H -E apt install -y python3-pip
+    $out += sudo -H -E python3 -m pip install --user --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -318,13 +320,20 @@ else
 #write-host "Cmd: $runCmd" -ForegroundColor Yellow
 #$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
-    $out = python -m pip install --user -e python_glue
+    $out  = python -m pip install --upgrade pip
+    $out2 = python -m pip install --user -e python_glue
 }
 else{
-    $out = sudo -H -E python3 -m pip install --user -e python_glue
+    $out  = sudo -H -E python3 -m pip install --upgrade pip
+    $out2 = sudo -H -E python3 -m pip install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($out2.Length -gt 0){
+    foreach($o in $out2){
         Write-Host $o -ForegroundColor Blue
     }
 }
