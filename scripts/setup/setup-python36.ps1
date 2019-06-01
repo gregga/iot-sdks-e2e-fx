@@ -46,7 +46,7 @@ function SearchForPythonVersion()
         }
     }
     
-    $PyPath = Which("python*")
+    $PyPath = Which("python")
     $pyVerFound = $false
     if ($PyPath) {
         foreach($PyFile in $PyPath)
@@ -67,21 +67,20 @@ function SearchForPythonVersion()
     }
     return $pyVerFound
 }
+
 function which([string]$cmd) {
+    if($IsWin32) {
+        $cmd += '.exe'
+    }
     Write-Host "Looking for $cmd in path..." -ForegroundColor Yellow
     $path = (Get-Command $cmd).Path
-    if($path){
-        #foreach($p in $path) {
-        #    Write-Host "Found $cmd in $p" -ForegroundColor Green
-        #}
-    }
-    else {
+    if(!$path){
         Write-Host "Command $cmd NOT FOUND in path" -ForegroundColor Red
     }
     return $path
 }
 
-function IsWin32os {
+function IsWindows {
     $IsW32 = $false
     try {
         if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
@@ -100,38 +99,145 @@ function IsWin32os {
 $PythonMinVersionMajor = 3
 $PythonMinVersionMinor = 5
 
+$IsWin32 = IsWindows
+
+$script_dir = $pwd.Path
+$root_dir = $script_dir + '/../..'
+
 Write-Host "POWERSHELL SCRIPT in Setup-Python36" -ForegroundColor Red -BackgroundColor Yellow
 $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor)
 
 if(!$foundPy)
 {
     Write-Host "Python version not found" -ForegroundColor Red
-    if (IsWin32) {
+    if ($IsWin32) {
         Write-Host "Please install python 3.6 on Windows." -ForegroundColor Red
         exit 1
     }
     else {
-        Write-Host "Installing python 3.6..." -ForegroundColor Green
-        # sudo apt-get install -y python3
+        Write-Host "Installing python 3.6..." -ForegroundColor Yellow
+        sudo apt-get install -y python3
+        if($LASTEXITCODE -eq 0)
+        {
+            Write-Host "puthon installed successfully" -ForegroundColor Green
+        } 
+        else 
+        {
+            Write-Host "python install failed" -ForegroundColor Red
+            exit 1
+        }
     }
 }
 
-# Write-Host "Looking for Pip3" -ForegroundColor Yellow
-$Pip3Path = Which("pip3*")
-if($Pip3Path)
+$Pip3Path = Which("pip3")
+if($Pip3Path.Length -lt 1)
 {
     Write-Host "Pip3 not found" -ForegroundColor Red
-    $osVerW32 = IsWin32os
-    if($osVerW32) {
+    if($IsWin32) {
         Write-Host "Please install Pip3 on Windows." -ForegroundColor Red
         exit 1
     }
     else {
-        Write-Host "Installing pip3..." -ForegroundColor Green
+        Write-Host "Installing pip3..." -ForegroundColor Yellow
         $PyCmd = & sudo apt-get install -y python3-pip 2>&1
         Write-Host $PyCmd -ForegroundColor Yellow
+        if($LASTEXITCODE -eq 0)
+        {
+            Write-Host "pip3 installed successfully" -ForegroundColor Green
+        } 
+        else 
+        {
+            Write-Host "pip3 install failed"  -ForegroundColor Red
+            exit 1
+        }
 
     }
 }
+else {
+    Write-Host "Pip3 already installed" -ForegroundColor Green
+}
 
-Write-Host "setup-python 3.6 SUCCESS" -ForegroundColor Green
+#colorecho $_yellow "Installing python libraries"
+#cd ${root_dir}/ci-wrappers/pythonpreview/wrapper  &&  \
+#   python3 -m pip install --user -e python_glue
+#if [ $? -ne 0 ]; then 
+#    colorecho $_yellow "user path not accepted.  Installing globally"
+#    cd ${root_dir}/ci-wrappers/pythonpreview/wrapper  &&  \
+#        python3 -m pip install -e python_glue
+#    [ $? -eq 0 ] || { colorecho $_red "install python_glue failed"; exit 1; }
+#fi
+
+Write-Host "Installing python libraries" -ForegroundColor Yellow
+cd $root_dir/ci-wrappers/pythonpreview/wrapper
+$out = python -m pip install --user -e python_glue; if ($LASTEXITCODE -ne 0) { $out }
+if($out.Length -gt 0){
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($LASTEXITCODE -eq 0)
+{
+    Write-Host "python libraries installed successfully" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "python libraries install failed"  -ForegroundColor Red
+    exit 1
+}
+
+#cd ${root_dir} &&  \
+#    python3 -m pip install --user -e horton_helpers
+#if [ $? -ne 0 ]; then 
+#    colorecho $_yellow "user path not accepted.  Installing globally"
+#    cd ${root_dir} &&  \
+#        python3 -m pip install -e horton_helpers
+#    [ $? -eq 0 ] || { colorecho $_red "install horton_helpers failed"; exit 1; }
+#fi
+
+Write-Host "Installing horton_helpers" -ForegroundColor Yellow
+cd $root_dir
+$out = python -m pip install --user -e horton_helpers; if ($LASTEXITCODE -ne 0) { $out }
+if($out.Length -gt 0){
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($LASTEXITCODE -eq 0)
+{
+    Write-Host "horton_helpers installed successfully" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "horton_helpers install failed"  -ForegroundColor Red
+    exit 1
+}
+
+# install requirements for our test runner
+#cd ${root_dir}/test-runner &&  \
+#    python3 -m pip install --user -r requirements.txt
+#if [ $? -ne 0 ]; then 
+#    colorecho $_yellow "user path not accepted.  Installing globally"
+#    cd ${root_dir}/test-runner &&  \
+#        python3 -m pip install -r requirements.txt
+#    [ $? -eq 0 ] || { colorecho $_red "pip install requirements.txt failed"; exit 1; }
+#fi
+
+Write-Host "Installing requirements for our test runner" -ForegroundColor Yellow
+cd $root_dir/test-runner
+$out = python -m pip install --user -r requirements.txt; if ($LASTEXITCODE -ne 0) { $out }
+if($out.Length -gt 0){
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($LASTEXITCODE -eq 0)
+{
+    Write-Host "test runner requirements installed successfully" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "test runner requirements install failed"  -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "Python3 and Python libraries installed successfully" -ForegroundColor Green
