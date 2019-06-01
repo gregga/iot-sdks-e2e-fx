@@ -324,14 +324,16 @@ else
 if($IsWin32) {
     $out  = python -m pip install --upgrade pip
     $out2 = python -m pip install --user setuptools
-    $out3 = python -m pip install --user msrestazure
-    $out4 = python -m pip install --user -e python_glue
+    $out3 = python -m pip install --user msrest
+    $out4 = python -m pip install --user msrestazure
+    $out5 = python -m pip install --user -e python_glue
 }
 else{
     $out  = sudo -H -E python3 -m pip install --upgrade pip
     $out2 = sudo -H -E python3 -m pip install --user setuptools
-    $out3 = sudo -H -E python3 -m pip install --user msrestazure
-    $out4 = sudo -H -E python3 -m pip install --user -e python_glue
+    $out3 = sudo -H -E python3 -m pip install --user msrest
+    $out4 = sudo -H -E python3 -m pip install --user msrestazure
+    $out5 = sudo -H -E python3 -m pip install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -350,6 +352,11 @@ if($out3.Length -gt 0){
 }
 if($out4.Length -gt 0){
     foreach($o in $out4){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($out5.Length -gt 0){
+    foreach($o in $out5){
         Write-Host $o -ForegroundColor Blue
     }
 }
