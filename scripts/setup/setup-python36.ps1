@@ -73,8 +73,14 @@ function which([string]$cmd) {
         $cmd += '.exe'
     }
     Write-Host "Looking for $cmd in path..." -ForegroundColor Yellow
-    $path = (Get-Command $cmd).Path
-    if(!$path){
+    try{
+        $path = (Get-Command $cmd).Path
+    }
+    catch{
+        Write-Host "Command $cmd NOT FOUND in path" -ForegroundColor Red
+        return $null
+    }
+    if($null -eq $path){
         Write-Host "Command $cmd NOT FOUND in path" -ForegroundColor Red
     }
     return $path
@@ -147,12 +153,29 @@ if(!$foundPy)
 
 $gotPip3 = $false
 $Pip3Path = Which("pip3")
-if($Pip3Path.Length -lt 1)
+if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
 {
     Write-Host "Pip3 not found" -ForegroundColor Red
     if($IsWin32) {
-        Write-Host "Please install Pip3 on Windows." -ForegroundColor Red
-        exit 1
+        Write-Host "Installing pip3..." -ForegroundColor Yellow
+        $out = python -m ensurepip
+        #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
+        #$out = sudo apt-get install -y pip setuptools wheel
+        if($out.Length -gt 0){
+            foreach($o in $out){
+                Write-Host $o -ForegroundColor Blue
+            }
+        }
+        if($LASTEXITCODE -eq 0)
+        {
+            Write-Host "pip3 installed successfully" -ForegroundColor Green
+            $gotPip3 = $true
+        } 
+        else 
+        {
+            Write-Host "pip3 install failed"  -ForegroundColor Red
+            exit 1
+        }
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
@@ -182,10 +205,10 @@ if($gotPip3) {
     #$out = python.exe -m pip install --upgrade pip
     #python -m pip install flask
     if($IsWin32) {
-        $out = python -m $pipcmd install --upgrade flask
+        $out = python -m $pipcmd install -y --upgrade flask
     }
     else{
-        $out = python3 -m pip install --upgrade flask
+        $out = python3 -m pip install -y --upgrade flask
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -205,10 +228,10 @@ if($gotPip3) {
     Write-Host "Updating Pip3" -ForegroundColor Yellow 
     if($IsWin32) {
         #$out = python -m $pipcmd install --upgrade pip3
-        $out = python -m pip install --upgrade pip setuptools wheel
+        $out = python -m pip install -y --upgrade pip setuptools wheel
     }
     else{
-        $out = python3 -m pip install --upgrade  pip setuptools wheel
+        $out = python3 -m pip install -y --upgrade  pip setuptools wheel
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -248,10 +271,15 @@ else {
 
 Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
 if($IsWin32) {
-    $out = pip3 install --upgrade pip
+    $out = python -m ensurepip
+    #$out =  python -m pip uninstall -y pip
+    #$out += apt install -y python3-pip --reinstall
+    #$out += python -m pip install -y python3-pip --reinstall
 }
 else{
-    $out = sudo pip3 install --upgrade pip
+    #$out = sudo pip3 install --upgrade pip
+    $out = sudo python3 -m pip uninstall -y pip
+    $out+= sudo apt install -y python3-pip --reinstall
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -260,11 +288,11 @@ if($out.Length -gt 0){
 }
 if($LASTEXITCODE -eq 0)
 {
-    Write-Host "$runCmd Success" -ForegroundColor Green
+    Write-Host "python3-pip Success" -ForegroundColor Green
 } 
 else 
 {
-    Write-Host "$runCmd FAIL"  -ForegroundColor Red
+    Write-Host "python3-pip FAIL"  -ForegroundColor Red
     exit 1
 }
 
@@ -277,11 +305,11 @@ if($out.Length -gt 0){
 }
 if($LASTEXITCODE -eq 0)
 {
-    Write-Host "$runCmd Success" -ForegroundColor Green
+    Write-Host "cd $root_dir/ci-wrappers/pythonpreview/wrapper Success" -ForegroundColor Green
 } 
 else 
 {
-    Write-Host "$runCmd FAIL"  -ForegroundColor Red
+    Write-Host " cd $root_dir/ci-wrappers/pythonpreview/wrapper FAIL"  -ForegroundColor Red
     exit 1
 }
 
