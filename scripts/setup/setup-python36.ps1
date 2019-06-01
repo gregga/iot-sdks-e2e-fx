@@ -283,7 +283,7 @@ else{
     #$out = sudo python3 -m pip uninstall pip
     #$out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
     $out  = sudo -H -E apt install -y python3-pip
-    $out2 = sudo -H -E python3 -m pip install --user --upgrade pip
+    $out2 = sudo -H -E pip3 install --user --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -330,10 +330,10 @@ if($IsWin32) {
 }
 else{
     $out  = sudo -H -E python3 -m pip install --upgrade pip
-    $out2 = sudo -H -E python3 -m pip install --user setuptools
-    $out3 = sudo -H -E python3 -m pip install --user msrest
-    $out4 = sudo -H -E python3 -m pip install --user msrestazure
-    $out5 = sudo -H -E python3 -m pip install --user -e python_glue
+    $out2 = sudo -H -E pip3 install --user setuptools
+    $out3 = sudo -H -E pip3 install --user msrest
+    $out4 = sudo -H -E pip3 install --user msrestazure
+    $out5 = sudo -H -E pip3 install --user -e python_glue
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -392,7 +392,7 @@ if($IsWin32) {
     $out = python -m pip install --user -e horton_helpers
 }
 else{
-    $out = sudo -H -E python3 -m pip install --user -e horton_helpers
+    $out = sudo -H -E pip3 install --user -e horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -433,7 +433,7 @@ if($IsWin32) {
     $out = python -m pip install --user -r requirements.txt
 }
 else{
-    $out = sudo -H -E python3 -m pip install --user -r requirements.txt
+    $out = sudo -H -E pip3 install --user -r requirements.txt
 }
 if($out.Length -gt 0){
     foreach($o in $out){
