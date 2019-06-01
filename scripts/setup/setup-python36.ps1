@@ -56,7 +56,7 @@ function SearchForPythonVersion()
                 $pyFound =  CheckVerString($PyVer.FileVersion)
                 if($pyFound)
                 {
-                    Write-Host $PyFile -ForegroundColor Green
+                    Write-Host "Found: $PyFile" -ForegroundColor Green
                     $pyVerFound = $true
                 }
             }
@@ -94,6 +94,7 @@ function IsWindows {
     return $IsW32
 }
 
+###############################################################
 #### Script Starts Here ####
 
 $PythonMinVersionMajor = 3
@@ -116,14 +117,19 @@ if(!$foundPy)
     }
     else {
         Write-Host "Installing python 3.6..." -ForegroundColor Yellow
-        sudo apt-get install -y python3
+        $out = sudo apt-get install -y python3; if ($LASTEXITCODE -ne 0) { $out }
+        if($out.Length -gt 0){
+            foreach($o in $out){
+                Write-Host $o -ForegroundColor Blue
+            }
+        }
         if($LASTEXITCODE -eq 0)
         {
-            Write-Host "puthon installed successfully" -ForegroundColor Green
+            Write-Host "python installed successfully" -ForegroundColor Green
         } 
         else 
         {
-            Write-Host "python install failed" -ForegroundColor Red
+            Write-Host "python install failed"  -ForegroundColor Red
             exit 1
         }
     }
@@ -139,8 +145,12 @@ if($Pip3Path.Length -lt 1)
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
-        $PyCmd = & sudo apt-get install -y 2>&1
-        Write-Host $PyCmd -ForegroundColor Yellow
+        $out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
+        if($out.Length -gt 0){
+            foreach($o in $out){
+                Write-Host $o -ForegroundColor Blue
+            }
+        }
         if($LASTEXITCODE -eq 0)
         {
             Write-Host "pip3 installed successfully" -ForegroundColor Green
@@ -150,15 +160,14 @@ if($Pip3Path.Length -lt 1)
             Write-Host "pip3 install failed"  -ForegroundColor Red
             exit 1
         }
-
-    }
+            }
 }
 else {
     Write-Host "Pip3 already installed" -ForegroundColor Green
 }
 
 $pipcmd = 'pip3'
-if(IsWin32){
+if($IsWin32){
     $pipcmd = 'pip'
 }
 
