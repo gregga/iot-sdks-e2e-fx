@@ -4,13 +4,14 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 
+import os
+import sys
+sys.path.append('../horton_helpers')
 from edgehub_factory import createNewHubInstance
 from connection_string import connection_string_to_sas_token
 from config_yaml import ConfigFile
 from identity_helpers import ensure_edge_environment_variables
 from service_helper import Helper
-import os
-import sys
 
 ensure_edge_environment_variables()
 
