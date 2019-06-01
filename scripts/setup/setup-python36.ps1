@@ -233,7 +233,6 @@ cd $root_dir
 $runCmd = "python -m $pipcmd install --user -e horton_helpers"
 write-host "Cmd: $runCmd" -ForegroundColor Magenta
 $out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-#$out = python -m $pipcmd install --user -e horton_helpers; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -261,7 +260,9 @@ else
 
 Write-Host "Installing requirements for Horton test runner" -ForegroundColor Yellow
 cd $root_dir/test-runner
-$out = python -m $pipcmd install --user -r requirements.txt; if ($LASTEXITCODE -ne 0) { $out }
+$runCmd = "python -m $pipcmd install --user -r requirements.txt"
+write-host "Cmd: $runCmd" -ForegroundColor Magenta
+$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($out.Length -gt 0){
     foreach($o in $out){
         Write-Host $o -ForegroundColor Blue
@@ -269,11 +270,11 @@ if($out.Length -gt 0){
 }
 if($LASTEXITCODE -eq 0)
 {
-    Write-Host "Horton test runner requirements installed successfully" -ForegroundColor Green
+    Write-Host "Horton test runner installed successfully" -ForegroundColor Green
 } 
 else 
 {
-    Write-Host "Horton test runner requirements install failed"  -ForegroundColor Red
+    Write-Host "Horton test runner install failed"  -ForegroundColor Red
     exit 1
 }
 
