@@ -16,11 +16,6 @@ foreach($o in $out){
     Write-Host $o -ForegroundColor Magenta
 }
 
-$out = sudo -H -E python3 -m pip install -e $pysripts
-foreach($o in $out){
-    Write-Host $o -ForegroundColor Magenta
-}
-
 $out = python3 $pysripts/create_new_edgehub_device.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
