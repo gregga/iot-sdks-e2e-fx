@@ -8,12 +8,25 @@ if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 
-$out = python3 $path/../pyscripts/create_new_edgehub_device.py
+$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
+$pysripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
+
+write-host "hh: $hh\npysripts: $pyscripts" -ForegroundColor Green
+
+#"PYTHONPATH": "/repos/iotiot-sdks-e2e-fx-fork/horton_helpers"
+if($env:PYTHONPATH){
+    $env:PYTHONPATH += ";$hh;$pysripts"
+}
+else {
+    $env:PYTHONPATH = "$hh;$pysripts" 
+}
+
+$out = python3 $pysripts/create_new_edgehub_device.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
 
-$out = python3 $path/../pyscripts/deploy_test_containers.py
+$out = python3 $pysripts/deploy_test_containers.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
