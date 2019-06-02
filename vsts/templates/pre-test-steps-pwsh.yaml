@@ -31,9 +31,9 @@ steps:
   displayName: 'POWERSHELL: pre-cache docker images'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- script: |
-    $(Horton.FrameworkRoot)/scripts/create-new-edgehub-device.sh 
-  displayName: 'Create new edgehub identity'
+- powershell: $(Horton.FrameworkRoot)/scripts/create-new-edgehub-device.ps1
+  workingDirectory: $(Horton.FrameworkRoot)
+  displayName: 'POWERSHELL: Create new edgehub identity'
   env:
     IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
     IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
