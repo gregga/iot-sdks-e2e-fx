@@ -18,7 +18,6 @@ Param
     [Parameter(Mandatory)]
     [Alias("o")] 
     [string]$test_o,
-    [Parameter(Mandatory=$false)]
     [Alias("extra_args")] 
     [string]$test_extra_args
 )
