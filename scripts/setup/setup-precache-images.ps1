@@ -3,36 +3,34 @@
 
 Param
 (
-    [Parameter(Position=0)]
-    [string]$Repo_User,
-    [Parameter(Position=0)]
+    [Parameter(Mandatory)]
+    [Alias("User")] 
+    [string[]]$Repo_User,
+    [Parameter(Mandatory)]
+    [Alias("Pw")] 
     [string]$Repo_Pw,
-    [Parameter(Position=0)]
+    [Parameter(Mandatory)]
+    [Alias("Repo")] 
     [string]$Repo_Name,
-    [Parameter(Position=0)]
+    [Parameter(Mandatory)]
+    [Alias("Lang")] 
     [string]$Language,
-    [Parameter(Position=1)]
+    [Parameter(Mandatory)]
+    [Alias("TImg")] 
     [string]$Test_Image,
-    [Parameter(Position=2)]
+    [Parameter(Mandatory)]
+    [Alias("EAImg")] 
     [string]$Image_EdgeAgent,
-    [Parameter(Position=3)]
+    [Parameter(Mandatory)]
+    [Alias("EHImg")] 
     [string]$Image_EdgeHub,
-    [Parameter(Position=4)]
+    [Parameter(Mandatory)]
+    [Alias("FrImg")] 
     [string]$Image_Friendmod
 )
 
-
-$script_dir = $pwd.Path
-$path = $MyInvocation.MyCommand.Path
-if (!$path) {$path = $psISE.CurrentFile.Fullpath}
-if ( $path) {$path = split-path $path -Parent}
-set-location $path
-Write-Host "RealPath $path" -ForegroundColor Yellow
-
-
-
 docker login -u $Repo_User -p $Repo_Pw $Repo_Name
-docker pull $env:IOTHUB_E2E_REPO_ADDRESS/$Language-e2e-v3:$Test_Image
+docker pull $$Repo_Name/$Language-e2e-v3:$Test_Image
 docker pull $Image_EdgeAgent
 docker pull $Image_EdgeHub
 docker pull $Image_Friendmod
