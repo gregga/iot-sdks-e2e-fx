@@ -267,14 +267,9 @@ if($gotPip3) {
     }
 }
 
-$pipcmd = 'pip3'
-$Mypycmd = 'python'
-if($IsWin32){
-    $pipcmd = 'pip'
-}
-else {
-    $pipcmd = 'pip'
-    $Mypycmd = 'python3'
+$out = ls /usr/bin/python*
+foreach($o in $out){
+    Write-Host $o -ForegroundColor Yellow
 }
 
 #colorecho $_yellow "Installing python libraries"
