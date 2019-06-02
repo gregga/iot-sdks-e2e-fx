@@ -388,7 +388,7 @@ if($IsWin32) {
     $out = python -m pip install --user -e horton_helpers
 }
 else{
-    $out = sudo -H -E pip3 install --user -e horton_helpers
+    $out = sudo -H -E python3 -m pip install --user -e horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -429,7 +429,7 @@ if($IsWin32) {
     $out = python -m pip install --user -r requirements.txt
 }
 else{
-    $out = sudo -H -E pip3 install --user -r requirements.txt
+    $out = sudo -H -E python3 -m pip install --user -r requirements.txt
 }
 if($out.Length -gt 0){
     foreach($o in $out){
