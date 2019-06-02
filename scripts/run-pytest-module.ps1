@@ -19,7 +19,7 @@ Param
     [Alias("o")] 
     [string]$test_o,
     [Alias("extra_args")] 
-    [string]$test_extra_args
+    [string]$test_extra_args=""
 )
 
 $script_dir = $pwd.Path
