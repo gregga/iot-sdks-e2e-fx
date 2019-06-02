@@ -22,16 +22,16 @@ function IsWin32 {
     return $IsW32
 }
 
-if(IsWin32 -eq $false) {
-    $out = sudo apt-get install -y iotedge
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
-    $out = sudo chmod 666 /etc/iotedge/config.yaml
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
+#if(IsWin32 -eq $false) {
+$out = sudo -H -E apt-get install -y iotedge
+foreach($o in $out){
+    Write-Host $o -ForegroundColor Magenta
 }
+$out = sudo -H -E chmod 666 /etc/iotedge/config.yaml
+foreach($o in $out){
+    Write-Host $o -ForegroundColor Magenta
+}
+#}
 # install iotedge
 #sudo apt-get install -y iotedge
 #[ $? -eq 0 ] || { echo "apt-get install iotedge failed"; exit 1; }
