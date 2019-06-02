@@ -26,7 +26,7 @@ steps:
   displayName: 'POWERSHELL: install iotedge packages'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/setup/setup-precache-images.ps1 -User ${{ parameters.repo_user }} -Pw ${{ parameters.repo_password }} -Repo ${{ parameters.repo_address }} -Lang ${{ parameters.language }} -TImg ${{ parameters.test_image }} -EAImg ${{ parameters.image_edgeAgent }} -EHImg ${{ parameters.image_edgeHub }} -FrImg ${{ parameters.image_friendmod }}
+- powershell: $(Horton.FrameworkRoot)/scripts/setup/setup-precache-images.ps1 -user ${{ parameters.repo_user }} -pw ${{ parameters.repo_password }} -repo ${{ parameters.repo_address }} -lang ${{ parameters.language }} -timg ${{ parameters.test_image }} -eaimg ${{ parameters.image_edgeAgent }} -ehimg ${{ parameters.image_edgeHub }} -frImg ${{ parameters.image_friendmod }}
   workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'POWERSHELL: pre-cache docker images'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))

@@ -4,36 +4,36 @@
 Param
 (
     [Parameter(Mandatory)]
-    [Alias("User")] 
-    [string[]]$Repo_User,
+    [Alias("user")] 
+    [string[]]$repo_User,
     [Parameter(Mandatory)]
-    [Alias("Pw")] 
-    [string]$Repo_Pw,
+    [Alias("pw")] 
+    [string]$repo_pw,
     [Parameter(Mandatory)]
-    [Alias("Repo")] 
-    [string]$Repo_Name,
+    [Alias("repo")] 
+    [string]$repo_name,
     [Parameter(Mandatory)]
-    [Alias("Lang")] 
-    [string]$Language,
+    [Alias("lang")] 
+    [string]$language,
     [Parameter(Mandatory)]
-    [Alias("TImg")] 
-    [string]$Test_Image,
+    [Alias("timg")] 
+    [string]$test_image,
     [Parameter(Mandatory)]
-    [Alias("EAImg")] 
-    [string]$Image_EdgeAgent,
+    [Alias("eaimg")] 
+    [string]$image_edgeagent,
     [Parameter(Mandatory)]
-    [Alias("EHImg")] 
-    [string]$Image_EdgeHub,
+    [Alias("ehimg")] 
+    [string]$image_edgehub,
     [Parameter(Mandatory)]
-    [Alias("FrImg")] 
-    [string]$Image_Friendmod
+    [Alias("frImg")] 
+    [string]$image_friendmod
 )
 
-docker login -u $Repo_User -p $Repo_Pw $Repo_Name
-docker pull $$Repo_Name/$Language-e2e-v3:$Test_Image
-docker pull $Image_EdgeAgent
-docker pull $Image_EdgeHub
-docker pull $Image_Friendmod
+docker login -u $repo_user -p $repo_pw $repo_name
+docker pull $repo_name/$language-e2e-v3:$test_image
+docker pull $image_edgeagent
+docker pull $image_edgehub
+docker pull $image_friendmod
 
 
 
