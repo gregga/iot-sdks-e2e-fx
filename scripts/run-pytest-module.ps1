@@ -32,6 +32,13 @@ Write-Host "RealPath $path" -ForegroundColor Yellow
 $testpath = Join-Path -Path $path -ChildPath '../../test-runner' -Resolve
 set-location $testpath
 
+#export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
+
+$pem_file = "/var/lib/iotedge/hsm/certs/edge_owner_ca*.pem"
+$base64string = [Convert]::ToBase64String([IO.File]::ReadAllBytes($pem_file))
+Write-Host $base64string
+$env:IOTHUB_E2E_EDGEHUB_CA_CERT = $base64string
+
 write-host $pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args$
 $out = sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
 foreach($o in $out){

@@ -7,9 +7,9 @@ parameters:
   log_folder_name: ''
 
 steps:
-- powershell: $(Horton.FrameworkRoot)/scripts/run-pytest-module.ps1 -scenario ${{ parameters.scenario }} -transport=${{ parameters.transport }} -lang=${{ parameters.language }} -junitxml=$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml -o junit_suite_name=${{ parameters.log_folder_name }} -extra_args=${{ parameters.extra_args }}
+- powershell: $(Horton.FrameworkRoot)/scripts/run-pytest-module.ps1 -scenario ${{ parameters.scenario }} -transport ${{ parameters.transport }} -lang ${{ parameters.language }} -junitxml $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml -o junit_suite_name=${{ parameters.log_folder_name }} -extra_args ${{ parameters.extra_args }}
   workingDirectory: $(Horton.FrameworkRoot)
-  displayName: 'run tests ${{ parameters.scenario }} ${{ parameters.language }} ${{ parameters.transport }}'
+  displayName: 'POWERSHELL: run tests ${{ parameters.scenario }} ${{ parameters.language }} ${{ parameters.transport }}'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
   env:
     IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
