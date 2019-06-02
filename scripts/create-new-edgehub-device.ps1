@@ -16,17 +16,17 @@ foreach($o in $out){
     Write-Host $o -ForegroundColor Magenta
 }
 
-$out = python3 $pysripts/create_new_edgehub_device.py
+$out = sudo -H -E python3 $pysripts/create_new_edgehub_device.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
 
-$out = python3 $pysripts/deploy_test_containers.py
+$out = sudo -H -E python3 $pysripts/deploy_test_containers.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
 
-$out = sudo systemctl restart iotedge
+$out = sudo -H -E  systemctl restart iotedge
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
