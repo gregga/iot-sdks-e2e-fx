@@ -12,7 +12,7 @@ if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 
-function IsWindows {
+function IsWin32 {
     $IsW32 = $false
     try {
         if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
@@ -26,7 +26,7 @@ function IsWindows {
     return $IsW32
 }
 
-if(!IsWindows) {
+if(IsWin32 -eq $false) {
     $out = sudo apt-get install -y iotedge
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
