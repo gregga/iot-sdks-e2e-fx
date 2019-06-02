@@ -11,14 +11,14 @@ Write-Host "RealPath $path" -ForegroundColor Yellow
 $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 $pysripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
-write-host "hh: $hh\npysripts: $pyscripts" -ForegroundColor Green
-
-#"PYTHONPATH": "/repos/iotiot-sdks-e2e-fx-fork/horton_helpers"
-if($env:PYTHONPATH){
-    $env:PYTHONPATH += ";$hh;$pysripts"
+$out = sudo -H -E python3 -m pip install -e $hh
+foreach($o in $out){
+    Write-Host $o -ForegroundColor Magenta
 }
-else {
-    $env:PYTHONPATH = "$hh;$pysripts" 
+
+$out = sudo -H -E python3 -m pip install -e $pysripts
+foreach($o in $out){
+    Write-Host $o -ForegroundColor Magenta
 }
 
 $out = python3 $pysripts/create_new_edgehub_device.py
