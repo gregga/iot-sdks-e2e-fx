@@ -77,8 +77,7 @@ function which([string]$cmd) {
         $path = (Get-Command $cmd).Path
     }
     catch{
-        Write-Host "Command $cmd NOT FOUND in path" -ForegroundColor Red
-        return $null
+        $path = $null
     }
     if($null -eq $path){
         Write-Host "Command $cmd NOT FOUND in path" -ForegroundColor Red
@@ -135,7 +134,12 @@ if($foundPy)
     else {
         Write-Host "Installing python 3.6..." -ForegroundColor Yellow
         #$out = sudo -H -E apt-get install -y python3; if ($LASTEXITCODE -ne 0) { $out }
-
+        $out = sudo -H -E sudo add-apt-repository ppa:deadsnakes/ppa
+        if($out.Length -gt 0){
+            foreach($o in $out){
+                Write-Host $o -ForegroundColor Blue
+            }
+        }
         $out = sudo -H -E apt update
         if($out.Length -gt 0){
             foreach($o in $out){
