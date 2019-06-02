@@ -35,7 +35,8 @@ set-location $testpath
 #export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
 
 $pem_file = "/var/lib/iotedge/hsm/certs/edge_owner_ca*.pem"
-$base64string = [Convert]::ToBase64String([IO.File]::ReadAllBytes($pem_file))
+$full_pem = Resolve-Path -Path $pem_file
+$base64string = [Convert]::ToBase64String([IO.File]::ReadAllBytes($full_pem))
 Write-Host $base64string
 $env:IOTHUB_E2E_EDGEHUB_CA_CERT = $base64string
 
