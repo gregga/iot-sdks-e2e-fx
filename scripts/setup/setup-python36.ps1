@@ -135,7 +135,16 @@ if($foundPy)
     else {
         Write-Host "Installing python 3.6..." -ForegroundColor Yellow
         #$out = sudo -H -E apt-get install -y python3; if ($LASTEXITCODE -ne 0) { $out }
-        $out = sudo -H -E apt-get install -y python3
+
+        $out = sudo -H -E apt update
+        if($out.Length -gt 0){
+            foreach($o in $out){
+                Write-Host $o -ForegroundColor Blue
+            }
+        }
+        $out = sudo -H -E apt install python3.6
+
+        #$out = sudo -H -E apt-get install -y python3
         if($out.Length -gt 0){
             foreach($o in $out){
                 Write-Host $o -ForegroundColor Blue
@@ -143,7 +152,7 @@ if($foundPy)
         }
         if($LASTEXITCODE -eq 0)
         {
-            Write-Host "python installed successfully" -ForegroundColor Green
+            Write-Host "python3.6 installed successfully" -ForegroundColor Green
         } 
         else 
         {
@@ -233,7 +242,7 @@ if($gotPip3) {
         $out = python -m pip install -y --upgrade pip3
     }
     else{
-        $out = python3 -m pip install -y --upgrade pip3
+        $out = python3.6 -m pip install -y --upgrade pip3
     }
     if($out.Length -gt 0){
         foreach($o in $out){
@@ -284,7 +293,7 @@ else{
     #$out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
     #sudo apt-get install -y python3-pip
     $out  = sudo -H -E apt install -y python3-pip
-    $out2 = sudo -H -E python3 -m pip install --user --upgrade pip
+    $out2 = sudo -H -E python3.6 -m pip install --user --upgrade pip
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -331,10 +340,10 @@ if($IsWin32) {
 }
 else{
     #$out  = sudo -H -E python3 -m pip install --upgrade pip
-    $out2 = sudo -H -E python3 -m pip install --user setuptools
-    $out3 = sudo -H -E python3 -m pip install --user msrest
-    $out4 = sudo -H -E python3 -m pip install --user msrestazure
-    $out5 = sudo -H -E python3 -m pip install --user -e python_glue
+    $out2 = sudo -H -E python3.6 -m pip install --user setuptools
+    $out3 = sudo -H -E python3.6 -m pip install --user msrest
+    $out4 = sudo -H -E python3.6 -m pip install --user msrestazure
+    $out5 = sudo -H -E python3.6 -m pip install --user -e python_glue
 }
 if($out2.Length -gt 0){
     foreach($o in $out2){
@@ -388,7 +397,7 @@ if($IsWin32) {
     $out = python -m pip install --user -e horton_helpers
 }
 else{
-    $out = sudo -H -E python3 -m pip install --user -e horton_helpers
+    $out = sudo -H -E python3.6 -m pip install --user -e horton_helpers
 }
 if($out.Length -gt 0){
     foreach($o in $out){
@@ -429,7 +438,7 @@ if($IsWin32) {
     $out = python -m pip install --user -r requirements.txt
 }
 else{
-    $out = sudo -H -E python3 -m pip install --user -r requirements.txt
+    $out = sudo -H -E python3.6 -m pip install --user -r requirements.txt
 }
 if($out.Length -gt 0){
     foreach($o in $out){
