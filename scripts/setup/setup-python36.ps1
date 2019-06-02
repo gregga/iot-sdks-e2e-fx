@@ -169,6 +169,26 @@ if($foundPy)
     }
 }
 
+if ($IsWin32 -eq $false) {
+    $out = sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Magenta
+    }
+    $out = sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Magenta
+    }
+    $out = sudo update-alternatives --config python3
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Magenta
+    }
+    $out = sudo update-alternatives --set python3 /usr/bin/python3.6
+    foreach($o in $out){
+        Write-Host $o -ForegroundColor Magenta
+    }
+}
+
+
 $gotPip3 = $false
 $Pip3Path = Which("pip3")
 if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
