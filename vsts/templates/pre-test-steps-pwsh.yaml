@@ -73,13 +73,13 @@ steps:
   displayName: 'Verify ${{ parameters.language }}Mod deployment (${{ parameters.test_image }})'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- script: |
-   python3 $(Horton.FrameworkRoot)/pyscripts/ensure-container.py ${{ parameters.language }}Mod
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-container-running.ps1 ${{ parameters.language }}Mod
+  workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'Verify that ${{ parameters.language }}Mod is responding'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- script: |
-   python3 $(Horton.FrameworkRoot)/pyscripts/ensure-container.py friendMod
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-container-running.ps1 friendMod
+  workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'Verify that friendMod is responding'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
