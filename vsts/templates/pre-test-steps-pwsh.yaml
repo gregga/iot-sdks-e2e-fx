@@ -42,7 +42,7 @@ steps:
     IOTEDGE_DEBUG_LOG: $(IOTEDGE_DEBUG_LOG)
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/deploy-test-containers.ps1 -friend ${{ parameters.language }} ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
+- powershell: $(Horton.FrameworkRoot)/scripts/deploy-test-containers.ps1 -container ${{ parameters.language }} ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
   workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'POWERSHELL: Deploy manifest (${{ parameters.test_image }})'
   env:
