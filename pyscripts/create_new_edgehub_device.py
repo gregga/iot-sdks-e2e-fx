@@ -9,10 +9,10 @@ import sys
 #sys.path.append('../horton_helpers')
 #hpath = os.path.join(os.path.sep, '../horton_helpers'
 #sys.path.insert(0, '../horton_helpers')
-scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
-print("MYPATH: " + scriptPath)
-os.chdir(scriptPath)
-sys.path.append("../horton_helpers")
+#scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
+#print("MYPATH: " + scriptPath)
+#os.chdir(scriptPath)
+#sys.path.append("../horton_helpers")
 from edgehub_factory import createNewHubInstance
 from connection_string import connection_string_to_sas_token
 from config_yaml import ConfigFile
