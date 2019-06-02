@@ -27,6 +27,7 @@ steps:
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - powershell: |
+    ls &
     docker login -u ${{ parameters.repo_user }} -p ${{ parameters.repo_password }} ${{ parameters.repo_address }} &
     docker pull ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }} &
     docker pull ${{ parameters.image_edgeAgent }} &
