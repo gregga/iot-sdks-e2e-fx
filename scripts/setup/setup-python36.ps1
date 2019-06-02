@@ -178,11 +178,11 @@ if ($IsWin32 -eq $false) {
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
     }
-    $out = sudo update-alternatives --config python3
+    $out = sudo update-alternatives --set python3 /usr/bin/python3.6
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
     }
-    $out = sudo update-alternatives --set python3 /usr/bin/python3.6
+    $out = python3 -V
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
     }
