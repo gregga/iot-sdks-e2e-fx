@@ -117,7 +117,7 @@ set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 $out = ls /usr/bin/python*
 foreach($o in $out){
-    Write-Host $0 -ForegroundColor Yellow
+    Write-Host $o -ForegroundColor Yellow
 }
 #$root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
 $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
