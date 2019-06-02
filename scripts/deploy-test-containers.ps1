@@ -4,8 +4,8 @@
 Param
 (
     [Parameter(Mandatory)]
-    [Alias("friend")] 
-    [string[]]$friend
+    [Alias("container")] 
+    [string[]]$container_name
 )
 
 $script_dir = $pwd.Path
@@ -21,9 +21,9 @@ foreach($o in $out){
     Write-Host $o -ForegroundColor Magenta
 }
 
-Write-Host "deploy_test_container $friend" -ForegroundColor Yellow
+Write-Host "deploy_test_container $container_name" -ForegroundColor Yellow
 #python3 $pyscripts/deploy_test_containers.py --friend $friend
-$out = sudo -H -E python3 $pysripts/deploy_test_containers.py --friend $friend
+$out = sudo -H -E python3 $pysripts/deploy_test_containers.py --friend $container_name
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
