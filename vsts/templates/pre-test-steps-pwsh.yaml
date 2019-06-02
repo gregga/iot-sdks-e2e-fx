@@ -45,7 +45,7 @@ steps:
 - powershell: |
     python3 $(Horton.FrameworkRoot)/pyscripts/deploy_test_containers.py --friend --${{ parameters.language }} ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
   workingDirectory: $(Horton.FrameworkRoot)
-  displayName: 'POWERSHELL: Create new edgehub identity'
+  displayName: 'POWERSHELL: Deploy manifest (${{ parameters.test_image }})'
   env:
     IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
     IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)

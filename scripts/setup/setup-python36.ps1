@@ -366,6 +366,7 @@ else{
     $out3 = sudo -H -E python3.6 -m pip install --user msrest
     $out4 = sudo -H -E python3.6 -m pip install --user msrestazure
     $out5 = sudo -H -E python3.6 -m pip install --user -e python_glue
+    $out6 = sudo -H -E python3.6 -m pip install --user ruamel
 }
 if($out2.Length -gt 0){
     foreach($o in $out2){
@@ -384,6 +385,11 @@ if($out4.Length -gt 0){
 }
 if($out5.Length -gt 0){
     foreach($o in $out5){
+        Write-Host $o -ForegroundColor Blue
+    }
+}
+if($out6.Length -gt 0){
+    foreach($o in $out6){
         Write-Host $o -ForegroundColor Blue
     }
 }
