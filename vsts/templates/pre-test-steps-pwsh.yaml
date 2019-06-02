@@ -21,18 +21,19 @@ steps:
   displayName: 'POWERSHELL: install python libs'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- script: |
-    $(Horton.FrameworkRoot)/scripts/setup/setup-iotedge.sh
-  displayName: 'install iotedge packages'
+- powershell: $(Horton.FrameworkRoot)/scripts/setup/setup-iotedge.ps1
+  workingDirectory: $(Horton.FrameworkRoot)
+  displayName: 'POWERSHELL: install iotedge packages'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- script: |
+- powershell: |
     docker login -u ${{ parameters.repo_user }} -p ${{ parameters.repo_password }} ${{ parameters.repo_address }} &&
     docker pull ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }} &&
     docker pull ${{ parameters.image_edgeAgent }} &&
     docker pull ${{ parameters.image_edgeHub }} &&
     docker pull ${{ parameters.image_friendmod }} 
-  displayName: 'pre-cache docker images'
+  workingDirectory: $(Horton.FrameworkRoot)
+  displayName: 'POWERSHELL: pre-cache docker images'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - script: |

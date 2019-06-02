@@ -103,7 +103,7 @@ function IsWindows {
 #### Script Starts Here ####
 
 $PythonMinVersionMajor = 3
-$PythonMinVersionMinor = 5
+$PythonMinVersionMinor = 6
 
 $IsWin32 = IsWindows
 $pipTestOpts = ' --upgrade --no-deps --force-reinstall '
