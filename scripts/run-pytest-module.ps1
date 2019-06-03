@@ -71,6 +71,15 @@ foreach($env_var in $out){
     }
 }
 
+try {
+    $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
+    if($null -ne $cert_val){
+        Write-Host "found IOTHUB_E2E_EDGEHUB_CA_CERT"
+    }
+catch {
+    Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
+}
+
 write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
 $out = sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrap$env_wper --junitxml=$test_junitxml -o $test_o $test_extra_args
 foreach($o in $out){
