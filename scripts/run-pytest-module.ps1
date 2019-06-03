@@ -76,6 +76,7 @@ try {
     if($null -ne $cert_val){
         Write-Host "found IOTHUB_E2E_EDGEHUB_CA_CERT"
     }
+}
 catch {
     Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
 }
