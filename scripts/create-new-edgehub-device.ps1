@@ -11,10 +11,10 @@ Write-Host "RealPath $path" -ForegroundColor Yellow
 $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 $pysripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
-$out = sudo -H -E python3 -m pip install --user ruamel.yaml
-foreach($o in $out){
-    Write-Host $o -ForegroundColor Magenta
-}
+#$out = sudo -H -E python3 -m pip install --user ruamel.yaml
+#foreach($o in $out){
+#    Write-Host $o -ForegroundColor Magenta
+#}
 
 $out = sudo -H -E python3 -m pip install -e $hh
 foreach($o in $out){
