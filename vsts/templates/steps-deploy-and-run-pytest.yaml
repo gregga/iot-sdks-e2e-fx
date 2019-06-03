@@ -151,12 +151,12 @@ steps:
 
 - template: steps-ensure-e2e-fx-repo.yaml
 
-- template: pre-test-steps-pwsh.yaml
+- template: pre-test-steps.yaml
   parameters:
     language: ${{ parameters.language }}
     test_image: $(testImage)
 
-- template: pytest-test-steps-pwsh.yaml
+- template: pytest-test-steps.yaml
   parameters:
     language: ${{ parameters.language }}
     transport: $(transport)
