@@ -363,8 +363,8 @@ if($IsWin32) {
 else{
     #$out  = sudo -H -E python3 -m pip install --upgrade pip
     $out2 = sudo -H -E python3.6 -m pip install --user setuptools
-    $out3 = sudo -H -E python3.6 -m pip install --user msrest
-    $out4 = sudo -H -E python3.6 -m pip install --user msrestazure
+    #$out3 = sudo -H -E python3.6 -m pip install --user msrest
+    #$out4 = sudo -H -E python3.6 -m pip install --user msrestazure
     $out5 = sudo -H -E python3.6 -m pip install --user -e python_glue
     $out6 = sudo -H -E python3.6 -m pip install --user ruamel
 }
@@ -373,12 +373,12 @@ if($out2.Length -gt 0){
         Write-Host $o -ForegroundColor Blue
     }
 }
-if($out3.Length -gt 0){
+if("$out3" -ne "" -and $out3.Length -gt 0){
     foreach($o in $out3){
         Write-Host $o -ForegroundColor Blue
     }
 }
-if($out4.Length -gt 0){
+if("$out4" -ne "" -and $out4.Length -gt 0){
     foreach($o in $out4){
         Write-Host $o -ForegroundColor Blue
     }
