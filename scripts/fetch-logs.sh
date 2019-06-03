@@ -34,5 +34,8 @@ if [ $? -ne 0 ]; then
   echo "error merging logs"
 fi
 
-ls
+pushd $resultsdir
+ls $resultsdir
+echor "....."
+ls${root_dir}/TEST*
 python ${root_dir}/pyscripts/inject_into_junit.py -junit_file junit.xml -logfile merged.log
