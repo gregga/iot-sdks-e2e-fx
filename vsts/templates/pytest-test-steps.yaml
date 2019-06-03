@@ -14,7 +14,7 @@ steps:
     cd $(Horton.FrameworkRoot)/test-runner
     python3 -u -m pytest -v --scenario ${{ parameters.scenario }} --transport=${{ parameters.transport }} --${{ parameters.language }}-wrapper --junitxml=$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml -o junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}
 
-  displayName: 'python3.6 -u -m pytest -v --scenario ${{ parameters.scenario }} --transport=${{ parameters.transport }} --${{ parameters.language }}-wrapper --junitxml=$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml -o junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}'
+  displayName: 'python3 -u -m pytest -v --scenario ${{ parameters.scenario }} --transport=${{ parameters.transport }} --${{ parameters.language }}-wrapper --junitxml=$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml -o junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}'
 
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
   env:
