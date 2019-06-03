@@ -32,6 +32,7 @@ if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+$pypath = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 set-location $testpath
 
 #export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
@@ -47,8 +48,30 @@ catch {
     Write-Host "IOTHUB_E2E_EDGEHUB_CA_CERT not found"
 }
 
-write-host "$pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
-$out = sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
+$out = sudo -H -E python3 -$pypath/get_environment_variables.py
+foreach($o in $out){
+    Write-Host $o -ForegroundColor Blue
+}
+
+foreach($env_var in $out){
+    if ($env_var.StartsWith("export ")) {
+
+        $env_line = $env_var.Replace("`"","")
+        $env_line = $env_line -replace "export ", ""
+
+        $sep_pos = $env_line.IndexOf("=")
+
+        $var_name = $env_line.Substring(0, $sep_pos)
+        $var_val = $env_line.Substring($sep_pos + 1)
+        #$env:$var_name = $var_val
+        New-Item env:\$var_name -Value $var_val
+    }
+
+}
+
+
+write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
+$out = sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrap$env_wper --junitxml=$test_junitxml -o $test_o $test_extra_args
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
