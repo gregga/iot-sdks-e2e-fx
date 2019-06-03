@@ -31,7 +31,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
-$testpath = Join-Path -Path $path -ChildPath '../../test-runner' -Resolve
+$testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 set-location $testpath
 
 #export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
