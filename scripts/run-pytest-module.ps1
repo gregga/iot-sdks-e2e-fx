@@ -6,19 +6,25 @@ Param
     [Parameter(Mandatory)]
     [Alias("scenario")] 
     [string[]]$test_scenario,
+
     [Parameter(Mandatory)]
     [Alias("transport")] 
     [string]$test_transport,
+
     [Parameter(Mandatory)]
     [Alias("lang")] 
     [string]$test_lang,
-    [Parameter(Mandatory)]
+
     [Alias("junitxml")] 
-    [string]$test_junitxml,
-    [Parameter(Mandatory)]
+    [AllowEmptyString()]
+    [string]$test_junitxml="",
+
     [Alias("o")] 
-    [string]$test_o,
+    [AllowEmptyString()]
+    [string]$test_o="",
+
     [Alias("extra_args")] 
+    [AllowEmptyString()]
     [string]$test_extra_args=""
 )
 
