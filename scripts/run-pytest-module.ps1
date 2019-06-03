@@ -60,15 +60,16 @@ foreach($env_var in $out){
         $env_line = $env_line -replace "export ", ""
 
         $sep_pos = $env_line.IndexOf("=")
-
         $var_name = $env_line.Substring(0, $sep_pos)
         $var_val = $env_line.Substring($sep_pos + 1)
-        #$env:$var_name = $var_val
-        New-Item env:\$var_name -Value $var_val
+        try{
+            New-Item env:\$var_name -Value $var_val
+        }
+        catch{
+            write-host "$var_name already set"
+        }
     }
-
 }
-
 
 write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
 $out = sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrap$env_wper --junitxml=$test_junitxml -o $test_o $test_extra_args
