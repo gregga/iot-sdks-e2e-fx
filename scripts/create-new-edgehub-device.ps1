@@ -9,7 +9,7 @@ set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 
 $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
-$pysripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
+$pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
 #$out = sudo -H -E python3 -m pip install --user ruamel.yaml
 #foreach($o in $out){
@@ -21,12 +21,12 @@ foreach($o in $out){
     Write-Host $o -ForegroundColor Magenta
 }
 
-$out = sudo -H -E python3 $pysripts/create_new_edgehub_device.py
+$out = sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
 
-$out = sudo -H -E python3 $pysripts/deploy_test_containers.py
+$out = sudo -H -E python3 $pyscripts/deploy_test_containers.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }

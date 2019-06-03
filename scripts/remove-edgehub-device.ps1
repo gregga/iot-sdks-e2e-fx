@@ -7,9 +7,9 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
-$pysripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
+$pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
-$out = sudo -H -E python3 $pysripts/remove_edgehub_device.py
+$out = sudo -H -E python3 $pyscripts/remove_edgehub_device.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }

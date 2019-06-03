@@ -12,9 +12,9 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
-$pysripts = Join-Path -Path $path -ChildPath '../../pyscripts' -Resolve
+$pyscripts = Join-Path -Path $path -ChildPath '../../pyscripts' -Resolve
 
-$out = sudo -H -E python3 $pysripts/ensure-container.py $container_name
+$out = sudo -H -E python3 $pyscripts/ensure-container.py $container_name
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
