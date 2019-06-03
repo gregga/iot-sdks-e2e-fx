@@ -34,8 +34,12 @@ if [ $? -ne 0 ]; then
   echo "error merging logs"
 fi
 
+echo "injecting merged.log into junit"
 pushd $resultsdir
 ls $resultsdir
-echor "....."
-ls${root_dir}/TEST*
-python ${root_dir}/pyscripts/inject_into_junit.py -junit_file junit.xml -logfile merged.log
+echo "....."
+ls$2
+python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $2 -logfile merged.log
+if [ $? -ne 0 ]; then
+  echo "error injecting into junit"
+fi
