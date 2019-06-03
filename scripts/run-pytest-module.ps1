@@ -3,27 +3,24 @@
 
 Param
 (
-    [Parameter(Mandatory)]
-    [Alias("scenario")] 
+    [Parameter(Position=0)]
     [string[]]$test_scenario,
 
-    [Parameter(Mandatory)]
-    [Alias("transport")] 
+    [Parameter(Position=1)]
     [string]$test_transport,
 
-    [Parameter(Mandatory)]
-    [Alias("lang")] 
+    [Parameter(Position=2)]
     [string]$test_lang,
 
-    [Alias("junitxml")] 
+    [Parameter(Position=3)]
     [AllowEmptyString()]
     [string]$test_junitxml="",
 
-    [Alias("o")] 
+    [Parameter(Position=4)]
     [AllowEmptyString()]
     [string]$test_o="",
 
-    [Alias("extra_args")] 
+    [Parameter(Position=5)]
     [AllowEmptyString()]
     [string]$test_extra_args=""
 )
