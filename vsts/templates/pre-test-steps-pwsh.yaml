@@ -75,12 +75,12 @@ steps:
 
 - powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 ${{ parameters.language }}Mod
   workingDirectory: $(Horton.FrameworkRoot)
-  displayName: 'Verify that ${{ parameters.language }}Mod is responding'
+  displayName: 'POWERSHELL: Verify that ${{ parameters.language }}Mod is responding'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 friendMod
   workingDirectory: $(Horton.FrameworkRoot)
-  displayName: 'Verify that friendMod is responding'
+  displayName: 'POWERSHELL: Verify that friendMod is responding'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - script: |
