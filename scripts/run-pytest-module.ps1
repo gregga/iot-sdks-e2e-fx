@@ -48,7 +48,7 @@ catch {
     Write-Host "IOTHUB_E2E_EDGEHUB_CA_CERT not found"
 }
 
-$out = sudo -H -E python3 -$pypath/get_environment_variables.py
+$out = sudo -H -E python3 $pypath/get_environment_variables.py
 foreach($o in $out){
     Write-Host $o -ForegroundColor Blue
 }
