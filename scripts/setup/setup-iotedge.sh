@@ -4,6 +4,7 @@
 script_dir=$(cd "$(dirname "$0")" && pwd)
 
 # install iotedge
+sudo pip install --upgrade setuptools
 sudo apt-get install -y iotedge
 [ $? -eq 0 ] || { echo "apt-get install iotedge failed"; exit 1; }
 
