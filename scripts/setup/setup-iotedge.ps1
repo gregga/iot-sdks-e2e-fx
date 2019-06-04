@@ -25,10 +25,11 @@ function IsWin32 {
 }
 
 if(IsWin32 -eq $false) {
-    $out = sudo -H -E pip install --upgrade setuptools
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
+    sudo -H -E pip install --upgrade setuptools
+    #$out = sudo -H -E pip install --upgrade setuptools
+    #foreach($o in $out){
+    #    Write-Host $o -ForegroundColor Magenta
+    #}
     $out = sudo -H -E apt-get install -y iotedge
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
