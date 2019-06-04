@@ -1,4 +1,7 @@
 parameters:
+  repo_address: $(IOTHUB-E2E-REPO-ADDRESS)
+  repo_user: $(IOTHUB-E2E-REPO-USER)
+  repo_password: $(IOTHUB-E2E-REPO-PASSWORD)
   log_folder_name: ''
   language: ''
 
@@ -6,6 +9,12 @@ steps:
 - powershell: $(Horton.FrameworkRoot)/scripts/remove-edgehub-device.ps1
   workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'POWERSHELL: remove devices'
+  env:
+    IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
+    IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
+    IOTHUB_E2E_REPO_USER: $(IOTHUB-E2E-REPO-USER)
+    IOTHUB_E2E_REPO_PASSWORD: $(IOTHUB-E2E-REPO-PASSWORD)
+    IOTEDGE_DEBUG_LOG: $(IOTEDGE_DEBUG_LOG)
   condition: and(always(), ne(variables['skipTest'],'yes'))
 
 - script: |
