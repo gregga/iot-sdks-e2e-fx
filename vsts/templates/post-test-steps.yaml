@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 parameters:
   log_folder_name: ''
   language: ''
@@ -37,3 +38,44 @@ steps:
   condition: and(always(), ne(variables['skipTest'],'yes'))
 
 
+=======
+parameters:
+  log_folder_name: ''
+  language: ''
+
+steps:
+- script: |
+   python3 $(Horton.FrameworkRoot)/pyscripts/remove_edgehub_device.py
+  displayName: 'remove devices'
+  env:
+    IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
+  condition: and(always(), ne(variables['skipTest'],'yes'))
+
+- script: |
+    $(Horton.FrameworkRoot)/scripts/fetch-logs.sh ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml
+    mkdir -p $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
+    mv $(Horton.FrameworkRoot)/results/logs/* $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}/
+    mv $(Build.SourcesDirectory)/TEST-* $(Build.SourcesDirectory)/results
+  displayName: 'Fetch logs'
+  condition: and(always(), ne(variables['skipTest'],'yes'))
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **/TEST-*.xml'
+  condition: and(always(), ne(variables['skipTest'],'yes'))
+
+- task: CopyFiles@2
+  displayName: 'Copy result files to artifact staging'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/results'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  condition: and(always(), ne(variables['skipTest'],'yes'))
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Result for $(Build.DefinitionName) $(Build.BuildId)'
+  condition: and(always(), ne(variables['skipTest'],'yes'))
+
+
+>>>>>>> 1dbdbdda4c6576364b01e0bcb82641835fdaf1c1
