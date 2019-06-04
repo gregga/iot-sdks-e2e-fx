@@ -1,14 +1,6 @@
-<<<<<<< HEAD
-docker==3.5.0
-requests>=2.20.0
-colorama>=0.4.1
-netifaces>=0.10.9
-ruamel.yaml==0.15.71
-=======
 docker==3.5.0
 requests>=2.20.0
 colorama>=0.4.1
 netifaces>=0.10.9
 ruamel.yaml>=0.15.71
 junitparser>=1.3.2
->>>>>>> 1dbdbdda4c6576364b01e0bcb82641835fdaf1c1
