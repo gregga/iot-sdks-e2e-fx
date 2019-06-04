@@ -16,12 +16,7 @@ steps:
     architecture: 'x64'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-<<<<<<< HEAD
 - script: $(Horton.FrameworkRoot)/scripts/setup/setup-python36.sh
-=======
-- script: |
-    $(Horton.FrameworkRoot)/scripts/setup/setup-python36.sh
->>>>>>> 1dbdbdda4c6576364b01e0bcb82641835fdaf1c1
   displayName: 'install python libs'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
