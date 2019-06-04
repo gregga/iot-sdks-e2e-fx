@@ -8,7 +8,7 @@ if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 $pyscripts = Join-Path -Path $path -ChildPath '../../pyscripts' -Resolve
-$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
+$hh = Join-Path -Path $path -ChildPath '../../horton_helpers' -Resolve
 
 function IsWin32 {
     $IsW32 = $false
