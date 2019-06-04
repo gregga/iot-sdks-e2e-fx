@@ -11,20 +11,28 @@ $pyscripts = Join-Path -Path $path -ChildPath '../../pyscripts' -Resolve
 $hh = Join-Path -Path $path -ChildPath '../../horton_helpers' -Resolve
 
 function IsWin32 {
-    $IsW32 = $false
     try {
-        if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
+        $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
+        if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
     catch {
-        $IsW32 =  $false
+        Write-Host "NotWin32" -ForegroundColor Yellow
     }
-    return $IsW32
+    return $false
 }
 
-if(IsWin32 -eq $false) {
+if(IsWin32){
+    python -m pip install --upgrade pip
+
+    python -m  pip install --upgrade setuptools
+
+    #python -m pip install iotedge
+    python -m pip install -e $hh
+}
+else {
     sudo -H -E pip install --upgrade setuptools
     #$out = sudo -H -E pip install --upgrade setuptools
     #foreach($o in $out){
@@ -38,9 +46,4 @@ if(IsWin32 -eq $false) {
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
     }
-}
-else {
-    python -m pip install --upgrade pip
-    #python -m pip install iotedge
-    python -m pip install -e $hh
 }
