@@ -84,7 +84,7 @@ if($isWin32 -eq $false) {
 #  echo "error fetching iotedged journal"
 #fi
 
-$arglist = ""
+$arglist = " "
 $modlist = ""
 foreach($mod in $modulelist) {
     if("$mod" -ne "") {
@@ -98,7 +98,11 @@ Write-Host "merging logs for $modlist" -ForegroundColor Green
 if($isWin32) {
     Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
     $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist; if ($LASTEXITCODE -ne 0) { Write-Host "error merging logs" -ForegroundColor Red; $out }
-    python ${root_dir}/pyscripts/docker_log_processor.py $arglist.
+    python ${root_dir}/pyscripts/docker_log_processor.py $arglist
+    #args: -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log :
+    Write-Host "#########################" -ForegroundColor Yellow
+    python ${root_dir}/pyscripts/docker_log_processor.py " -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log"
+
 }
 else {
     python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist; if ($LASTEXITCODE -ne 0) { Write-Host "error merging logs" -ForegroundColor Red; $out }
