@@ -412,6 +412,26 @@ else
 #    [ $? -eq 0 ] || { colorecho $_red "install horton_helpers failed"; exit 1; }
 #fi
 
+##############################################################
+# Just for build-docker-image
+
+if($IsWin32) {
+    python -m pip uninstall -y docker
+    python -m pip uninstall -y docker-py
+    python -m pip uninstall -y docker-compose
+    python -m pip install docker
+    python -m pip install docker-py
+    python -m pip install docker-compose
+}
+else{
+    sudo -H -E python3 -m pip uninstall -y docker
+    sudo -H -E python3 -m pip uninstall -y docker-py
+    sudo -H -E python3 -m pip uninstall -y docker-compose
+    sudo -H -E python3 -m pip install docker
+    sudo -H -E python3 -m pip install docker-py
+    sudo -H -E python3 -m pip install docker-compose
+}
+
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
 cd $root_dir
 #$runCmd = "python -m $pipcmd install --user -e horton_helpers"

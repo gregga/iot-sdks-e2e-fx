@@ -19,6 +19,8 @@ set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath 'pyscripts' -Resolve
 
+$root_dir + "/scripts/setup/setup-python36.ps1"
+
 Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
 function RunningOnWin32 {
