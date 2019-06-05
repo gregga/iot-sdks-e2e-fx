@@ -80,8 +80,8 @@ jobs:
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
   - powershell: |
-      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
-    displayName: "POWERSHELL: build docker image ${{ parameters.language }}"
+      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }} --repo ${NormalizedRepo} --commit ${CommitToPass} --variant ${{ parameters.variant }}
+    displayName: "POWERSHELL: build docker image --language ${{ parameters.language }} --repo ${NormalizedRepo} --commit ${CommitToPass} --variant ${{ parameters.variant }}"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
       IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
