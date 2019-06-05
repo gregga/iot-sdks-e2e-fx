@@ -64,10 +64,15 @@ foreach($i in 1..24) {
         }
     }
     else {
-        Write-Host "container is unkonwn.  Waiting."  -ForegroundColor Yellow
+        Write-Host "container is unkonwn.  Waiting." -ForegroundColor Yellow
     }
     Start-Sleep -s 10
 }
+
+Write-Host  "container $container_name deployment failed" -ForegroundColor Red
+exit 1
+
+
 # each iteration = ~ 10 seconds
 #for i in {1..24}; do
 #  echo "getting image ID for $IMAGENAME"
