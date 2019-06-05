@@ -79,9 +79,8 @@ jobs:
     displayName: "pip install requirements.txt"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
-  - powershell: $(Horton.FrameworkRoot)/scripts/remove-edgehub-device.ps1 --language ${{ parameters.language }}  --repo ${NormalizedRepo} --commit ${CommitToPass} --variant ${{ parameters.variant }}
-#      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }} --repo ${NormalizedRepo} --commit ${CommitToPass} --variant ${{ parameters.variant }}
-    displayName: "POWERSHELL: build docker image --language ${{ parameters.language }} --repo ${NormalizedRepo} --commit ${CommitToPass} --variant ${{ parameters.variant }}"
+  - powershell: $(Horton.FrameworkRoot)/scripts/build_docker_image.py ${{ parameters.language }}  ${NormalizedRepo} ${CommitToPass} ${{ parameters.variant }}
+    displayName: "POWERSHELL: build docker image --language ${{ parameters.language }} --repo ${NormalizedRepo}"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
       IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
@@ -89,7 +88,6 @@ jobs:
       IOTHUB_E2E_REPO_PASSWORD: $(IOTHUB-E2E-REPO-PASSWORD)
       NormalizedRepo: $(NormalizedRepo)
       CommitToPass: $(CommitToPass)
-
 
 #  - powershell: |
 #      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }} --repo ${NormalizedRepo} --commit ${CommitToPass} --variant ${{ parameters.variant }}
