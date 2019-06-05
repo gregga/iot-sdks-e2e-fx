@@ -35,23 +35,39 @@ function RunningOnWin32 {
 }
 
 if( "$container_name" -eq "" -or "$image_name" -eq "") {
-  Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
-  Write-Host "eg: verify-deployment nodeMod localhost:5000/node-test-image:latest" -ForegroundColor Red
-  exit 1
+    Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
+    Write-Host "eg: verify-deployment nodeMod localhost:5000/node-test-image:latest" -ForegroundColor Red
+    exit 1
 }
 
+$expectedImg = ""
+$actualImg = ""
 foreach($i in 1..24) {
-  Write-Host "getting image ID for $image_name run $i"
-  $out = docker image inspect $image_name
-  foreach($o in $out){
-    Write-Host $o -ForegroundColor Magenta
-  }
-  Start-Sleep -s 10
+    Write-Host "getting image ID for $image_name run $i"
+    $expectedImg = docker image inspect $image_name --format="{{.Id}}"
+    if("$expectedImg" -ne "") {
+        Write-Host "calling docker inspect $container_name" -ForegroundColor Green
+        $running = docker image inspect --format="{{.State.Running}}" $container_name
+        if($running -eq $true) {
+            Write-Host "Container is running.  Checking image" -ForegroundColor Green
+
+            $actualImg = docker image inspect $container_name --format="{{.Image}}"
+            Write-Host "Actual ImageId: $actualImg" -ForegroundColor Green
+
+            if($expectedImg -eq $actualImg) {
+                Write-Host "IDs match.  Deployment is complete"  -ForegroundColor Green
+                exit 0
+            }
+            else {
+                Write-Host "container is not running.  Waiting"  -ForegroundColor Yellow
+            }
+        }
+    }
+    else {
+        Write-Host "container is unkonwn.  Waiting."  -ForegroundColor Yellow
+    }
+    Start-Sleep -s 10
 }
-
-#--format="{{.Id}}
-
-
 # each iteration = ~ 10 seconds
 #for i in {1..24}; do
 #  echo "getting image ID for $IMAGENAME"
