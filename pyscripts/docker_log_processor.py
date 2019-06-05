@@ -19,7 +19,7 @@ import sys
 class DockerLogProcessor:
 
     def __init__(self, args):
-
+        
         # Parse args
         parser = argparse.ArgumentParser(description="Docker Log Processor")
         group = parser.add_mutually_exclusive_group(required=True)
