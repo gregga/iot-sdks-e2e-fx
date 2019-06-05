@@ -42,9 +42,14 @@ if( "$container_name" -eq "" -or "$image_name" -eq "") {
 foreach($i in 1..24) {
   Write-Host "getting image ID for $image_name run $i"
   $out = docker image inspect $image_name
-  Write-Host "image: $out"
-  #--format="{{.Id}}
+  foreach($o in $out){
+    Write-Host $o -ForegroundColor Magenta
+  }
+  Start-Sleep -s 10
 }
+
+#--format="{{.Id}}
+
 
 # each iteration = ~ 10 seconds
 #for i in {1..24}; do
