@@ -40,6 +40,13 @@ if( "$container_name" -eq "" -or "$image_name" -eq "") {
     exit 1
 }
 
+Write-Host "######################################"
+docker container ps
+Write-Host "######################################"
+Write-Host "image_name: $image_name"
+Write-Host "container_name: $container_name"
+Write-Host "######################################"
+
 $expectedImg = ""
 $actualImg = ""
 foreach($i in 1..24) {
