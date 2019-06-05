@@ -23,6 +23,7 @@ jobs:
         $BuildImage="no"
       }
       $NormalizedRepo=$env:Repo
+      Write-Host "NR:$NormalizesRepo" + ":"
       if ($NormalizedRepo -like 'https://github.com/*') {
         $NormalizedRepo=$NormalizedRepo.Substring('https://github.com/'.length)
       }
