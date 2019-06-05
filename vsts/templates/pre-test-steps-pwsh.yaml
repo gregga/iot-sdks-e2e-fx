@@ -57,42 +57,22 @@ steps:
   displayName: 'POWERSHELL: Verify edgeHub deployment'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/verify-deployment-pwsh.ps1 edgeHub edgeAgent ${{ parameters.image_edgeAgent }}
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-deployment-pwsh.ps1 edgeAgent ${{ parameters.image_edgeAgent }}
   displayName: 'POWERSHELL: Verify edgeAgent deployment'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/verify-deployment-pwsh.ps1 edgeHub friendMod ${{ parameters.image_friendMod }}
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-deployment-pwsh.ps1 friendMod ${{ parameters.image_friendMod }}
   displayName: 'POWERSHELL: Verify friendMod deployment'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/verify-deployment-pwsh.ps1 edgeHub ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
-  displayName: 'POWERSHELL: Verify ${{ parameters.language }}Mod deployment (${{ parameters.test_image }})'
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-deployment-pwsh.ps1 ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
+  displayName: 'POWERSHELL: Verify deploymet ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-#- script: |
-#    $(Horton.FrameworkRoot)/scripts/verify-deployment.sh edgeHub ${{ parameters.image_edgeHub }}
-#  displayName: 'Verify edgeHub deployment'
-#  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
-
-#- script: |
-#    $(Horton.FrameworkRoot)/scripts/verify-deployment.sh edgeAgent ${{ parameters.image_edgeAgent }}
-#  displayName: 'Verify edgeAgent deployment'
-#  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
-
-#- script: |
-#    $(Horton.FrameworkRoot)/scripts/verify-deployment.sh friendMod ${{ parameters.image_friendMod }}
-#  displayName: 'Verify friendMod deployment'
-#  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
-
-#- script: |
-#    $(Horton.FrameworkRoot)/scripts/verify-deployment.sh ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
-#  displayName: 'Verify ${{ parameters.language }}Mod deployment (${{ parameters.test_image }})'
-#  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
-
-#- powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 ${{ parameters.language }}Mod
-#  workingDirectory: $(Horton.FrameworkRoot)
-#  displayName: 'POWERSHELL: Verify that ${{ parameters.language }}Mod is responding'
-#  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
+- powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 ${{ parameters.language }}Mod
+  workingDirectory: $(Horton.FrameworkRoot)
+  displayName: 'POWERSHELL: Verify that ${{ parameters.language }}Mod is responding'
+  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 friendMod
   workingDirectory: $(Horton.FrameworkRoot)

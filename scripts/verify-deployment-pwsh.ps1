@@ -6,6 +6,7 @@ Param
     [Parameter(Position=0)]
     [AllowEmptyString()]
     [string]$container_name="",
+    
     [Parameter(Position=1)]
     [AllowEmptyString()]
     [string]$image_name=""
