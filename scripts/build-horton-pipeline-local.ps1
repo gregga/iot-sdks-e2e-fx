@@ -35,84 +35,101 @@ function RunningOnWin32 {
 }
 
 $isWin32 = RunningOnWin32
+$horton_user = $env:IOTHUB_E2E_REPO_USER
+$horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
+$horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS
 
+# export to global ENV
+Set-Item "env:IOTHUB-E2E-REPO-USER" $horton_user
+Set-Item "env:IOTHUB-E2E-REPO-PASSWORD" $horton_pw
+Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
+set-location $root_dir
 # Build Images:
 
 
 # pre-test-steps
 
-#/scripts/setup/setup-python36.ps1
-Write-Host 'POWERSHELL: install python libs'
+Write-Host 'POWERSHELL: install python libs' -ForegroundColor Blue
+scripts/setup/setup-python36.ps1
 
-#/scripts/setup/setup-iotedge.ps1
-Write-Host 'POWERSHELL: install iotedge packages'
+if(!$isWin32) {
+    Write-Host 'POWERSHELL: install iotedge packages' -ForegroundColor Blue
+    scripts/setup/setup-iotedge.ps1    
+}
 
-#/scripts/setup/setup-precache-images.ps1 -user ${{ parameters.repo_user }} -pw ${{ parameters.repo_password }} -repo ${{ parameters.repo_address }} -lang ${{ parameters.language }} -timg ${{ parameters.test_image }} -eaimg ${{ parameters.image_edgeAgent }} -ehimg ${{ parameters.image_edgeHub }} -frImg ${{ parameters.image_friendmod }}
-Write-Host 'POWERSHELL: pre-cache docker images'
+Write-Host 'POWERSHELL: pre-cache docker images' -ForegroundColor Blue
+$lang = "node"
+$timg = "none"
+$eaimg = "mcr.microsoft.com/azureiotedge-agent:1.0.6"
+$ehimg = "mcr.microsoft.com/azureiotedge-hub:1.0.6"
+$frimg = "$(IOTHUB-E2E-REPO-ADDRESS)/default-friend-module:latest"
 
-#/scripts/create-new-edgehub-device.ps1
-Write-Host 'POWERSHELL: Create new edgehub identity'
+set-location $root_dir
 
-#/scripts/deploy-test-containers.ps1 ${{ parameters.language }} ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
-Write-Host 'POWERSHELL: Deploy manifest (${{ parameters.test_image }})'
+#D:\repos\iot\iot-sdks-e2e-fx-fork\scripts\setup\setup-precache-images.ps1
+#scripts/setup/setup-precache-images.ps1
+scripts/setup/setup-precache-images.ps1 -lang $lang -timg $timg -eaimg $eaimg -ehimg $ehimg -frImg $frimg
 
-#/scripts/verify-deployment-pwsh.ps1 edgeHub ${{ parameters.image_edgeHub }}
-Write-Host 'POWERSHELL: Verify edgeHub deployment'
+Write-Host 'POWERSHELL: Create new edgehub identity' -ForegroundColor Blue
+scripts/create-new-edgehub-device.ps1
 
-#/scripts/verify-deployment-pwsh.ps1 edgeAgent ${{ parameters.image_edgeAgent }}
-Write-Host 'POWERSHELL: Verify edgeAgent deployment'
+Write-Host 'POWERSHELL: Deploy manifest (${{ parameters.test_image }})' -ForegroundColor Blue
+scripts/deploy-test-containers.ps1 $lang $horton_repo/$lang-e2e-v3:$timg
 
-#/scripts/verify-deployment-pwsh.ps1 friendMod ${{ parameters.image_friendMod }}
-Write-Host 'POWERSHELL: Verify friendMod deployment'
+Write-Host 'POWERSHELL: Verify edgeHub deployment' -ForegroundColor Blue
+scripts/verify-deployment-pwsh.ps1 edgeHub $ehimg
 
-#/scripts/verify-deployment-pwsh.ps1 ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}
-Write-Host 'POWERSHELL: Verify deploymet ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}'
+Write-Host 'POWERSHELL: Verify edgeAgent deployment' -ForegroundColor Blue
+scripts/verify-deployment-pwsh.ps1 edgeAgent $eaimg
 
-#/scripts/setup/verify-container-running.ps1 ${{ parameters.language }}Mod
-Write-Host 'POWERSHELL: Verify that ${{ parameters.language }}Mod is responding'
+Write-Host 'POWERSHELL: Verify friendMod deployment' -ForegroundColor Blue
+scripts/verify-deployment-pwsh.ps1 friendMod $frimg
 
-#/scripts/setup/verify-container-running.ps1 friendMod
-Write-Host 'POWERSHELL: Verify that friendMod is responding'
+Write-Host "POWERSHELL: Verify deploymet $lang-Mod $horton_repo/$lang-e2e-v3:$timg" -ForegroundColor Blue
+scripts/verify-deployment-pwsh.ps1 $lang-Mod $horton_repo/$lang-e2e-v3:$timg
 
+Write-Host 'POWERSHELL: Verify that $lang-Mod is responding' -ForegroundColor Blue
+scripts/setup/verify-container-running.ps1 $lang-Mod
+
+Write-Host 'POWERSHELL: Verify that friendMod is responding' -ForegroundColor Blue
+scripts/setup/verify-container-running.ps1 friendMod
+
+Write-Host 'POWERSHELL: give edgeHub 30 seconds to start up' -ForegroundColor Yellow
 Start-Sleep -s 30
 
 # pytest-steps
-#/scripts/run-pytest-module.ps1 ${{ parameters.scenario }} ${{ parameters.transport }} ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}
-Write-Host 'POWERSHELL: run-pytest-module.ps1 ${{ parameters.scenario }} ${{ parameters.transport }} ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}'
+$scenario = ""
+$xport = ""
+#$lang = ""
+$log_folder = ""
+$build_dir = ""
+$xtra_params = ""
 
-# post-test-stepss
+#$(Horton.FrameworkRoot)/scripts/run-pytest-module.ps1 ${{ parameters.scenario }} ${{ parameters.transport }} ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}
+#Write-Host "POWERSHELL: run-pytest-module.ps1 $scenario $xport $lang $build_dir'/TEST-'$log_folder'.xml' junit_suite_name=$log_folder $xtra_params"
+#scripts/run-pytest-module.ps1 $scenario $xport $lang $build_dir'/TEST-'$log_folder'.xml' junit_suite_name=$log_folder $xtra_params
+
+# post-test-steps
 
 #fetch-logs
-Write-Host 'POWERSHELL: Fetch logs'
+Write-Host 'POWERSHELL: Fetch logs' -ForegroundColor Green
 
-$Horton.FrameworkRoot/"scripts/fetch-logs-pwsh.ps1" ${{ parameters.language }}
+scripts/fetch-logs-pwsh.ps1 $lang
+
 try {
-  New-Item -Path $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
+    New-Item -Path $build_dir/results/$log_folder -ItemType Directory
 }
 finally {
-  try {
-    New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -type directory
-  }
-  finally {
-    $files = Get-ChildItem $(Horton.FrameworkRoot)/results/logs/*
-    Move-Item $files  $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
-  }
-}
-try {
- New-Item $(Build.SourcesDirectory)/results} -type directory
-}
-finally {
-  $files = Get-ChildItem $(Build.SourcesDirectory)/TEST-*
-  Move-Item $files $(Build.SourcesDirectory)/results}
+    Write-Host "Nope"
 }
 
-#
-
-
-
-
-
-
+#try {
+#    New-Item $xtra_params -type directory
+#}
+#finally {
+#    $files = Get-ChildItem $xtra_params/'TEST-'
+#    Move-Item $files $xtra_params/results}
+#}
 
 

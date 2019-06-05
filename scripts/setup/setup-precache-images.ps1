@@ -3,37 +3,33 @@
 
 Param
 (
-    [Parameter(Mandatory)]
-    [Alias("user")] 
-    [string[]]$repo_User,
-    [Parameter(Mandatory)]
-    [Alias("pw")] 
-    [string]$repo_pw,
-    [Parameter(Mandatory)]
-    [Alias("repo")] 
-    [string]$repo_name,
-    [Parameter(Mandatory)]
+    [Parameter(Mandatory=$false)]
     [Alias("lang")] 
-    [string]$language,
-    [Parameter(Mandatory)]
+    [string]$language="",
+
+    [Parameter(Mandatory=$false)]
     [Alias("timg")] 
-    [string]$test_image,
-    [Parameter(Mandatory)]
+    [string]$test_image="",
+
+    [Parameter(Mandatory=$false)]
     [Alias("eaimg")] 
-    [string]$image_edgeagent,
-    [Parameter(Mandatory)]
+    [string]$image_edgeagent="",
+
+    [Parameter(Mandatory=$false)]
     [Alias("ehimg")] 
-    [string]$image_edgehub,
-    [Parameter(Mandatory)]
+    [string]$image_edgehub="",
+
+    [Parameter(Mandatory=$false)]
     [Alias("frImg")] 
-    [string]$image_friendmod
+    [string]$image_friendmod=""
 )
 
-docker login -u $repo_user -p $repo_pw $repo_name
+$horton_user = $env:IOTHUB_E2E_REPO_USER
+$horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
+$horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS
+
+docker login -u $horton_user -p $horton_pw $horton_repo
 docker pull $repo_name/$language-e2e-v3:$test_image
 docker pull $image_edgeagent
 docker pull $image_edgehub
 docker pull $image_friendmod
-
-
-
