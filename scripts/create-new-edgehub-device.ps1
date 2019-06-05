@@ -16,7 +16,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-$Horton.FrameworkRoot = $root_dir
+#$Horton.FrameworkRoot = $root_dir
 
 Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
