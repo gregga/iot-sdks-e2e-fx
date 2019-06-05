@@ -11,19 +11,13 @@ Param
     [string]$image_name=""
 )
 
-#$script_dir = $pwd.Path
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 
-Write-Host "rootpath: $rootpath" -ForegroundColor Yellow
-
-if($langmod.EndsWith("xml")) {
-    $junit_file = $langmod
-    $langmod = ""
-}
+Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
 function RunningOnWin32 {
     try {
@@ -39,26 +33,14 @@ function RunningOnWin32 {
     return $false
 }
 
-
-
-
-#CONTAINERNAME=$1
-#IMAGENAME=$2
-#if [ -z ${CONTAINERNAME} ] ||
-#   [ -z ${IMAGENAME} ]; then
-#  echo "usage: $0 [containername] [imagename]"
-#  echo "eg: $0 nodeMod localhost:5000/node-test-image:latest"
-#  exit 1
-#fi
-
 if( "$container_name" -eq "" -or "$image_name" -eq "") {
   Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
   Write-Host "eg: verify-deployment nodeMod localhost:5000/node-test-image:latest" -ForegroundColor Red
   exit 1
 }
 
-foreach($i in 1..24){
-  Write-Host "getting image ID for $image_name"
+foreach($i in 1..24) {
+  Write-Host "getting image ID for $image_name run $i"
   $out = docker image inspect $image_name
   Write-Host "image: $out"
   #--format="{{.Id}}

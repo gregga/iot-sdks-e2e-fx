@@ -18,7 +18,7 @@ if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 
-Write-Host "rootpath: $rootpath" -ForegroundColor Yellow
+Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
 if($langmod.EndsWith("xml")) {
     $junit_file = $langmod
