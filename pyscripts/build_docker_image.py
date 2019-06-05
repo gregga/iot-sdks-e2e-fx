@@ -1,13 +1,14 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information
 import os
-import docker
 import json
 import sys
 import docker_tags
 import argparse
 import datetime
 import colorama
+import docker
+
 from colorama import Fore
 
 colorama.init(autoreset=True)
@@ -89,7 +90,6 @@ def print_filtered_docker_line(lineobj):
                 lineout = "".format("{}", line)
                 print(''.join([chr(i) if i < 128 else '\x23' for i in lineout]))
  
-
 def build_image(tags):
     print(print_separator)
     print("BUILDING IMAGE")
