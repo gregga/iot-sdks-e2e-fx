@@ -34,8 +34,8 @@ jobs:
         $IsPr = "yes"
       }
 
-      $lang = $env:language
-      $veryant = $env:variant
+      $Lang = $env:language
+      $Veryant = $env:variant
 
       Write-Host "##vso[task.setvariable variable=buildImage]${BuildImage}"
       Write-Host "##vso[task.setvariable variable=NormalizedRepo]${NormalizedRepo}"
@@ -50,6 +50,8 @@ jobs:
       Commit: ${{ parameters.commit }}
       ForcedImage: ${{ parameters.forced_image }}
       Repo: ${{ parameters.repo }}
+      Lang: ${{ parameters.language }}
+      Veryant: ${{ parameters.variant }}
     ignoreLASTEXITCODE: false
     errorActionPreference: Stop
     failOnStderr: true
@@ -83,9 +85,9 @@ jobs:
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
   - powershell: |
-      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language $(lang)  --repo $(NormalizedRepo) --commit ${CommitToPass} --variant $(veryant)
+      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language $(Lang) --repo $(NormalizedRepo) --commit ${CommitToPass} --variant $(Veryant)
       #python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
-    displayName: "POWERSHELL: build docker image -l $(veryant) -r $(NormalizedRepo) -c ${CommitToPass} -v $(veryant)"
+    displayName: "POWERSHELL: build docker image -l $(Lang) -r $(NormalizedRepo) -c ${CommitToPass} -v $(Veryant)"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
       IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
