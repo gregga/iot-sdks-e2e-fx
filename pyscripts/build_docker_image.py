@@ -68,7 +68,7 @@ class BuildDockerImage:
 
         except:
             print("ERROR in args: " +  cmd_args)
-            exit 1
+            sys.exit(-1)
 
         #default_repo = "(Azure/azure-iot-sdk-BLAH)"
         #all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
