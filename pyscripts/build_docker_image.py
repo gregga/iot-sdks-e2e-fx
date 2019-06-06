@@ -39,7 +39,7 @@ class BuildDockerImage:
 
             got_arg = False
             skip_this = False
-            print("FUMF arg: " + arg)
+            #print("FUMF arg: " + arg)
 
             if arg == "--language":
                 lang = args[pos+1]
@@ -282,5 +282,5 @@ class BuildDockerImage:
             )
 
 if __name__ == "__main__":
-    bld_docker_img = BuildDockerImage(sys.argv[1:])
+    bld_docker_img = BuildDockerImage(sys.argv)
 
