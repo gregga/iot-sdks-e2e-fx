@@ -80,7 +80,8 @@ jobs:
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
   - powershell: |
-      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
+      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language node  --repo hortone2eacr.azurecr.io
+      #python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
     displayName: "POWERSHELL: build docker image ${{ parameters.language }}"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
