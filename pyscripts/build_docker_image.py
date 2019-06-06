@@ -19,6 +19,7 @@ class BuildDockerImage:
     def build_docker_image(self, args):
 
         got_arg = False
+        index = 0
         lang = ""
         repo = ""
         commit = ""
@@ -28,37 +29,44 @@ class BuildDockerImage:
         all_args = cmd_args.split()
         arg_len = len(all_args)
         print(str(arg_len) +":"+cmd_args)
-        try:
-            for index in range(0, arg_len):
-                arg = all_args[index]
+
+        for ar in all_args:
+            print(":"+ar+":")
+
+        #try:
+            #for index in range(0, arg_len):
+            for arg in all_args:
+                index += 1
+                #arg = all_args[index]
                 print("ARG:: " + arg)
+                print("IDX: "+ str(index))
+                print("LEN: "+ str(arg_len))
                 
                 if got_arg:
                     got_arg = False
                     continue
 
                 if arg == "--language":
-                    if index+1 >= arg_len: break
-                    print(str(index+1)+":atindex+1:" + args[index+1])
-                    lang = args[index+1]
+                    if index >= arg_len: break
+                    lang = all_args[index]
                     got_arg = True
                     continue
 
                 if arg == "--repo":
-                    if index+1 >= arg_len: break
-                    repo = args[index+1]
+                    if index >= arg_len: break
+                    repo = all_args[index]
                     got_arg = True
                     continue
 
                 if arg == "--commit":
-                    if index+1 >= arg_len: break
-                    commit = args[index+1]
+                    if index >= arg_len: break
+                    commit = all_args[index]
                     got_arg = True
                     continue
 
                 if arg == "--variant":
-                    if index+1 >= arg_len: break
-                    variant = args[index+1]
+                    if index >= arg_len: break
+                    variant = all_args[index]
                     got_arg = True
                     continue
 
@@ -67,9 +75,9 @@ class BuildDockerImage:
             print("commit: " + commit)
             print("variant: " + variant)
 
-        except:
-            print("ERROR in args: " +  cmd_args)
-            sys.exit(-1)
+        #except:
+        #    print("ERROR in args: " +  cmd_args)
+        #    sys.exit(-1)
 
         #default_repo = "(Azure/azure-iot-sdk-BLAH)"
         #all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
