@@ -37,7 +37,13 @@ function RunningOnWin32 {
     return $false
 }
 
-#$isWin32 = RunningOnWin32
+$isWin32 = RunningOnWin32
+
+if($isWin32) {
+    python -m pip install docker
+}
+
+
 $args = ""
 if("$lang" -ne "") { $args += " --language $lang"}
 if("$repo" -ne "") { $args += " --repo $repo"}
