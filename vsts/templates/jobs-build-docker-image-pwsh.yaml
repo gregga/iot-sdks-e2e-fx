@@ -74,9 +74,14 @@ jobs:
       architecture: 'x64'
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
-  - script: |
+  #- script: |
+  #    python3 -m pip install -r $(Horton.FrameworkRoot)/pyscripts/requirements.txt
+  #  displayName: "pip install requirements.txt"
+  #  condition: and(succeeded(), eq(variables['buildImage'],'yes'))
+
+  - powershell: |
       python3 -m pip install -r $(Horton.FrameworkRoot)/pyscripts/requirements.txt
-    displayName: "pip install requirements.txt"
+    displayName: "POWERSHELL: pip install requirements.txt"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
   - powershell: $(Horton.FrameworkRoot)/scripts/build-docker-image.ps1 ${{ parameters.language }}  ${NormalizedRepo} ${CommitToPass} ${{ parameters.variant }}
