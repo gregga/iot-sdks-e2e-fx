@@ -28,42 +28,46 @@ class BuildDockerImage:
         all_args = cmd_args.split()
         arg_len = len(all_args)
 
-        for index in range(0, arg_len):
-            arg = all_args[index]
-            print("ARG:: " + arg)
-            
-            if got_arg:
-                got_arg = False
-                continue
+        try:
+            for index in range(0, arg_len):
+                arg = all_args[index]
+                print("ARG:: " + arg)
+                
+                if got_arg:
+                    got_arg = False
+                    continue
 
-            if arg == "--language":
-                if index+1 >= arg_len: break
-                lang = args[index+1]
-                got_arg = True
-                continue
+                if arg == "--language":
+                    if index+1 >= arg_len: break
+                    lang = args[index+1]
+                    got_arg = True
+                    continue
 
-            if arg == "--repo":
-                if index+1 >= arg_len: break
-                repo = args[index+1]
-                got_arg = True
-                continue
+                if arg == "--repo":
+                    if index+1 >= arg_len: break
+                    repo = args[index+1]
+                    got_arg = True
+                    continue
 
-            if arg == "--commit":
-                if index+1 >= arg_len: break
-                commit = args[index+1]
-                got_arg = True
-                continue
+                if arg == "--commit":
+                    if index+1 >= arg_len: break
+                    commit = args[index+1]
+                    got_arg = True
+                    continue
 
-            if arg == "--variant":
-                if index+1 >= arg_len: break
-                variant = args[index+1]
-                got_arg = True
-                continue
+                if arg == "--variant":
+                    if index+1 >= arg_len: break
+                    variant = args[index+1]
+                    got_arg = True
+                    continue
+                    
+            print("lang: " + lang)
+            print("repo: " + repo)
+            print("commit: " + commit)
+            print("variant: " + variant)
 
-        print("lang: " + lang)
-        print("repo: " + repo)
-        print("commit: " + commit)
-        print("variant: " + variant)
+        except:
+            print("ERROR in args: " +  cmd_args)
 
         #default_repo = "(Azure/azure-iot-sdk-BLAH)"
         #all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
