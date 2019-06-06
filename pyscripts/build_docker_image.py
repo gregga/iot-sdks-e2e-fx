@@ -17,6 +17,10 @@ class BuildDockerImage:
         self.build_docker_image(args)
 
     def build_docker_image(self, args):
+
+        for arg in args:
+            print("FUMF arg: " + arg)
+
         default_repo = "(Azure/azure-iot-sdk-BLAH)"
         all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
         
