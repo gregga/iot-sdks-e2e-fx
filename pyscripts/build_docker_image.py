@@ -18,7 +18,7 @@ class BuildDockerImage:
 
     def build_docker_image(self, args):
 
-        pos = -1
+        pos = 0
         got_arg = False
         #skip_this = False
         lang = ""
@@ -28,16 +28,15 @@ class BuildDockerImage:
 
         cmd_args = " ".join(args)
         all_args = cmd_args.split()
-        arg_len = len(all_args) - 1
+        arg_len = len(all_args) 
 
         for arg in all_args:
             print("ARG:: " + arg)
             pos += 1
 
-            #if got_arg:
-            #    got_arg = False
-            #    skip_this = True
-            #    continue
+            if got_arg:
+                got_arg = False
+                continue
 
             #if skip_this:
             #    skip_this = False
@@ -49,25 +48,25 @@ class BuildDockerImage:
 
             if arg == "--language":
                 if pos >= arg_len: continue
-                lang = args[pos+1]
+                lang = args[pos]
                 got_arg = True
                 continue
 
             if arg == "--repo":
                 if pos >= arg_len: continue
-                repo = args[pos+1]
+                repo = args[pos]
                 got_arg = True
                 continue
 
             if arg == "--commit":
                 if pos >= arg_len: continue
-                commit = args[pos+1]
+                commit = args[pos]
                 got_arg = True
                 continue
 
             if arg == "--variant":
                 if pos >= arg_len: continue
-                variant = args[pos+1]
+                variant = args[pos]
                 got_arg = True
                 continue
 
