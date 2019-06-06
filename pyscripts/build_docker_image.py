@@ -27,6 +27,7 @@ class BuildDockerImage:
         variant = ""
 
         for arg in args:
+            print("ARG:: " + arg)
             if got_arg:
                 got_arg = False
                 skip_this = True
