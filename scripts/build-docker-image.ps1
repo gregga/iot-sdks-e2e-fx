@@ -40,11 +40,18 @@ function RunningOnWin32 {
 $isWin32 = RunningOnWin32
 
 if($isWin32) {
+    python -m pip install --upgrade pip
     python -m pip install -I docker
+    python -m pip install -I colorama
+     
 }
 else {
+    sudo -H -E python3 -m pip install --upgrade pip
+    sudo python3 -m pip install --upgrade pip
     sudo -H -E python3 -m pip install -I docker
     sudo python3 -m pip install -I docker
+    sudo -H -E python3 -m pip install -I colorama
+    sudo python3 -m pip install -I colorama
 }
 
 $args = ""
