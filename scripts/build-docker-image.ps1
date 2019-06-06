@@ -42,8 +42,7 @@ $isWin32 = RunningOnWin32
 if($isWin32) {
     python -m pip install --upgrade pip
     python -m pip install -I docker
-    python -m pip install -I colorama
-     
+    python -m pip install -I colorama     
 }
 else {
     sudo -H -E python3 -m pip install --upgrade pip
@@ -55,7 +54,7 @@ else {
 }
 
 $args = ""
-if("$lang" -ne "") { $args += " --language $lang"}
+if("$language" -ne "") { $args += " --language $language"}
 if("$repo" -ne "") { $args += " --repo $repo"}
 if("$commit" -ne "") { $args += " --commit $commit"}
 if("$commit" -ne "") { $args += " --variant $variant"}
