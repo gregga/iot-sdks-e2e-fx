@@ -54,10 +54,10 @@ else {
 }
 
 $args = ""
-if("$language" -ne "") { $args += " --language $language"}
-if("$repo" -ne "") { $args += " --repo $repo"}
-if("$commit" -ne "") { $args += " --commit $commit"}
-if("$commit" -ne "") { $args += " --variant $variant"}
+if("$language" -ne "") { $args += "--language ""$language"" "}
+if("$repo" -ne "") { $args += "--repo ""$repo"" "}
+if("$commit" -ne "") { $args += "--commit ""$commit"" "}
+if("$variant" -ne "") { $args += "--variant ""$variant"" "}
 
 if($isWin32) {
     python $pyscripts/build_docker_image.py $args

@@ -39,6 +39,7 @@ class BuildDockerImage:
 
                 if arg == "--language":
                     if index+1 >= arg_len: break
+                    print(str(index+1)+":atindex+1:" + args[index+1])
                     lang = args[index+1]
                     got_arg = True
                     continue
