@@ -18,8 +18,8 @@ class BuildDockerImage:
 
     def build_docker_image(self, args):
 
-        pos = 0
-        got_arg = False
+        #pos = -1
+        #got_arg = False
         #skip_this = False
         lang = ""
         repo = ""
@@ -28,12 +28,15 @@ class BuildDockerImage:
 
         cmd_args = " ".join(args)
         all_args = cmd_args.split()
-        arg_len = len(all_args) 
+        arg_len = len(all_args) - 1
 
-        for arg in all_args:
+        #for arg in all_args:
+        #for index in range(1 to)
+        for index in range(0, arg_len):
+            arg = all_args[index]
             print("ARG:: " + arg)
-            pos += 1
-
+            #pos += 1
+#
             #if got_arg:
             #    got_arg = False
             #    continue
@@ -47,27 +50,27 @@ class BuildDockerImage:
             #print("FUMF arg: " + arg)
 
             if arg == "--language":
-                if pos > arg_len: continue
-                lang = args[pos]
-                got_arg = True
+                if index > arg_len: continue
+                lang = args[index+1]
+                #got_arg = True
                 continue
 
             if arg == "--repo":
-                if pos > arg_len: continue
-                repo = args[pos]
-                got_arg = True
+                if index > arg_len: continue
+                repo = args[index+1]
+                #got_arg = True
                 continue
 
             if arg == "--commit":
-                if pos > arg_len: continue
-                commit = args[pos]
-                got_arg = True
+                if index > arg_len: continue
+                commit = args[index+1]
+                #got_arg = True
                 continue
 
             if arg == "--variant":
-                if pos > arg_len: continue
-                variant = args[pos]
-                got_arg = True
+                if index > arg_len: continue
+                variant = args[index+1]
+                #got_arg = True
                 continue
 
         print("lang: " + lang)
