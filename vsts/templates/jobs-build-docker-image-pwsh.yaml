@@ -34,6 +34,9 @@ jobs:
         $IsPr = "yes"
       }
 
+      $lang = ${{ parameters.language }}
+      $veryant =  ${{ parameters.variant }}
+
       Write-Host "##vso[task.setvariable variable=buildImage]${BuildImage}"
       Write-Host "##vso[task.setvariable variable=NormalizedRepo]${NormalizedRepo}"
       Write-Host "##vso[task.setvariable variable=IsPr]${IsPr}"
@@ -80,9 +83,9 @@ jobs:
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
   - powershell: |
-      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language node  --repo $(NormalizedRepo) --commit ${CommitToPass} --variant ${{ parameters.variant }}
+      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language $(lang)  --repo $(NormalizedRepo) --commit ${CommitToPass} --variant $(veryant)
       #python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
-    displayName: "POWERSHELL: build docker image ${{ parameters.language }} --repo $(NormalizedRepo) $(NormalizedRepo) --commit ${CommitToPass} --variant ${{ parameters.variant }}"
+    displayName: "POWERSHELL: build docker image -l $(veryant) -r $(NormalizedRepo) -c ${CommitToPass} -v $(veryant)"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
       IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
