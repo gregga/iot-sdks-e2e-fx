@@ -98,7 +98,7 @@ jobs:
       Commit: ${{ parameters.commit }}
       ForcedImage: ${{ parameters.forced_image }}
       Repo: ${{ parameters.repo }}
-      Lang: ${{ parameters.language }}
+      Lang: $(Lang)
       Veryant: ${{ parameters.variant }}
 
   - task: PublishBuildArtifacts@1
