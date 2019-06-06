@@ -3,10 +3,11 @@
 import os
 import json
 import sys
-import docker_tags
+#import docker_tags
 import argparse
 import datetime
 import colorama
+#import docker
 import docker
 
 from colorama import Fore
