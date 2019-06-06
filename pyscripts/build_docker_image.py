@@ -20,7 +20,7 @@ class BuildDockerImage:
 
         pos = -1
         got_arg = False
-        skip_this = False
+        #skip_this = False
         lang = ""
         repo = ""
         commit = ""
@@ -28,11 +28,12 @@ class BuildDockerImage:
 
         cmd_args = " ".join(args)
         all_args = cmd_args.split()
+        arg_len = len(all_args) - 1
 
         for arg in all_args:
             print("ARG:: " + arg)
             pos += 1
-            
+
             #if got_arg:
             #    got_arg = False
             #    skip_this = True
@@ -47,6 +48,7 @@ class BuildDockerImage:
             #print("FUMF arg: " + arg)
 
             if arg == "--language":
+                if arg_len == pos: continue
                 lang = args[pos+1]
                 got_arg = True
                 continue
