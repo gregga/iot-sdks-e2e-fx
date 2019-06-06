@@ -8,7 +8,7 @@ import argparse
 import datetime
 #import colorama
 #import docker
-#import docker
+import docker
 import docker_tags
 
 from colorama import Fore

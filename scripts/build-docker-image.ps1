@@ -40,9 +40,12 @@ function RunningOnWin32 {
 $isWin32 = RunningOnWin32
 
 if($isWin32) {
-    python -m pip install docker
+    python -m pip install -I docker
 }
-
+else {
+    sudo -H -E python3 -m pip install -I docker
+    sudo python3 -m pip install -I docker
+}
 
 $args = ""
 if("$lang" -ne "") { $args += " --language $lang"}
