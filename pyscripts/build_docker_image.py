@@ -28,7 +28,7 @@ class BuildDockerImage:
 
         cmd_args = " ".join(args)
         all_args = cmd_args.split()
-        arg_len = len(all_args) - 1
+        arg_len = len(all_args)
 
         #for arg in all_args:
         #for index in range(1 to)
