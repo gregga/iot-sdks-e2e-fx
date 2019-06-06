@@ -26,7 +26,11 @@ class BuildDockerImage:
         commit = ""
         variant = ""
 
-        for arg in args:
+        cmd_args = " ".join(args)
+
+        all_args = cmd_args.split()
+
+        for arg in all_args:
             print("ARG:: " + arg)
             if got_arg:
                 got_arg = False
@@ -282,5 +286,5 @@ class BuildDockerImage:
             )
 
 if __name__ == "__main__":
-    bld_docker_img = BuildDockerImage(sys.argv)
+    bld_docker_img = BuildDockerImage(sys.argv[1:])
 
