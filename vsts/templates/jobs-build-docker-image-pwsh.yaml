@@ -84,10 +84,9 @@ jobs:
     displayName: "POWERSHELL: pip install requirements.txt"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
-  - powershell: |
-      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language $(Lang) --repo $(NormalizedRepo) --commit ${CommitToPass} --variant $(Veryant)
+  - powershell: $(Horton.FrameworkRoot)/scripts/build-docker-image.ps1 ${{ parameters.language }} $(NormalizedRepo) ${CommitToPass} ${{ parameters.variant }}
       #python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
-    displayName: "POWERSHELL: build docker image -l $(Lang) -r $(NormalizedRepo) -c ${CommitToPass} -v $(Veryant)"
+    displayName: "POWERSHELL: build docker image ${{ parameters.language }} $(NormalizedRepo) ${CommitToPass} ${{ parameters.variant }}"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
       IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
@@ -100,6 +99,23 @@ jobs:
       Repo: ${{ parameters.repo }}
       Lang: $(Lang)
       Veryant: ${{ parameters.variant }}
+
+#  - powershell: |
+#      python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language $(Lang) --repo $(NormalizedRepo) --commit ${CommitToPass} --variant $(Veryant)
+      #python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
+#    displayName: "POWERSHELL: build docker image -l $(Lang) -r $(NormalizedRepo) -c ${CommitToPass} -v $(Veryant)"
+#    condition: and(succeeded(), eq(variables['buildImage'],'yes'))
+#    env: 
+#      IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
+#      IOTHUB_E2E_REPO_USER: $(IOTHUB-E2E-REPO-USER)
+#      IOTHUB_E2E_REPO_PASSWORD: $(IOTHUB-E2E-REPO-PASSWORD)
+#      NormalizedRepo: $(NormalizedRepo)
+#      CommitToPass: $(CommitToPass)
+#      Commit: ${{ parameters.commit }}
+#      ForcedImage: ${{ parameters.forced_image }}
+#      Repo: ${{ parameters.repo }}
+#      Lang: $(Lang)
+#      Veryant: ${{ parameters.variant }}
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifacts'
