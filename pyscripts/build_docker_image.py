@@ -27,7 +27,7 @@ class BuildDockerImage:
         cmd_args = " ".join(args)
         all_args = cmd_args.split()
         arg_len = len(all_args)
-
+        print(str(arg_len) +":"+cmd_args)
         try:
             for index in range(0, arg_len):
                 arg = all_args[index]
@@ -60,7 +60,7 @@ class BuildDockerImage:
                     variant = args[index+1]
                     got_arg = True
                     continue
-                    
+
             print("lang: " + lang)
             print("repo: " + repo)
             print("commit: " + commit)
@@ -68,6 +68,7 @@ class BuildDockerImage:
 
         except:
             print("ERROR in args: " +  cmd_args)
+            exit 1
 
         #default_repo = "(Azure/azure-iot-sdk-BLAH)"
         #all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
