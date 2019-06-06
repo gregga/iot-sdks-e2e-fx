@@ -54,16 +54,19 @@ class BuildDockerImage:
                 continue
 
             if arg == "--repo":
+                if arg_len == pos: continue
                 repo = args[pos+1]
                 got_arg = True
                 continue
 
             if arg == "--commit":
+                if arg_len == pos: continue
                 commit = args[pos+1]
                 got_arg = True
                 continue
 
             if arg == "--variant":
+                if arg_len == pos: continue
                 variant = args[pos+1]
                 got_arg = True
                 continue
