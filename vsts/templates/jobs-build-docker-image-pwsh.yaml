@@ -95,6 +95,11 @@ jobs:
       IOTHUB_E2E_REPO_PASSWORD: $(IOTHUB-E2E-REPO-PASSWORD)
       NormalizedRepo: $(NormalizedRepo)
       CommitToPass: $(CommitToPass)
+      Commit: ${{ parameters.commit }}
+      ForcedImage: ${{ parameters.forced_image }}
+      Repo: ${{ parameters.repo }}
+      Lang: ${{ parameters.language }}
+      Veryant: ${{ parameters.variant }}
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifacts'
