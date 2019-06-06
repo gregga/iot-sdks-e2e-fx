@@ -50,9 +50,16 @@ if("$repo" -ne "") { $args += " --repo $repo"}
 if("$commit" -ne "") { $args += " --commit $commit"}
 if("$commit" -ne "") { $args += " --variant $variant"}
 
-$out = sudo -H -E python3 $pyscripts/build_docker_image.py $args
-foreach($o in $out){
-    Write-Host $o -ForegroundColor Blue
+if($isWin32) {
+    python $pyscripts/build_docker_image.py $args
 }
+else {
+    sudo -H -E python3 $pyscripts/build_docker_image.py $args
+    #$out = sudo -H -E python3 $pyscripts/build_docker_image.py $args
+    #foreach($o in $out) {
+    #    Write-Host $o -ForegroundColor Blue
+    #}    
+}
+
  
 
