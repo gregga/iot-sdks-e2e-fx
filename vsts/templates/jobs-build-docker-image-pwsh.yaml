@@ -34,8 +34,8 @@ jobs:
         $IsPr = "yes"
       }
 
-      $lang = ${{ parameters.language }}
-      $veryant =  ${{ parameters.variant }}
+      $lang = $env:language
+      $veryant = $env:variant
 
       Write-Host "##vso[task.setvariable variable=buildImage]${BuildImage}"
       Write-Host "##vso[task.setvariable variable=NormalizedRepo]${NormalizedRepo}"
