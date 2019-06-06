@@ -33,12 +33,12 @@ class BuildDockerImage:
                 skip_this = True
                 continue
 
-            if skip_this:
-                skip_this = False
-                continue
+            #if skip_this:
+            #    skip_this = False
+            #    continue
 
-            got_arg = False
-            skip_this = False
+            #got_arg = False
+            #skip_this = False
             #print("FUMF arg: " + arg)
 
             if arg == "--language":
