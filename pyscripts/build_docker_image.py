@@ -3,7 +3,7 @@
 import os
 import json
 import sys
-import argparse
+#import argparse
 import datetime
 import docker
 import docker_tags
@@ -18,26 +18,68 @@ class BuildDockerImage:
 
     def build_docker_image(self, args):
 
+        pos = 0
+        got_arg = False
+        skip_this = False
+        lang = ""
+        repo = ""
+        commit = ""
+        variant = ""
+
         for arg in args:
+            if got_arg:
+                got_arg = False
+                skip_this = True
+                continue
+
+            if skip_this:
+                skip_this = False
+                continue
+
+            got_arg = False
+            skip_this = False
             print("FUMF arg: " + arg)
 
-        default_repo = "(Azure/azure-iot-sdk-BLAH)"
-        all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
-        
-        parser = argparse.ArgumentParser(description="build docker image for testing")
-        #parser.add_argument("--language", help="language to build", type=str, required=True)
-        parser.add_argument("--language", help="language to build", type=str, required=True)
-        parser.add_argument("--repo", help="repo with source", type=str, default=default_repo)
-        parser.add_argument("--commit", help="commit to apply (ref or branch)", type=str, default="master")
-        parser.add_argument("--variant", help="Docker image variant (blank for default)", type=str, nargs="?", const="")
-        args = parser.parse_args()
+            if arg == "--language":
+                lang = args[pos+1]
+                got_arg = True
 
-        if args.repo == default_repo:
-            if args.language == "pythonpreview":
-                args.repo = "Azure/azure-iot-sdk-python-preview"
-            else:
-                args.repo = "Azure/azure-iot-sdk-" + args.language
-            print(Fore.YELLOW + "Repo not specified.  Defaulting to " + args.repo)
+            if arg == "--repo":
+                repo = args[pos+1]
+                got_arg = True
+
+            if arg == "--commit":
+                commit = args[pos+1]
+                got_arg = True 
+
+            if arg == "--variant":
+                variant = args[pos+1]
+                got_arg = True 
+            
+            pos += 1
+
+        print("lang: " + lang)
+        print("repo: " + repo)
+        print("commit: " + commit)
+        print("variant: " + variant)
+
+        #default_repo = "(Azure/azure-iot-sdk-BLAH)"
+        #all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
+        
+        #parser = argparse.ArgumentParser(description="build docker image for testing")
+        #parser.add_argument("--language", help="language to build", type=str, required=True)
+        #parser.add_argument("--language", help="language to build", type=str, required=True)
+        #parser.add_argument("--repo", help="repo with source", type=str, default=default_repo)
+        #parser.add_argument("--commit", help="commit to apply (ref or branch)", type=str, default="master")
+        #parser.add_argument("--variant", help="Docker image variant (blank for default)", type=str, nargs="?", const="")
+        #args = parser.parse_args()
+
+        #if args.repo == default_repo:
+        #    if args.language == "pythonpreview":
+        #        args.repo = "Azure/azure-iot-sdk-python-preview"
+        #    else:
+        #        args.repo = "Azure/azure-iot-sdk-" + args.language
+            #print(Fore.YELLOW + "Repo not specified.  Defaulting to " + args.repo)
 
         print_separator = "".join("/\\" for _ in range(80))
 
@@ -219,7 +261,8 @@ class BuildDockerImage:
 
 
         tags = docker_tags.get_docker_tags_from_commit(
-            args.language, args.repo, args.commit, args.variant
+            #args.language, args.repo, args.commit, args.variant
+            lang, repo, commit, variant
         )
 
         prefetch_cached_images(tags)
