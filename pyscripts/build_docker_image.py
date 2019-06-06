@@ -34,9 +34,9 @@ class BuildDockerImage:
             print("ARG:: " + arg)
             pos += 1
 
-            if got_arg:
-                got_arg = False
-                continue
+            #if got_arg:
+            #    got_arg = False
+            #    continue
 
             #if skip_this:
             #    skip_this = False
@@ -47,25 +47,25 @@ class BuildDockerImage:
             #print("FUMF arg: " + arg)
 
             if arg == "--language":
-                if pos >= arg_len: continue
+                if pos > arg_len: continue
                 lang = args[pos]
                 got_arg = True
                 continue
 
             if arg == "--repo":
-                if pos >= arg_len: continue
+                if pos > arg_len: continue
                 repo = args[pos]
                 got_arg = True
                 continue
 
             if arg == "--commit":
-                if pos >= arg_len: continue
+                if pos > arg_len: continue
                 commit = args[pos]
                 got_arg = True
                 continue
 
             if arg == "--variant":
-                if pos >= arg_len: continue
+                if pos > arg_len: continue
                 variant = args[pos]
                 got_arg = True
                 continue
