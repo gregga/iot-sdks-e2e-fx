@@ -18,9 +18,7 @@ class BuildDockerImage:
 
     def build_docker_image(self, args):
 
-        #pos = -1
-        #got_arg = False
-        #skip_this = False
+        got_arg = False
         lang = ""
         repo = ""
         commit = ""
@@ -30,47 +28,36 @@ class BuildDockerImage:
         all_args = cmd_args.split()
         arg_len = len(all_args)
 
-        #for arg in all_args:
-        #for index in range(1 to)
         for index in range(0, arg_len):
             arg = all_args[index]
             print("ARG:: " + arg)
-            #pos += 1
-#
-            #if got_arg:
-            #    got_arg = False
-            #    continue
-
-            #if skip_this:
-            #    skip_this = False
-            #    continue
-
-            #got_arg = False
-            #skip_this = False
-            #print("FUMF arg: " + arg)
+            
+            if got_arg:
+                got_arg = False
+                continue
 
             if arg == "--language":
-                if index > arg_len: continue
+                if index+1 >= arg_len: break
                 lang = args[index+1]
-                #got_arg = True
+                got_arg = True
                 continue
 
             if arg == "--repo":
-                if index > arg_len: continue
+                if index+1 >= arg_len: break
                 repo = args[index+1]
-                #got_arg = True
+                got_arg = True
                 continue
 
             if arg == "--commit":
-                if index > arg_len: continue
+                if index+1 >= arg_len: break
                 commit = args[index+1]
-                #got_arg = True
+                got_arg = True
                 continue
 
             if arg == "--variant":
-                if index > arg_len: continue
+                if index+1 >= arg_len: break
                 variant = args[index+1]
-                #got_arg = True
+                got_arg = True
                 continue
 
         print("lang: " + lang)
@@ -135,7 +122,7 @@ class BuildDockerImage:
                             print(obj["status"])
                     elif "error" in obj:
                         print ("docker error: {}".format(line))
-                        #raise Exception(obj["error"])
+                        raise Exception(obj["error"])
                     elif "Step" in obj or "---" in obj:
                         print("{}".format(obj).strip())
                     elif obj == "\n":
