@@ -61,24 +61,18 @@ try {
     New-Item -Path $resultsdir -ItemType Directory
 }
 finally {
-    Write-Host "fetching docker logs" -ForegroundColor Green
-    if("$langmod" -ne "") {
-        $languageMod = $langmod + "Mod"
-        Write-Host "Including: $languageMod" -ForegroundColor Magenta
-    }    
+    Write-Host "Got $resultsdir" -ForegroundColor Green
 }
-
 
 $modulelist = @( $languageMod, "friendMod", "edgeHub", "edgeAgent")
 foreach($mod in $modulelist) {
     if("$mod" -ne "") {
         Write-Host "getting log for $mod" -ForegroundColor Green 
-        $out = docker logs -t $mod; if ($LASTEXITCODE -ne 0) { Write-Host "error fetching logs for $mod" -ForegroundColor Red; $out }
+        $out = docker logs -t $mod
         #docker logs -t $mod
         $out | Out-File -Append $resultsdir/${mod}.log
     }
 }
-
 
 #for mod in ${languageMod} friendMod edgeHub edgeAgent; do
 #  echo "getting log for $mod"
@@ -89,7 +83,7 @@ foreach($mod in $modulelist) {
 #done
 
 if($isWin32 -eq $false) {
-    $out = sudo journalctl -u iotedge -n 500 -e; if ($LASTEXITCODE -ne 0) { Write-Host "error fetching iotedged journal" -ForegroundColor Red; $out }
+    $out = sudo journalctl -u iotedge -n 500 -e
     $out | Out-File -Append $resultsdir/${mod}.log
 }
 
@@ -112,7 +106,7 @@ Write-Host "merging logs for $modlist" -ForegroundColor Green
 Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 if($isWin32) {
     Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
-    $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist; if ($LASTEXITCODE -ne 0) { Write-Host "error merging logs" -ForegroundColor Red; $out }
+    $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
     python ${root_dir}/pyscripts/docker_log_processor.py $arglist
     #args: -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log :
     Write-Host "#########################" -ForegroundColor Yellow
@@ -132,7 +126,6 @@ else {
     Write-Host $out
 }
 
-
 #args=
 #for mod in ${languageMod} friendMod edgeHub edgeAgent; do
 #    args="${args} -staticfile ${mod}.log"
@@ -148,10 +141,10 @@ $log_file = "$resultsdir/merged.log"
 Write-Host "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
 if($isWin32) {
-    $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
+    $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie
 }
 else {
-    $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
+    $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
 }
 Write-Host $out
 #$out | Out-File -Append $resultsdir/$merged.log
