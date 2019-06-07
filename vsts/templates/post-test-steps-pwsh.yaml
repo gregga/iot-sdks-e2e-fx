@@ -30,7 +30,7 @@ steps:
         $files = Get-ChildItem "$(Horton.FrameworkRoot)/results/logs/*"
         Move-Item $files  $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
       }
-    
+    }
     try {
       New-Item $(Build.SourcesDirectory)/results -type directory
     }
