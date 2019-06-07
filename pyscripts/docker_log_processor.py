@@ -71,7 +71,7 @@ class DockerLogProcessor:
 
         #if arguments.staticfile:
         if got_static:
-            self.process_static_log(static_file.split(), filterfile.split())
+            self.process_static_log(static_file.split(), filterfile)
             #self.process_static_log(arguments.staticfile, arguments.filterfile)
         else:
             self.queue = Queue()
@@ -305,9 +305,12 @@ class DockerLogProcessor:
                                     #    log_data = log_line
                                     #    print("LOG_DATA: " + log_data)
 
-                                log_time = DockerLogProcessor.format_date_and_time(log_line_parts[0], "%Y-%m-%d %H:%M:%S.%f")
-                                log_line_object = LogLineObject(log_time, module_name, log_data)
-                                loglines.append(log_line_object)
+                                if num_parts >= 2:
+                                    log_time = DockerLogProcessor.format_date_and_time(log_line_parts[0], "%Y-%m-%d %H:%M:%S.%f")
+                                    log_line_object = LogLineObject(log_time, module_name, log_data)
+                                    loglines.append(log_line_object)
+                                else:
+                                    print("INVALID_LINE:" + log_line)
 
         # Sort the merged static file lines by timestamp
         loglines.sort(key=lambda x: x.timestamp)
