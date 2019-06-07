@@ -98,7 +98,7 @@ if($isWin32 -eq $false) {
 #  echo "error fetching iotedged journal"
 #fi
 
-$arglist = " "
+$arglist = ""
 $modlist = ""
 foreach($mod in $modulelist) {
     if("$mod" -ne "") {
@@ -108,20 +108,30 @@ foreach($mod in $modulelist) {
 }
 
 set-location $resultsdir
-Write-Host "merging logs for $modlist" -ForegroundColor Green 
+Write-Host "merging logs for $modlist" -ForegroundColor Green
+Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 if($isWin32) {
     Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
     $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist; if ($LASTEXITCODE -ne 0) { Write-Host "error merging logs" -ForegroundColor Red; $out }
     python ${root_dir}/pyscripts/docker_log_processor.py $arglist
     #args: -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log :
     Write-Host "#########################" -ForegroundColor Yellow
-    $out = python ${root_dir}/pyscripts/docker_log_processor.py " -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log"
-
+    #$out = python ${root_dir}/pyscripts/docker_log_processor.py " -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log"
+    $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
+    #$out | Out-File -Append $resultsdir/$merged.log
 }
 else {
-    $out = python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist; if ($LASTEXITCODE -ne 0) { Write-Host "error merging logs" -ForegroundColor Red; $out }
+    $out = python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist
 }
-$out | Out-File -Append $resultsdir/$merged.log
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "error merging logs" -ForegroundColor Red
+    Write-Host $out
+}
+else {
+    $out | Out-File -Append $resultsdir/$merged.log
+    Write-Host $out
+}
+
 
 #args=
 #for mod in ${languageMod} friendMod edgeHub edgeAgent; do
