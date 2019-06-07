@@ -10,6 +10,9 @@ if [ -z ${CONTAINERNAME} ] ||
   echo "eg: $0 nodeMod localhost:5000/node-test-image:latest"
   exit 1
 fi
+echo "######################################"
+docker container ps
+echo "######################################"
 
 # each iteration = ~ 10 seconds
 for i in {1..24}; do

@@ -83,6 +83,7 @@ class EdgeHub:
         for name in modules.split(","):
             name = name.strip()
             if name in all_containers:
+                print("ADDING: " + all_containers[name])
                 configuration.add_module(all_containers[name])
             else:
                 print("module {} is invalid".format(name))
