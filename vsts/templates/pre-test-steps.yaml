@@ -88,6 +88,10 @@ steps:
 
 - script: |
     sleep 30
+    echo "######################################Cntr"
+    docker container ps
+    echo "######################################Img"
+    docker image ls
   displayName: 'give edgeHub 30 seconds to start up'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 

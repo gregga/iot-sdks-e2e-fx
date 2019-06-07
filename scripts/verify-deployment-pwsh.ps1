@@ -40,6 +40,7 @@ if( "$container_name" -eq "" -or "$image_name" -eq "") {
     exit 1
 }
 
+$isWin32 = RunningOnWin32
 Write-Host "######################################Cntr"
 docker container ps
 Write-Host "######################################Img"
@@ -51,16 +52,34 @@ Write-Host "######################################"
 
 $expectedImg = ""
 $actualImg = ""
+$expectedImg = ""
+$running = $false
 foreach($i in 1..24) {
     Write-Host "getting image ID for $image_name run $i"
-    $expectedImg = docker image inspect $image_name --format="{{.Id}}"
+    if($isWin32) {
+        $expectedImg = docker image inspect $image_name --format="{{.Id}}"
+    }
+    else {
+        $expectedImg = sudo docker image inspect $image_name --format="{{.Id}}"
+    }
     if("$expectedImg" -ne "") {
         Write-Host "calling docker inspect $container_name" -ForegroundColor Green
-        $running = docker image inspect --format="{{.State.Running}}" $container_name
+        if($isWin32) {
+            $running = docker image inspect --format="{{.State.Running}}" $container_name
+        }
+        else {
+            $running = sudo docker inspect --format="{{.State.Running}}" $container_name
+        }
+
         if($running -eq $true) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 
-            $actualImg = docker image inspect $container_name --format="{{.Image}}"
+            if($isWin32) {
+                $actualImg = docker inspect $container_name --format="{{.Image}}"
+            }
+            else {
+                $actualImg = sudo docker inspect $container_name --format="{{.Image}}"
+            }
             Write-Host "Actual ImageId: $actualImg" -ForegroundColor Green
 
             if($expectedImg -eq $actualImg) {
@@ -76,7 +95,7 @@ foreach($i in 1..24) {
         Write-Host "container is unkonwn.  Waiting." -ForegroundColor Yellow
     }
     Write-Host "Sleeping..."
-    Start-Sleep -s 15
+    Start-Sleep -s 10
 }
 
 Write-Host  "container $container_name deployment failed" -ForegroundColor Red
