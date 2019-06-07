@@ -49,12 +49,12 @@ if($isWin32) {
     python -m pip install -I colorama     
 }
 else {
-    sudo -H -E python3 -m pip install --upgrade pip
-    sudo python3 -m pip install --upgrade pip
-    sudo -H -E python3 -m pip install -I docker
-    sudo python3 -m pip install -I docker
-    sudo -H -E python3 -m pip install -I colorama
-    sudo python3 -m pip install -I colorama
+    sudo -H -E python3 -m pip install --no-cache-dir --upgrade pip
+    sudo python3 -m pip install --no-cache-dir --upgrade pip
+    sudo -H -E python3 -m pip install --no-cache-dir -I docker
+    sudo python3 -m pip install --no-cache-dir -I docker
+    sudo -H -E python3 -m pip install --no-cache-dir -I colorama
+    sudo python3 -m pip install --no-cache-dir -I colorama
 }
 
 try {
@@ -134,7 +134,7 @@ $out | Out-File -Append $resultsdir/$merged.log
 
 set-location $resultsdir
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
-$log_file = "merged.log"
+$log_file = "$resultsdir/merged.log"
 Write-Host "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
 if($isWin32) {
