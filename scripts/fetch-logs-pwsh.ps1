@@ -8,7 +8,10 @@ Param
     [string]$langmod="",
     [Parameter(Position=1)]
     [AllowEmptyString()]
-    [string]$junit_file=""
+    [string]$build_dir="",
+    [Parameter(Position=2)]
+    [AllowEmptyString()]
+    [string]$log_folder_name=""
 )
 
 #$script_dir = $pwd.Path
@@ -20,10 +23,10 @@ $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 
 Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
-if($langmod.EndsWith("xml")) {
-    $junit_file = $langmod
-    $langmod = ""
-}
+#if($langmod.EndsWith("xml")) {
+#    $junit_file = $langmod
+#    $langmod = ""
+#}
 
 function RunningOnWin32 {
     try {
@@ -42,6 +45,12 @@ function RunningOnWin32 {
 $isWin32 = RunningOnWin32
 $languageMod=""
 $resultsdir="$root_dir/results/logs"
+
+
+
+#$(Horton.FrameworkRoot)/scripts/fetch-logs-pwsh.ps1 ${{ parameters.language }} $(Build.SourcesDirectory) ${{ parameters.log_folder_name }}.xml
+#$(Horton.FrameworkRoot)/scripts/fetch-logs-pwsh.ps1 ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml $(Build.SourcesDirectory)
+
 
 if($isWin32) {
     python -m pip install --upgrade pip
@@ -127,6 +136,12 @@ else {
     Write-Host $out
 }
 
+#$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml
+#$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
+
+$out = ""
+$junit_file = "$build_dir$log_folder_name.xml"
+
 #args=
 #for mod in ${languageMod} friendMod edgeHub edgeAgent; do
 #    args="${args} -staticfile ${mod}.log"
@@ -155,3 +170,34 @@ Write-Host $out
 #$if [ $? -ne 0 ]; then
 #  echo "error injecting into junit"
 #fi
+
+#$(Horton.FrameworkRoot)/scripts/fetch-logs.sh ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml
+#mkdir -p $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
+#mv $(Horton.FrameworkRoot)/results/logs/* $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}/
+#mv $(Build.SourcesDirectory)/TEST-* $(Build.SourcesDirectory)/results
+
+#$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
+#$junit_file = Join-Path -Path $junit_log_dir "$junit_file.xml" -Resolve
+
+try {
+    New-Item -Path $build_dir/results/$log_folder_name -ItemType Directory
+  }
+  finally {
+    #try {
+    #  New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
+    #}
+    #finally {
+    $files = Get-ChildItem "$root_dir/results/logs/*"
+    Move-Item $files $build_dir/results/$log_folder_name
+    #}
+
+  }
+  try {
+    New-Item $build_dir/results -ItemType Directory
+  }
+  finally {
+    $files = Get-ChildItem "$build_dir/TEST-*"
+    Move-Item $files $build_dir/results
+  }
+
+
