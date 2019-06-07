@@ -119,13 +119,15 @@ $out | Out-File -Append $resultsdir/${mod}.log
 #fi
 
 set-location $resultsdir
-Write-Host "injecting merged.log into junit" -ForegroundColor Green 
+Write-Host "injecting merged.log into junit" -ForegroundColor Green
+$log_file = "merged.log"
+Write-Host "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
 if($isWin32) {
-    $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file merged.log; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
+    $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
 }
 else {
-    $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file merged.log; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
+    $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
 }
 $out | Out-File -Append $resultsdir/${mod}.log
 
