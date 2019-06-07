@@ -16,7 +16,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-$Horton.FrameworkRoot = $root_dir
+#$Horton.FrameworkRoot = $root_dir
 
 Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
@@ -34,6 +34,7 @@ function RunningOnWin32 {
     return $false
 }
 
+set-location $root_dir
 $isWin32 = RunningOnWin32
 $horton_user = $env:IOTHUB_E2E_REPO_USER
 $horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
@@ -63,13 +64,13 @@ $lang = "node"
 $timg = "none"
 $eaimg = "mcr.microsoft.com/azureiotedge-agent:1.0.6"
 $ehimg = "mcr.microsoft.com/azureiotedge-hub:1.0.6"
-$frimg = "$(IOTHUB-E2E-REPO-ADDRESS)/default-friend-module:latest"
+$frimg = "$horton_repo/default-friend-module:latest"
 
 set-location $root_dir
 
 #D:\repos\iot\iot-sdks-e2e-fx-fork\scripts\setup\setup-precache-images.ps1
 #scripts/setup/setup-precache-images.ps1
-scripts/setup/setup-precache-images.ps1 -lang $lang -timg $timg -eaimg $eaimg -ehimg $ehimg -frImg $frimg
+scripts/setup/setup-precache-images.ps1 $lang $timg $eaimg $ehimg $frimg
 
 Write-Host 'POWERSHELL: Create new edgehub identity' -ForegroundColor Blue
 scripts/create-new-edgehub-device.ps1
@@ -78,6 +79,8 @@ Write-Host 'POWERSHELL: Deploy manifest (${{ parameters.test_image }})' -Foregro
 scripts/deploy-test-containers.ps1 $lang $horton_repo/$lang-e2e-v3:$timg
 
 Write-Host 'POWERSHELL: Verify edgeHub deployment' -ForegroundColor Blue
+set-location $root_dir
+#scripts/verify-deployment-pwsh.ps1 edgeHub $ehimg
 scripts/verify-deployment-pwsh.ps1 edgeHub $ehimg
 
 Write-Host 'POWERSHELL: Verify edgeAgent deployment' -ForegroundColor Blue
@@ -87,10 +90,10 @@ Write-Host 'POWERSHELL: Verify friendMod deployment' -ForegroundColor Blue
 scripts/verify-deployment-pwsh.ps1 friendMod $frimg
 
 Write-Host "POWERSHELL: Verify deploymet $lang-Mod $horton_repo/$lang-e2e-v3:$timg" -ForegroundColor Blue
-scripts/verify-deployment-pwsh.ps1 $lang-Mod $horton_repo/$lang-e2e-v3:$timg
+scripts/verify-deployment-pwsh.ps1 $lang+"-Mod" $horton_repo/$lang-e2e-v3:$timg
 
 Write-Host 'POWERSHELL: Verify that $lang-Mod is responding' -ForegroundColor Blue
-scripts/setup/verify-container-running.ps1 $lang-Mod
+scripts/setup/verify-container-running.ps1 $lang + "-Mod"
 
 Write-Host 'POWERSHELL: Verify that friendMod is responding' -ForegroundColor Blue
 scripts/setup/verify-container-running.ps1 friendMod
