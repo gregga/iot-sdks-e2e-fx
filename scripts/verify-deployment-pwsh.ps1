@@ -40,8 +40,10 @@ if( "$container_name" -eq "" -or "$image_name" -eq "") {
     exit 1
 }
 
-Write-Host "######################################"
+Write-Host "######################################Cntr"
 docker container ps
+Write-Host "######################################Img"
+docker image ls
 Write-Host "######################################"
 Write-Host "image_name: $image_name"
 Write-Host "container_name: $container_name"
