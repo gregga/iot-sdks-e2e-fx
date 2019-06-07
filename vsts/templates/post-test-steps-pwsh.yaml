@@ -32,7 +32,7 @@ steps:
     #  }
     #
     #try {
-    New-Item $(Build.SourcesDirectory)/results} -type directory
+    New-Item $(Build.SourcesDirectory)/results -type directory
     #}
     #finally {
     $files = Get-ChildItem "$(Build.SourcesDirectory)/TEST-*"
