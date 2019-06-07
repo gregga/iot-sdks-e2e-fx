@@ -299,7 +299,11 @@ class DockerLogProcessor:
                                     for part in range(1, num_parts):    
                                         log_data += log_line_parts[part] + ' '
                                 else:
-                                    log_data = log_line_parts[1]
+                                    if num_parts == 2:
+                                        log_data = log_line_parts[1]
+                                    #else:
+                                    #    log_data = log_line
+                                    #    print("LOG_DATA: " + log_data)
 
                                 log_time = DockerLogProcessor.format_date_and_time(log_line_parts[0], "%Y-%m-%d %H:%M:%S.%f")
                                 log_line_object = LogLineObject(log_time, module_name, log_data)

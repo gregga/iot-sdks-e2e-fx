@@ -102,6 +102,7 @@ foreach($mod in $modulelist) {
 }
 
 set-location $resultsdir
+$oout = ""
 Write-Host "merging logs for $modlist" -ForegroundColor Green
 Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 if($isWin32) {
