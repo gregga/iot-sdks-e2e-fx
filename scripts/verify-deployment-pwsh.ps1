@@ -73,7 +73,8 @@ foreach($i in 1..24) {
     else {
         Write-Host "container is unkonwn.  Waiting." -ForegroundColor Yellow
     }
-    Start-Sleep -s 10
+    Write-Host "Sleeping..."
+    Start-Sleep -s 15
 }
 
 Write-Host  "container $container_name deployment failed" -ForegroundColor Red
