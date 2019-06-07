@@ -140,7 +140,7 @@ else {
 #$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
 
 $out = ""
-$junit_file = "$build_dir$log_folder_name.xml"
+$junit_file = "$build_dir/$log_folder_name.xml"
 
 #args=
 #for mod in ${languageMod} friendMod edgeHub edgeAgent; do
@@ -154,7 +154,7 @@ $junit_file = "$build_dir$log_folder_name.xml"
 set-location $resultsdir
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
 $log_file = "$resultsdir/merged.log"
-Write-Host "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
+Write-Host "###${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
 if($isWin32) {
     $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie
@@ -162,7 +162,7 @@ if($isWin32) {
 else {
     $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
 }
-Write-Host $out
+#Write-Host $out
 #$out | Out-File -Append $resultsdir/$merged.log
 
 #echo "injecting merged.log into junit"
