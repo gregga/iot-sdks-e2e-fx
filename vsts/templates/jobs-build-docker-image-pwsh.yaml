@@ -84,7 +84,7 @@ jobs:
     displayName: "POWERSHELL: pip install requirements.txt"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
-  - powershell: $(Horton.FrameworkRoot)/scripts/build-docker-image.ps1 ${{ parameters.language }} $(NormalizedRepo) ${CommitToPass} ${{ parameters.variant }}
+  - powershell: $(Horton.FrameworkRoot)/scripts/build-docker-image.ps1 ${{ parameters.language }} $(NormalizedRepo) "master" ${{ parameters.variant }}
       #python3 $(Horton.FrameworkRoot)/pyscripts/build_docker_image.py --language ${{ parameters.language }}  --repo ${NormalizedRepo}  --commit ${CommitToPass} --variant ${{ parameters.variant }}
     displayName: "POWERSHELL: build docker image ${{ parameters.language }} $(NormalizedRepo) ${CommitToPass} ${{ parameters.variant }}"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
