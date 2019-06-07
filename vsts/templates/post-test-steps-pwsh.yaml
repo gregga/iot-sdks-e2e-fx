@@ -23,20 +23,21 @@ steps:
       New-Item -Path $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
     }
     finally {
-      try {
-        New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -type directory
-      }
-      finally {
-        $files = Get-ChildItem "$(Horton.FrameworkRoot)/results/logs/*"
-        Move-Item $files  $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
-      }
+      #try {
+      #  New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
+      #}
+      #finally {
+      $files = Get-ChildItem "$(Horton.FrameworkRoot)/results/logs"
+      Move-Item $files  $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
+      #}
+
     }
     try {
-      New-Item $(Build.SourcesDirectory)/results -type directory
+      New-Item $(Build.SourcesDirectory)/results -ItemType Directory
     }
     finally {
       $files = Get-ChildItem "$(Build.SourcesDirectory)/TEST-*"
-      Move-Item $files $(Build.SourcesDirectory)/results
+      Move-Item $files $(Build.SourcesDirectory)/results/
     }
   displayName: 'POWERSHELL: Fetch logs'
   condition: and(always(), ne(variables['skipTest'],'yes'))
