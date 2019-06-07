@@ -98,13 +98,21 @@ scripts/setup/verify-container-running.ps1 friendMod
 Write-Host 'POWERSHELL: give edgeHub 30 seconds to start up' -ForegroundColor Yellow
 Start-Sleep -s 30
 
+$logdir = "$root_dir/testlogs"
+New-Item -Path $logdir -Type Directory
+
 # pytest-steps
-$scenario = ""
-$xport = ""
-#$lang = ""
-$log_folder = ""
+$scenario = "edgehub_module"
+$xport = "mqtt"
 $build_dir = ""
+$junit_xml = "$logdir/TEST-test_edgehub_module_mqtt.xml"
+$opts = "test_edgehub_module_mqtt"
 $xtra_params = ""
+
+#pytest -v --scenario edgehub_module --transport=mqtt --node-wrapper --junitxml=/home/vsts/work/1/s/TEST-test_edgehub_module_mqtt.xml -o junit_suite_name=test_edgehub_module_mqtt 
+
+Write-Host 'POWERSHELL: run PYTEST module' -ForegroundColor Green
+scripts/setup/run-pytest-module.ps1 $scenario $xport $lang $junit_xml $opts $xtra_params
 
 #$(Horton.FrameworkRoot)/scripts/run-pytest-module.ps1 ${{ parameters.scenario }} ${{ parameters.transport }} ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}
 #Write-Host "POWERSHELL: run-pytest-module.ps1 $scenario $xport $lang $build_dir'/TEST-'$log_folder'.xml' junit_suite_name=$log_folder $xtra_params"

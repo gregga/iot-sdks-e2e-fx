@@ -102,7 +102,7 @@ $arglist = ""
 $modlist = ""
 foreach($mod in $modulelist) {
     if("$mod" -ne "") {
-        $arglist += "-staticfile $mod.log "
+        $arglist += "-staticfile $resultsdir/$mod.log "
         $modlist += "$mod "
     }
 }
