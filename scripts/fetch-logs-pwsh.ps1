@@ -121,7 +121,7 @@ if($isWin32) {
     #$out | Out-File -Append $resultsdir/$merged.log
 }
 else {
-    $out = python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist
+    $out = sudo -H -E python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist
 }
 if ($LASTEXITCODE -ne 0) {
     Write-Host "error merging logs" -ForegroundColor Red
