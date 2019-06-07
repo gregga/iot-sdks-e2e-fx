@@ -133,7 +133,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 else {
     $out | Out-File -Append $resultsdir/$merged.log
-    Write-Host $out
+    #$Write-Host $out
 }
 
 #$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml
@@ -179,25 +179,48 @@ else {
 #$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
 #$junit_file = Join-Path -Path $junit_log_dir "$junit_file.xml" -Resolve
 
-try {
-    New-Item -Path $build_dir/results/$log_folder_name -ItemType Directory
-  }
-  finally {
-    #try {
+if( -Not (Test-Path -Path $build_dir/results/$log_folder_name ) )
+{
+    New-Item -ItemType directory -Path $build_dir/results/$log_folder_name
+}
+else {
+    Remove-Item -Path $build_dir/results/$log_folder_name -Force -Recurse
+    New-Item -ItemType directory -Path $build_dir/results/$log_folder_name
+}
+$files = Get-ChildItem "$root_dir/results/logs/*"
+Move-Item $files $build_dir/results/$log_folder_name
+
+if( -Not (Test-Path -Path $build_dir/results ) )
+{
+    New-Item -ItemType directory -Path $build_dir/results
+}
+else {
+    Remove-Item -Path $build_dir/results -Force -Recurse
+    New-Item -ItemType directory -Path $build_dir/results
+}
+$files = Get-ChildItem "$build_dir/TEST-*"
+Move-Item $files $build_dir/results
+
+
+#try {
+#    New-Item -Path $build_dir/results/$log_folder_name -ItemType Directory
+#  }
+#  finally {
+#    #try {
     #  New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
     #}
     #finally {
-    $files = Get-ChildItem "$root_dir/results/logs/*"
-    Move-Item $files $build_dir/results/$log_folder_name
+#    $files = Get-ChildItem "$root_dir/results/logs/*"
+#    Move-Item $files $build_dir/results/$log_folder_name
     #}
 
-  }
-  try {
-    New-Item $build_dir/results -ItemType Directory
-  }
-  finally {
-    $files = Get-ChildItem "$build_dir/TEST-*"
-    Move-Item $files $build_dir/results
-  }
+#  }
+#  try {
+#    New-Item $build_dir/results -ItemType Directory
+#  }
+#  finally {
+#    $files = Get-ChildItem "$build_dir/TEST-*"
+#    Move-Item $files $build_dir/results
+#  }
 
 
