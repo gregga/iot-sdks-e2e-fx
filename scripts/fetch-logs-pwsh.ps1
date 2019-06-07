@@ -4,14 +4,11 @@
 Param
 (
     [Parameter(Position=0)]
-    [AllowEmptyString()]
-    [string]$langmod="",
+    [string]$langmod,
     [Parameter(Position=1)]
-    [AllowEmptyString()]
-    [string]$build_dir="",
+    [string]$build_dir,
     [Parameter(Position=2)]
-    [AllowEmptyString()]
-    [string]$log_folder_name=""
+    [string]$log_folder_name
 )
 
 #$script_dir = $pwd.Path
@@ -43,8 +40,18 @@ function RunningOnWin32 {
 }
 
 $isWin32 = RunningOnWin32
-$languageMod=""
+
 $resultsdir="$root_dir/results/logs"
+if( -Not (Test-Path -Path $resultsdir ) )
+{
+    New-Item -ItemType directory -Path $resultsdir
+}
+else {
+    Get-ChildItem -Path "$resultsdir/*" -Recurse | Remove-Item -Force -Recurse
+    Remove-Item -Path $resultsdir -Force -Recurse
+    New-Item -ItemType directory -Path $resultsdir
+}
+
 
 
 
@@ -66,12 +73,14 @@ else {
     sudo python3 -m pip install --no-cache-dir -I colorama
 }
 
-try {
-    New-Item -Path $resultsdir -ItemType Directory
-}
-finally {
-    Write-Host "Got $resultsdir" -ForegroundColor Green
-}
+#try {
+#    New-Item -Path $resultsdir -ItemType Directory
+#}
+#finally {
+#    Write-Host "Got $resultsdir" -ForegroundColor Green
+#}
+
+$languageMod = $langmod + "Mod"
 
 $modulelist = @( $languageMod, "friendMod", "edgeHub", "edgeAgent")
 foreach($mod in $modulelist) {
@@ -79,7 +88,7 @@ foreach($mod in $modulelist) {
         Write-Host "getting log for $mod" -ForegroundColor Green 
         $out = docker logs -t $mod
         #docker logs -t $mod
-        $out | Out-File -Append $resultsdir/${mod}.log
+        $out | Out-File $resultsdir/${mod}.log
     }
 }
 
@@ -92,8 +101,7 @@ foreach($mod in $modulelist) {
 #done
 
 if($isWin32 -eq $false) {
-    $out = sudo journalctl -u iotedge -n 500 -e
-    $out | Out-File -Append $resultsdir/${mod}.log
+    sudo journalctl -u iotedge -n 500 -e
 }
 
 #sudo journalctl -u iotedge -n 500 -e  &> $resultsdir/iotedged.log
@@ -117,7 +125,7 @@ Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 if($isWin32) {
     Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
     $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
-    python ${root_dir}/pyscripts/docker_log_processor.py $arglist
+    #python ${root_dir}/pyscripts/docker_log_processor.py $arglist
     #args: -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log :
     Write-Host "#########################" -ForegroundColor Yellow
     #$out = python ${root_dir}/pyscripts/docker_log_processor.py " -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log"
@@ -132,7 +140,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host $out
 }
 else {
-    $out | Out-File -Append $resultsdir/$merged.log
+    $out | Out-File $resultsdir/merged.log
     #$Write-Host $out
 }
 
@@ -179,27 +187,33 @@ else {
 #$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
 #$junit_file = Join-Path -Path $junit_log_dir "$junit_file.xml" -Resolve
 
-if( -Not (Test-Path -Path $build_dir/results/$log_folder_name ) )
+if( -Not (Test-Path -Path "$build_dir/results/$log_folder_name" ) )
 {
-    New-Item -ItemType directory -Path $build_dir/results/$log_folder_name
+    New-Item -ItemType directory -Path "$build_dir/results/$log_folder_name"
 }
 else {
-    Remove-Item -Path $build_dir/results/$log_folder_name -Force -Recurse
-    New-Item -ItemType directory -Path $build_dir/results/$log_folder_name
+    Get-ChildItem -Path "$build_dir/results/$log_folder_name/*" -Recurse | Remove-Item -Force -Recurse
+    Remove-Item -Path "$build_dir/results/$log_folder_name" -Force -Recurse
+    New-Item -ItemType directory -Path "$build_dir/results/$log_folder_name"
 }
 $files = Get-ChildItem "$root_dir/results/logs/*"
-Move-Item $files $build_dir/results/$log_folder_name
+if($files) {
+    Move-Item $files "$build_dir/results/$log_folder_name"
+}
 
-if( -Not (Test-Path -Path $build_dir/results ) )
+if( -Not (Test-Path -Path "$build_dir/results" ) )
 {
-    New-Item -ItemType directory -Path $build_dir/results
+    New-Item -ItemType directory -Path "$build_dir/results"
 }
 else {
-    Remove-Item -Path $build_dir/results -Force -Recurse
-    New-Item -ItemType directory -Path $build_dir/results
+    Get-ChildItem -Path "$build_dir/results/*" -Recurse | Remove-Item -Force -Recurse
+    Remove-Item -Path "$build_dir/results" -Force -Recurse
+    New-Item -ItemType directory -Path "$build_dir/results"
 }
 $files = Get-ChildItem "$build_dir/TEST-*"
-Move-Item $files $build_dir/results
+if($files) {
+    Move-Item $files "$build_dir/results"
+}
 
 
 #try {
