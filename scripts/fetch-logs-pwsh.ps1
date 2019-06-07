@@ -43,6 +43,20 @@ $isWin32 = RunningOnWin32
 $languageMod=""
 $resultsdir="$root_dir/results/logs"
 
+if($isWin32) {
+    python -m pip install --upgrade pip
+    python -m pip install -I docker
+    python -m pip install -I colorama     
+}
+else {
+    sudo -H -E python3 -m pip install --upgrade pip
+    sudo python3 -m pip install --upgrade pip
+    sudo -H -E python3 -m pip install -I docker
+    sudo python3 -m pip install -I docker
+    sudo -H -E python3 -m pip install -I colorama
+    sudo python3 -m pip install -I colorama
+}
+
 try {
     New-Item -Path $resultsdir -ItemType Directory
 }
@@ -129,7 +143,8 @@ if($isWin32) {
 else {
     $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file; if ($LASTEXITCODE -ne 0) { Write-Host "error injecting into junit" -ForegroundColor Red; $out }
 }
-$out | Out-File -Append $resultsdir/$merged.log
+Write-Host $out
+#$out | Out-File -Append $resultsdir/$merged.log
 
 #echo "injecting merged.log into junit"
 #pushd $resultsdir && python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $2 -log_file merged.log
