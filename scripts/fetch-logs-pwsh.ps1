@@ -16,6 +16,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
+
 function RunningOnWin32 {
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
@@ -102,6 +103,7 @@ else {
 
 $out = ""
 $junit_file = "$build_dir/$log_folder_name.xml"
+#$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
 
 set-location $resultsdir
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
@@ -154,7 +156,14 @@ else {
     #Remove-Item -Path "$build_dir/results" -Force -Recurse
     #New-Item -ItemType directory -Path "$build_dir/results"
 #}
+
+#$junit_file = "$build_dir/$log_folder_name.xml"
+#$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
+#$resultsdir="$build_dir/results/logs/$log_folder_name"
+
+Copy-Item $junit_file -Destination "$build_dir"
+
 $files = Get-ChildItem "$build_dir/TEST-*"
 if($files) {
-    Move-Item $files "$results_dir/results"
+    Move-Item $files "$build_dir/results/logs/$log_folder_name"
 }
