@@ -86,18 +86,13 @@ function which([string]$cmd) {
 }
 
 function IsWin32 {
-    $ret = $false
-    try {
-        $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
-        if ($CheckWin) {
+    if("$env:OS" -ne "") {
+        if ($env:OS.Indexof('Windows') -ne -1) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            $ret = $true
+            return $true
         }
     }
-    finally {
-        $ret = $false
-    }
-    return $ret
+    return $false
 }
 
 ###############################################################
