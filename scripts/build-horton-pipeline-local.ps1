@@ -47,8 +47,8 @@ Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
 set-location $root_dir
 # Build Images:
-scripts/build-docker-image.ps1 "node" $horton_repo "master"
 
+#scripts/build-docker-image.ps1 "node" "azure/azure-iot-sdk-node" "master"
 
 # pre-test-steps
 
@@ -69,8 +69,6 @@ $frimg = "$horton_repo/default-friend-module:latest"
 
 set-location $root_dir
 
-#D:\repos\iot\iot-sdks-e2e-fx-fork\scripts\setup\setup-precache-images.ps1
-#scripts/setup/setup-precache-images.ps1
 scripts/setup/setup-precache-images.ps1 $lang $timg $eaimg $ehimg $frimg
 
 Write-Host 'POWERSHELL: Create new edgehub identity' -ForegroundColor Blue
@@ -82,7 +80,6 @@ scripts/deploy-test-containers.ps1 $lang $horton_repo/$lang-e2e-v3:$timg
 
 Write-Host 'POWERSHELL: Verify edgeHub deployment' -ForegroundColor Blue
 set-location $root_dir
-#scripts/verify-deployment-pwsh.ps1 edgeHub $ehimg
 scripts/verify-deployment-pwsh.ps1 edgeHub $ehimg
 
 Write-Host 'POWERSHELL: Verify edgeAgent deployment' -ForegroundColor Blue

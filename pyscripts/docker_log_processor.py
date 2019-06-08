@@ -26,19 +26,12 @@ class DockerLogProcessor:
         got_static = False
         modulename = ""
         filterfile = ""
-
         cmd_args = " ".join(args)
         all_args = cmd_args.split()
         arg_len = len(all_args)
-        print(str(arg_len) +":"+cmd_args)
 
         for arg in all_args:
             index += 1
-            #arg = all_args[index]
-            print("ARG:: " + arg)
-            print("IDX: "+ str(index))
-            print("LEN: "+ str(arg_len))
-            
             if got_arg:
                 got_arg = False
                 continue

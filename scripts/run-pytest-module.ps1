@@ -40,14 +40,12 @@ function RunningOnWin32 {
 }
 
 
-#$script_dir = $pwd.Path
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 Write-Host "RealPath $path" -ForegroundColor Yellow
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
-#$pypath = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 set-location $testpath
 
 try {
@@ -60,24 +58,12 @@ catch {
     Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
 }
 
-#if( "$container_name" -eq "" -or "$image_name" -eq "") {
-#    Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
-#    Write-Host "eg: verify-deployment nodeMod localhost:5000/node-test-image:latest" -ForegroundColor Red
-#    exit 1
-#}
-
 $isWin32 = RunningOnWin32
 
 write-host "###### pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
-#python3 -u -m pytest -v --scenario ${{ parameters.scenario }} --transport=${{ parameters.transport }} --${{ parameters.language }}-wrapper --junitxml=$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml -o junit_suite_name=${{ parameters.log_folder_name }} ${{ parameters.extra_args }}
 if($isWin32) {
     python -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
 }
 else {
     sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
 }
-
-#$out = sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
-#foreach($o in $out){
-#    Write-Host $o -ForegroundColor Blue
-#}

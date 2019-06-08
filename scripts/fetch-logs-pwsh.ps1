@@ -11,15 +11,11 @@ Param
     [string]$log_folder_name
 )
 
-#$script_dir = $pwd.Path
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-
-Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
-
 function RunningOnWin32 {
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
@@ -47,13 +43,6 @@ else {
     New-Item -ItemType directory -Path $resultsdir
 }
 
-
-
-
-#$(Horton.FrameworkRoot)/scripts/fetch-logs-pwsh.ps1 ${{ parameters.language }} $(Build.SourcesDirectory) ${{ parameters.log_folder_name }}.xml
-#$(Horton.FrameworkRoot)/scripts/fetch-logs-pwsh.ps1 ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml $(Build.SourcesDirectory)
-
-
 if($isWin32) {
     python -m pip install --upgrade pip
     python -m pip install -I docker
@@ -68,40 +57,19 @@ else {
     sudo python3 -m pip install --no-cache-dir -I colorama
 }
 
-#try {
-#    New-Item -Path $resultsdir -ItemType Directory
-#}
-#finally {
-#    Write-Host "Got $resultsdir" -ForegroundColor Green
-#}
-
 $languageMod = $langmod + "Mod"
 $modulelist = @( $languageMod, "friendMod", "edgeHub", "edgeAgent")
 foreach($mod in $modulelist) {
     if("$mod" -ne "") {
         Write-Host "getting log for $mod" -ForegroundColor Green 
         $out = docker logs -t $mod
-        #docker logs -t $mod
         $out | Out-File $resultsdir/${mod}.log
     }
 }
 
-#for mod in ${languageMod} friendMod edgeHub edgeAgent; do
-#  echo "getting log for $mod"
-#  sudo docker logs -t ${mod} &> $resultsdir/${mod}.log 
-#  if [ $? -ne 0 ]; then
-#    echo "error fetching logs for ${mod}"
-#  fi
-#done
-
 if($isWin32 -eq $false) {
     sudo journalctl -u iotedge -n 500 -e
 }
-
-#sudo journalctl -u iotedge -n 500 -e  &> $resultsdir/iotedged.log
-#if [ $? -ne 0 ]; then
-#  echo "error fetching iotedged journal"
-#fi
 
 $arglist = ""
 $modlist = ""
@@ -119,12 +87,6 @@ Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 if($isWin32) {
     Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
     $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
-    #python ${root_dir}/pyscripts/docker_log_processor.py $arglist
-    #args: -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log :
-    Write-Host "#########################" -ForegroundColor Yellow
-    #$out = python ${root_dir}/pyscripts/docker_log_processor.py " -staticfile nodeMod.log -staticfile friendMod.log -staticfile edgeHub.log -staticfile edgeAgent.log"
-    #$out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
-    #$out | Out-File -Append $resultsdir/$merged.log
 }
 else {
     $out = sudo -H -E python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist
@@ -138,20 +100,8 @@ else {
     #$Write-Host $out
 }
 
-#$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml
-#$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
-
 $out = ""
 $junit_file = "$build_dir/$log_folder_name.xml"
-
-#args=
-#for mod in ${languageMod} friendMod edgeHub edgeAgent; do
-#    args="${args} -staticfile ${mod}.log"
-#done
-#pushd $resultsdir && python ${root_dir}/pyscripts/docker_log_processor.py $args > merged.log
-#if [ $? -ne 0 ]; then
-#  echo "error merging logs"
-#fi
 
 set-location $resultsdir
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
@@ -208,27 +158,3 @@ $files = Get-ChildItem "$build_dir/TEST-*"
 if($files) {
     Move-Item $files "$results_dir/results"
 }
-
-
-#try {
-#    New-Item -Path $build_dir/results/$log_folder_name -ItemType Directory
-#  }
-#  finally {
-#    #try {
-    #  New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
-    #}
-    #finally {
-#    $files = Get-ChildItem "$root_dir/results/logs/*"
-#    Move-Item $files $build_dir/results/$log_folder_name
-    #}
-
-#  }
-#  try {
-#    New-Item $build_dir/results -ItemType Directory
-#  }
-#  finally {
-#    $files = Get-ChildItem "$build_dir/TEST-*"
-#    Move-Item $files $build_dir/results
-#  }
-
-

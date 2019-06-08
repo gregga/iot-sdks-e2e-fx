@@ -16,9 +16,6 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-#$Horton.FrameworkRoot = $root_dir
-
-Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
 function RunningOnWin32 {
     try {
@@ -86,26 +83,3 @@ else {
         Write-Host $o -ForegroundColor Blue
     }    
 }
-#$out = sudo -H -E python3 -m pip install --user ruamel.yaml
-#foreach($o in $out){
-#    Write-Host $o -ForegroundColor Magenta
-#}
-
-#python3 $(dirname "$0")/../pyscripts/create_new_edgehub_device.py $1
-#[ $? -eq 0 ] || { echo "create_new_edgehub_device.py failed"; exit 1; }
-
-#python3 $(dirname "$0")/../pyscripts/deploy_test_containers.py
-#[ $? -eq 0 ] || { echo "deploy_test_containers.py failed"; exit 1; }
-
-#echo "restarting iotedge"
-#sudo systemctl restart iotedge
-#if [ $? -eq 0 ]; then 
-#    echo "iotedge restart complete"
-#else
-#    echo "restart iotedge failed" 
-#    echo "This is OK to ignore if running as part of a VSTS job."
-#    echo "It looks like iotedge has a back-off on restart and it's"
-#    echo "unable to restart right now.  It will restart on its own"
-#    echo "once it's ready."
-#fi
-
