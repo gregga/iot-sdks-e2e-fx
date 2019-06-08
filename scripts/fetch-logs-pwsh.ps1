@@ -20,11 +20,6 @@ $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 
 Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
-#if($langmod.EndsWith("xml")) {
-#    $junit_file = $langmod
-#    $langmod = ""
-#}
-
 function RunningOnWin32 {
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
