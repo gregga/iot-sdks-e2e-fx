@@ -59,6 +59,8 @@ if("$repo" -ne "") { $args += "--repo ""$repo"" "}
 if("$commit" -ne "") { $args += "--commit ""$commit"" "}
 if("$variant" -ne "") { $args += "--variant ""$variant"""}
 
+Write-Host "build-docker-image $args"
+
 if($isWin32) {
     python $pyscripts/build_docker_image.py $args
 }

@@ -47,6 +47,7 @@ Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
 set-location $root_dir
 # Build Images:
+scripts/build-docker-image.ps1 "node" $horton_repo "master"
 
 
 # pre-test-steps
