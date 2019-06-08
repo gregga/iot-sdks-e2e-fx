@@ -76,6 +76,7 @@ Write-Host 'POWERSHELL: Create new edgehub identity' -ForegroundColor Blue
 scripts/create-new-edgehub-device.ps1
 
 Write-Host 'POWERSHELL: Deploy manifest (${{ parameters.test_image }})' -ForegroundColor Blue
+Write-Host "#### scripts/deploy-test-containers.ps1 $lang $horton_repo/$lang-e2e-v3:$timg" -ForegroundColor Yellow
 scripts/deploy-test-containers.ps1 $lang $horton_repo/$lang-e2e-v3:$timg
 
 Write-Host 'POWERSHELL: Verify edgeHub deployment' -ForegroundColor Blue
