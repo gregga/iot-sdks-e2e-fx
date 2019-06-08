@@ -4,7 +4,7 @@
 Param
 (
     [Parameter(Position=0)]
-    [string[]]$test_scenario,
+    [string]$test_scenario,
 
     [Parameter(Position=1)]
     [string]$test_transport,
@@ -59,11 +59,12 @@ try {
 catch {
     Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
 }
-if( "$container_name" -eq "" -or "$image_name" -eq "") {
-    Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
-    Write-Host "eg: verify-deployment nodeMod localhost:5000/node-test-image:latest" -ForegroundColor Red
-    exit 1
-}
+
+#if( "$container_name" -eq "" -or "$image_name" -eq "") {
+#    Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
+#    Write-Host "eg: verify-deployment nodeMod localhost:5000/node-test-image:latest" -ForegroundColor Red
+#    exit 1
+#}
 
 $isWin32 = RunningOnWin32
 
