@@ -16,26 +16,26 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-#$Horton.FrameworkRoot = $root_dir
+set-location $root_dir
 
-Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
 
-function RunningOnWin32 {
+function IsWin32 {
+    $ret = $false
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
         if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $ret = $true
         }
     }
-    catch {
-        Write-Host "Not Win32" -ForegroundColor Magenta
+    finally {
+        $ret = $false
     }
-    return $false
+    return $ret
 }
 
-set-location $root_dir
-$isWin32 = RunningOnWin32
+$isWin32 = IsWin32
+
 $horton_user = $env:IOTHUB_E2E_REPO_USER
 $horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
 $horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS

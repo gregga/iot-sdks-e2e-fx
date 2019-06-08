@@ -14,24 +14,29 @@ Param
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
-set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
+set-location $root_dir
 
-function RunningOnWin32 {
+$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
+$pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
+
+function IsWin32 {
+    $ret = $false
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
         if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $ret = $true
         }
     }
-    catch {
-        Write-Host "Not Win32" -ForegroundColor Magenta
+    finally {
+        $ret = $false
     }
-    return $false
+    return $ret
 }
 
-$isWin32 = RunningOnWin32
+$isWin32 = IsWin32
+
 $horton_user = $env:IOTHUB_E2E_REPO_USER
 $horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
 $horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS
@@ -41,45 +46,14 @@ Set-Item "env:IOTHUB-E2E-REPO-USER" $horton_user
 Set-Item "env:IOTHUB-E2E-REPO-PASSWORD" $horton_pw
 Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
-set-location $root_dir
-
-$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
-$pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
-
 if($isWin32) {
-    $out = python -m pip install -e $hh
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
-    
-    $out = python $pyscripts/create_new_edgehub_device.py
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
-    
-    $out = python $pyscripts/deploy_test_containers.py
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
+    python -m pip install -e $hh
+    python $pyscripts/create_new_edgehub_device.py
+    #python $pyscripts/deploy_test_containers.py
 }
 else {
-    $out = sudo -H -E python3 -m pip install -e $hh
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
-    
-    $out = sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
-    
-    $out = sudo -H -E python3 $pyscripts/deploy_test_containers.py
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
-    
-    $out = sudo -H -E  systemctl restart iotedge
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }    
+    sudo -H -E python3 -m pip install -e $hh
+    sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
+    #sudo -H -E python3 $pyscripts/deploy_test_containers.py
+    sudo -H -E  systemctl restart iotedge
 }

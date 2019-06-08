@@ -19,25 +19,22 @@ set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath 'pyscripts' -Resolve
 
-#$root_dir + "/scripts/setup/setup-python36.ps1"
-
-Write-Host "root_dir: $root_dir" -ForegroundColor Yellow
-
-function RunningOnWin32 {
+function IsWin32 {
+    $ret = $false
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
         if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $ret = $true
         }
     }
-    catch {
-        Write-Host "Not Win32" -ForegroundColor Magenta
+    finally {
+        $ret = $false
     }
-    return $false
+    return $ret
 }
 
-$isWin32 = RunningOnWin32
+$isWin32 = IsWin32
 
 if($isWin32) {
     python -m pip install --upgrade pip

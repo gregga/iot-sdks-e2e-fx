@@ -25,28 +25,27 @@ Param
     [string]$test_extra_args=""
 )
 
-function RunningOnWin32 {
+function IsWin32 {
+    $ret = $false
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
         if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $ret = $true
         }
     }
-    catch {
-        Write-Host "Not Win32" -ForegroundColor Magenta
+    finally {
+        $ret = $false
     }
-    return $false
+    return $ret
 }
-
 
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
-set-location $path
-Write-Host "RealPath $path" -ForegroundColor Yellow
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 set-location $testpath
+$isWin32 = IsWin32
 
 try {
     $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
@@ -57,8 +56,6 @@ try {
 catch {
     Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
 }
-
-$isWin32 = RunningOnWin32
 
 write-host "###### pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
 if($isWin32) {

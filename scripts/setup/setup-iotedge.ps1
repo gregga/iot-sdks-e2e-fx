@@ -8,8 +8,9 @@ set-location $path
 $pyscripts = Join-Path -Path $path -ChildPath '../../pyscripts' -Resolve
 $hh = Join-Path -Path $path -ChildPath '../../horton_helpers' -Resolve
 
+
 function IsWin32 {
-    ret = $false
+    $ret = $false
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
         if ($CheckWin) {

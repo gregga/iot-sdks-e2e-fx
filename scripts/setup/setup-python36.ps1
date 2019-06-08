@@ -85,18 +85,19 @@ function which([string]$cmd) {
     return $path
 }
 
-function IsWindows {
-    $IsW32 = $false
+function IsWin32 {
+    $ret = $false
     try {
-        if ([System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)) {
+        $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
+        if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $ret = $true
         }
     }
-    catch {
-        $IsW32 =  $false
+    finally {
+        $ret = $false
     }
-    return $IsW32
+    return $ret
 }
 
 ###############################################################
@@ -105,28 +106,16 @@ function IsWindows {
 $PythonMinVersionMajor = 3
 $PythonMinVersionMinor = 6
 
-$IsWin32 = IsWindows
-$pipTestOpts = ' --upgrade --no-deps --force-reinstall '
+$IsWin32 = IsWin32
 
-$script_dir = $pwd.Path
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
-set-location $path
-
-Write-Host "RealPath $path" -ForegroundColor Yellow
-$out = ls /usr/bin/python*
-foreach($o in $out){
-    Write-Host $o -ForegroundColor Yellow
-}
-#$root_dir = Join-Path -Path $script_dir -ChildPath '/../..' -Resolve
 $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
+set-location $root_dir
 
-Write-Host "POWERSHELL SCRIPT in Setup-Python36" -ForegroundColor Red -BackgroundColor Yellow
-Write-Host "RootDir: $root_dir" -ForegroundColor Magenta
 $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor)
 
-#if(!$foundPy)
 if($foundPy)
 {
     Write-Host "Python version not found" -ForegroundColor Red
@@ -135,59 +124,32 @@ if($foundPy)
         #exit 1
     }
     else {
-        Write-Host "Installing python 3.6..." -ForegroundColor Yellow
-        #$out = sudo -H -E apt-get install -y python3; if ($LASTEXITCODE -ne 0) { $out }
-        $out = sudo -H -E sudo add-apt-repository ppa:deadsnakes/ppa
-        if($out.Length -gt 0){
-            foreach($o in $out){
-                Write-Host $o -ForegroundColor Blue
-            }
-        }
-        $out = sudo -H -E apt update
-        if($out.Length -gt 0){
-            foreach($o in $out){
-                Write-Host $o -ForegroundColor Blue
-            }
-        }
-        $out = sudo -H -E apt install python3.6
+            Write-Host "Installing python 3.6..." -ForegroundColor Yellow
+            sudo -H -E sudo add-apt-repository ppa:deadsnakes/ppa        
+            sudo -H -E apt update
+            sudo -H -E apt install python3.6
+    }
 
-        #$out = sudo -H -E apt-get install -y python3
-        if($out.Length -gt 0){
-            foreach($o in $out){
-                Write-Host $o -ForegroundColor Blue
-            }
-        }
-        if($LASTEXITCODE -eq 0)
-        {
-            Write-Host "python3.6 installed successfully" -ForegroundColor Green
-        } 
-        else 
-        {
-            Write-Host "python install failed"  -ForegroundColor Red
-            exit 1
-        }
+    if($LASTEXITCODE -eq 0)
+    {
+        Write-Host "python3.6 installed successfully" -ForegroundColor Green
+    } 
+    else 
+    {
+        Write-Host "python install failed"  -ForegroundColor Red
+        exit 1
     }
 }
 
 if ($IsWin32 -eq $false) {
-    $out = sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
-    $out = sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
-    $out = sudo update-alternatives --set python3 /usr/bin/python3.6
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
+    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+    sudo update-alternatives --set python3 /usr/bin/python3.6
     $out = python3 -V
     foreach($o in $out){
         Write-Host $o -ForegroundColor Magenta
     }
 }
-
 
 $gotPip3 = $false
 $Pip3Path = Which("pip3")
@@ -196,14 +158,9 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
     Write-Host "Pip3 not found" -ForegroundColor Red
     if($IsWin32) {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
-        $out = python -m ensurepip
+        python -m ensurepip
         #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
         #$out = sudo apt-get install -y pip setuptools wheel
-        if($out.Length -gt 0){
-            foreach($o in $out){
-                Write-Host $o -ForegroundColor Blue
-            }
-        }
         if($LASTEXITCODE -eq 0)
         {
             Write-Host "pip3 installed successfully" -ForegroundColor Green
@@ -212,18 +169,12 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
         else 
         {
             Write-Host "pip3 install failed"  -ForegroundColor Red
-            exit 1
+            #exit 1
         }
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
-        #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
-        $out = sudo apt-get install pip
-        if($out.Length -gt 0){
-            foreach($o in $out){
-                Write-Host $o -ForegroundColor Blue
-            }
-        }
+        sudo apt-get install pip
         if($LASTEXITCODE -eq 0)
         {
             Write-Host "pip3 installed successfully" -ForegroundColor Green
@@ -238,20 +189,12 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
 }
 
 if($gotPip3) {
-    Write-Host "Pip3 already installed" -ForegroundColor Green
     Write-Host "Updating pip" -ForegroundColor Yellow
-    #$out = python.exe -m pip install --upgrade pip
-    #python -m pip install flask
     if($IsWin32) {
-        $out = pip install --user --upgrade pip
+        python -m pip install --user --upgrade pip
     }
-    else{
-        $out = pip install --user --upgrade pip
-    }
-    if($out.Length -gt 0){
-        foreach($o in $out){
-            Write-Host $o -ForegroundColor Blue
-        }
+    else {
+        python3 -m pip install --user --upgrade pip
     }
     if($LASTEXITCODE -eq 0)
     {
@@ -265,16 +208,10 @@ if($gotPip3) {
 
     Write-Host "Updating Pip3" -ForegroundColor Yellow 
     if($IsWin32) {
-        #$out = python -m $pipcmd install --upgrade pip3
-        $out = python -m pip install -y --upgrade pip3
+        python -m pip install -y --upgrade pip3
     }
     else{
-        $out = python3.6 -m pip install -y --upgrade pip3
-    }
-    if($out.Length -gt 0){
-        foreach($o in $out){
-            Write-Host $o -ForegroundColor Blue
-        }
+        python3.6 -m pip install -y --upgrade pip3
     }
     if($LASTEXITCODE -eq 0)
     {
@@ -292,35 +229,14 @@ foreach($o in $out){
     Write-Host $o -ForegroundColor Yellow
 }
 
-#colorecho $_yellow "Installing python libraries"
-#cd ${root_dir}/ci-wrappers/pythonpreview/wrapper  &&  \
-#   python3 -m pip install --user -e python_glue
-#if [ $? -ne 0 ]; then 
-#    colorecho $_yellow "user path not accepted.  Installing globally"
-#    cd ${root_dir}/ci-wrappers/pythonpreview/wrapper  &&  \
-#        python3 -m pip install -e python_glue
-#    [ $? -eq 0 ] || { colorecho $_red "install python_glue failed"; exit 1; }
-#fi
-
 Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
 if($IsWin32) {
-    $out = python -m ensurepip; pip install --user --upgrade pip
-    #$out =  python -m pip uninstall -y pip
-    #$out += apt install -y python3-pip --reinstall
-    #$out += python -m pip install -y python3-pip --reinstall
+    python -m ensurepip
+    python -m pip install --user --upgrade pip
 }
 else{
-    #$out = sudo pip3 install --upgrade pip
-    #$out = sudo python3 -m pip uninstall pip
-    #$out = sudo apt install -y python3-pip --reinstall; pip install --user --upgrade pip
-    #sudo apt-get install -y python3-pip
-    $out  = sudo -H -E apt install -y python3-pip
-    $out2 = sudo -H -E python3.6 -m pip install --user --upgrade pip
-}
-if($out.Length -gt 0){
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
+    sudo -H -E apt install -y python3-pip
+    sudo -H -E python3.6 -m pip install --user --upgrade pip
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -333,65 +249,17 @@ else
 }
 
 Write-Host "Installing python libraries" -ForegroundColor Yellow
-$out = cd $root_dir/ci-wrappers/pythonpreview/wrapper
-if($out.Length -gt 0){
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
-}
-if($LASTEXITCODE -eq 0)
-{
-    Write-Host "cd $root_dir/ci-wrappers/pythonpreview/wrapper Success" -ForegroundColor Green
-} 
-else 
-{
-    Write-Host " cd $root_dir/ci-wrappers/pythonpreview/wrapper FAIL"  -ForegroundColor Red
-    exit 1
-}
+set-location "$root_dir/ci-wrappers/pythonpreview/wrapper"
 
-#$runCmd = "python -m $pipcmd install -e python_glue"
-#$runCmd = "python -m $pipcmd install python_glue"
-#write-host "Cmd: $runCmd" -ForegroundColor Yellow
-#$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
 if($IsWin32) {
-    $out  = python -m pip install --upgrade pip
-    #$out2 = python -m pip install --user setuptools
-    #$out3 = python -m pip install --user msrest
-    #$out4 = python -m pip install --user msrestazure
-    #$out5 = python -m pip install --user -e python_glue
+    python -m pip install --user setuptools
+    python -m pip install --user -e python_glue
+    python -m pip install --user ruamel
 }
 else{
-    #$out  = sudo -H -E python3 -m pip install --upgrade pip
-    $out2 = sudo -H -E python3.6 -m pip install --user setuptools
-    #$out3 = sudo -H -E python3.6 -m pip install --user msrest
-    #$out4 = sudo -H -E python3.6 -m pip install --user msrestazure
-    $out5 = sudo -H -E python3.6 -m pip install --user -e python_glue
-    $out6 = sudo -H -E python3.6 -m pip install --user ruamel
-}
-if($out2.Length -gt 0){
-    foreach($o in $out2){
-        Write-Host $o -ForegroundColor Blue
-    }
-}
-if("$out3" -ne "" -and $out3.Length -gt 0){
-    foreach($o in $out3){
-        Write-Host $o -ForegroundColor Blue
-    }
-}
-if("$out4" -ne "" -and $out4.Length -gt 0){
-    foreach($o in $out4){
-        Write-Host $o -ForegroundColor Blue
-    }
-}
-if($out5.Length -gt 0){
-    foreach($o in $out5){
-        Write-Host $o -ForegroundColor Blue
-    }
-}
-if($out6.Length -gt 0){
-    foreach($o in $out6){
-        Write-Host $o -ForegroundColor Blue
-    }
+    sudo -H -E python3.6 -m pip install --user setuptools
+    sudo -H -E python3.6 -m pip install --user -e python_glue
+    sudo -H -E python3.6 -m pip install --user ruamel
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -403,56 +271,33 @@ else
     #exit 1
 }
 
-#cd ${root_dir} &&  \
-#    python3 -m pip install --user -e horton_helpers
-#if [ $? -ne 0 ]; then 
-#    colorecho $_yellow "user path not accepted.  Installing globally"
-#    cd ${root_dir} &&  \
-#        python3 -m pip install -e horton_helpers
-#    [ $? -eq 0 ] || { colorecho $_red "install horton_helpers failed"; exit 1; }
-#fi
-
-##############################################################
-# Just for build-docker-image
-
-if($IsWin32) {
-    python -m pip uninstall -y docker
-    python -m pip uninstall -y docker-py
-    python -m pip uninstall -y docker-compose
-    python -m pip install docker
-    python -m pip install docker-py
-    python -m pip install docker-compose
-    python -m pip install colorama
-}
-else{
-    sudo -H -E python3 -m pip uninstall -y docker
-    sudo -H -E python3 -m pip uninstall -y docker-py
-    sudo -H -E python3 -m pip uninstall -y docker-compose
-    sudo -H -E python3 -m pip install docker
-    sudo -H -E python3 -m pip install docker-py
-    sudo -H -E python3 -m pip install docker-compose
-    sudo -H -E python3 -m pip install colorama
-}
+#if($IsWin32) {
+#    python -m pip uninstall -y docker
+#    python -m pip uninstall -y docker-py
+#    python -m pip uninstall -y docker-compose
+#    python -m pip install docker
+#    python -m pip install docker-py
+#    python -m pip install docker-compose
+#    python -m pip install colorama
+#}
+#else{
+#    sudo -H -E python3 -m pip uninstall -y docker
+#    sudo -H -E python3 -m pip uninstall -y docker-py
+#    sudo -H -E python3 -m pip uninstall -y docker-compose
+#    sudo -H -E python3 -m pip install docker
+#    sudo -H -E python3 -m pip install docker-py
+#    sudo -H -E python3 -m pip install docker-compose
+#    sudo -H -E python3 -m pip install colorama
+#}
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
-cd $root_dir
-#$runCmd = "python -m $pipcmd install --user -e horton_helpers"
-#$runCmd = "python -m $pipcmd $pipTestOpts -e horton_helpers"
-#$runCmd = "python -m $pipcmd install horton_helpers"
-#$runCmd = "python -m $pipcmd install -e horton_helpers"
-#write-host "Cmd: $runCmd" -ForegroundColor Magenta
-#$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-#$out = $pycmd -m $pipcmd install horton_helpers
+set-location $root_dir
+
 if($IsWin32) {
-    $out = python -m pip install --user -e horton_helpers
+    python -m pip install --user -e horton_helpers
 }
 else{
-    $out = sudo -H -E python3.6 -m pip install --user -e horton_helpers
-}
-if($out.Length -gt 0){
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
+    sudo -H -E python3.6 -m pip install --user -e horton_helpers
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -464,36 +309,14 @@ else
     exit 1
 }
 
-# install requirements for our test runner
-#cd ${root_dir}/test-runner &&  \
-#    python3 -m pip install --user -r requirements.txt
-#if [ $? -ne 0 ]; then 
-#    colorecho $_yellow "user path not accepted.  Installing globally"
-#    cd ${root_dir}/test-runner &&  \
-#        python3 -m pip install -r requirements.txt
-#    [ $? -eq 0 ] || { colorecho $_red "pip install requirements.txt failed"; exit 1; }
-#fi
-
 Write-Host "Installing requirements for Horton test runner" -ForegroundColor Yellow
-#cd $root_dir/test-runner
-#$runCmd = "cd $root_dir/test-runner"
-cd $root_dir/test-runner
-#$runCmd = "python -m $pipcmd install --user -r requirements.txt"
-#$runCmd = "python -m $pipcmd install -r requirements.txt"
-#write-host "Cmd: $runCmd" -ForegroundColor Magenta
-#$out = $runCmd; if ($LASTEXITCODE -ne 0) { $out }
-#$out = $pycmd -m pip install -r requirements.txt
-#; if ($LASTEXITCODE -ne 0) { $out }
+set-location $root_dir/test-runner
+
 if($IsWin32) {
-    $out = python -m pip install --user -r requirements.txt
+    python -m pip install --user -r requirements.txt
 }
 else{
-    $out = sudo -H -E python3.6 -m pip install --user -r requirements.txt
-}
-if($out.Length -gt 0){
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Blue
-    }
+    sudo -H -E python3.6 -m pip install --user -r requirements.txt
 }
 if($LASTEXITCODE -eq 0)
 {

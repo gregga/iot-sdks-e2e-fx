@@ -14,23 +14,24 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
+$pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
-function RunningOnWin32 {
+function IsWin32 {
+    $ret = $false
     try {
         $CheckWin = [System.Boolean](Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction SilentlyContinue)
         if ($CheckWin) {
             Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
+            $ret = $true
         }
     }
-    catch {
-        Write-Host "Not Win32" -ForegroundColor Magenta
+    finally {
+        $ret = $false
     }
-    return $false
+    return $ret
 }
 
-$isWin32 = RunningOnWin32
-$pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
+$isWin32 = IsWin32
 
 Write-Host "deploy_test_container.py --friend --$lang $container_name" -ForegroundColor Yellow
 
