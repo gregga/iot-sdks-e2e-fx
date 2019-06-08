@@ -49,14 +49,12 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy result files to artifact staging'
   inputs:
-    cleanTargetFolder: true # Optional
     SourceFolder: '$(Build.SourcesDirectory)/results'
-    contents: '**/!(*.pyc)'
-    targetFolder: $(Build.ArtifactStagingDirectory)
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
 #  inputs:
 #    SourceFolder: '$(Build.SourcesDirectory)/results'
 #    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-#  condition: and(always(), ne(variables['skipTest'],'yes'))
+  condition: and(always(), ne(variables['skipTest'],'yes'))
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
