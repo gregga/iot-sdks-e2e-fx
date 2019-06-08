@@ -17,6 +17,10 @@ if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 
+#$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }},xml
+$junit_file = "$build_dir/TEST-$log_folder_name.xml"
+
+
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
@@ -98,7 +102,7 @@ else {
 }
 
 $out = ""
-$junit_file = "$build_dir/$log_folder_name.xml"
+#$junit_file = "$build_dir/$log_folder_name.xml"
 #$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
 
 set-location $resultsdir
@@ -157,7 +161,10 @@ else {
 #$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
 #$resultsdir="$build_dir/results/logs/$log_folder_name"
 
-Copy-Item $junit_file -Destination "$build_dir"
+if(Test-Path $junit_file) {
+    #Copy-Item $junit_file -Destination "$build_dir"
+    Write-Host "Found: $junit_file" -ForegroundColor Green
+}
 
 $files = Get-ChildItem "$build_dir/TEST-*"
 if($files) {
