@@ -202,8 +202,8 @@ if( -Not (Test-Path -Path "$build_dir/results" ) )
 }
 else {
     Get-ChildItem -Path "$build_dir/results/*" -Recurse | Remove-Item -Force -Recurse
-    Remove-Item -Path "$build_dir/results" -Force -Recurse
-    New-Item -ItemType directory -Path "$build_dir/results"
+    #Remove-Item -Path "$build_dir/results" -Force -Recurse
+    #New-Item -ItemType directory -Path "$build_dir/results"
 }
 $files = Get-ChildItem "$build_dir/TEST-*"
 if($files) {
