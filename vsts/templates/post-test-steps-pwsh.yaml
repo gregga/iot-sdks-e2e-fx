@@ -51,9 +51,6 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)/results'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
-#  inputs:
-#    SourceFolder: '$(Build.SourcesDirectory)/results'
-#    TargetFolder: '$(Build.ArtifactStagingDirectory)'
   condition: and(always(), ne(variables['skipTest'],'yes'))
 
 - task: PublishBuildArtifacts@1
@@ -62,5 +59,3 @@ steps:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'Result for $(Build.DefinitionName) $(Build.BuildId)'
   condition: and(always(), ne(variables['skipTest'],'yes'))
-
-

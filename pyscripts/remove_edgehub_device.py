@@ -30,6 +30,10 @@ def remove_edgehub_device():
         old_edgehub_device_id = cn["DeviceId"]
         old_edgehub_leaf_device = "{}_leaf_device".format(old_edgehub_device_id)
         helper = Helper(service_connection_string)
+
+        print("deleteing {}".format(old_edgehub_device_id))
+        sys.exit(0)
+        
         if helper.try_delete_device(old_edgehub_device_id):
             print("deleted {}".format(old_edgehub_device_id))
         if helper.try_delete_device(old_edgehub_leaf_device):

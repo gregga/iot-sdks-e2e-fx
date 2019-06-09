@@ -47,8 +47,7 @@ if($isWin32) {
     #python $pyscripts/deploy_test_containers.py
 }
 else {
-    sudo -H -E python3 -m pip install -e $hh
+    #sudo -H -E python3 -m pip install -e $hh
     sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
-    #sudo -H -E python3 $pyscripts/deploy_test_containers.py
     sudo -H -E  systemctl restart iotedge
 }

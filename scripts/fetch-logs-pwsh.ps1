@@ -177,5 +177,8 @@ else {
 
 $files = Get-ChildItem "$build_dir/TEST-*"
 if($files) {
+    foreach($f in $files) {
+        Write-Host "FILE: $f"
+    }
     Move-Item $files "$build_dir/results/logs/$log_folder_name"
 }
