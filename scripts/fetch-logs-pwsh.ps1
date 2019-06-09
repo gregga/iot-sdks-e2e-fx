@@ -120,7 +120,9 @@ if($isWin32) {
 else {
     $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
 }
-#Write-Host $out
+foreach($o in $out) {
+    Write-Host $o
+}
 #$out | Out-File -Append $resultsdir/$merged.log
 
 #echo "injecting merged.log into junit"
