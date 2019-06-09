@@ -157,10 +157,8 @@ class BuildDockerImage:
                 dockerfile = "Dockerfile"
 
             print(
-                #Fore.YELLOW
-                #+ "Building image for "
-                #Fore.YELLOW
-                "Building image for "
+                Fore.YELLOW
+                + "Building image for "
                 + tags.docker_image_name
                 + " using "
                 + dockerfile
@@ -218,7 +216,7 @@ class BuildDockerImage:
         def prefetch_cached_images(tags):
             if docker_tags.running_on_azure_pipelines():
                 print(print_separator)
-                #print(Fore.YELLOW + "PREFETCHING IMAGE")
+                print(Fore.YELLOW + "PREFETCHING IMAGE")
                 print("PREFETCHING IMAGE")
                 print(print_separator)
                 tags.image_tag_to_use_for_cache = None
@@ -231,7 +229,7 @@ class BuildDockerImage:
         
                 for image_tag in tags.image_tags:
                     print(
-                        #Fore.YELLOW
+                        Fore.YELLOW
                         "trying to prefetch {}:{}".format(
                             tags.docker_full_image_name, image_tag
                         )
@@ -246,12 +244,12 @@ class BuildDockerImage:
                             print_filtered_docker_line(line)
                         tags.image_tag_to_use_for_cache = image_tag
                         print(
-                            #Fore.GREEN
+                            Fore.GREEN
                             "Found {}.  Using this for image cache".format(image_tag)
                         )
                         return
                     except docker.errors.APIError:
-                        #print(Fore.YELLOW + "Image not found in repository")
+                        print(Fore.YELLOW + "Image not found in repository")
                         print("Image not found in repository")
 
 
@@ -266,10 +264,10 @@ class BuildDockerImage:
         push_images(tags)
 
         if not docker_tags.running_on_azure_pipelines():
-            #print(Fore.GREEN + "Done.  Deploy with the following command:")
+            print(Fore.GREEN + "Done.  Deploy with the following command:")
             print("Done.  Deploy with the following command:")
             print(
-                #Fore.GREEN
+                Fore.GREEN
                 "./deploy-test-containers.sh --{} {}:{}".format(
                     tags.language, tags.docker_full_image_name, tags.image_tags[0]
                 )

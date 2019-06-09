@@ -18,27 +18,6 @@ steps:
   condition: and(always(), ne(variables['skipTest'],'yes'))
 
 - powershell: $(Horton.FrameworkRoot)/scripts/fetch-logs-pwsh.ps1 ${{ parameters.language }} $(Build.SourcesDirectory) ${{ parameters.log_folder_name }}
-    #$(Horton.FrameworkRoot)/scripts/fetch-logs-pwsh.ps1 ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml $(Build.SourcesDirectory)
-    #try {
-    #  New-Item -Path $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
-    #}
-    #finally {
-      #try {
-      #  New-Item $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }} -ItemType Directory
-      #}
-      #finally {
-    #  $files = Get-ChildItem "$(Horton.FrameworkRoot)/results/logs"
-    #  Move-Item $files  $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
-      #}
-
-    #}
-    #try {
-    #  New-Item $(Build.SourcesDirectory)/results -ItemType Directory
-    #}
-    #finally {
-    #  $files = Get-ChildItem "$(Build.SourcesDirectory)/TEST-*"
-    #  Move-Item $files $(Build.SourcesDirectory)/results/
-    #}
   displayName: 'POWERSHELL: Fetch logs'
   condition: and(always(), ne(variables['skipTest'],'yes'))
 
@@ -49,7 +28,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy result files to artifact staging'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/results'
+    SourceFolder: '$(Build.SourcesDirectory)/results/logs'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   condition: and(always(), ne(variables['skipTest'],'yes'))
 

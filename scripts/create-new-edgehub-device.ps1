@@ -30,8 +30,6 @@ function IsWin32 {
     return $false
 }
 
-$isWin32 = IsWin32
-
 $horton_user = $env:IOTHUB_E2E_REPO_USER
 $horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
 $horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS
@@ -41,7 +39,7 @@ Set-Item "env:IOTHUB-E2E-REPO-USER" $horton_user
 Set-Item "env:IOTHUB-E2E-REPO-PASSWORD" $horton_pw
 Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
-if($isWin32) {
+if(IsWin32) {
     python -m pip install -e $hh
     python $pyscripts/create_new_edgehub_device.py
     #python $pyscripts/deploy_test_containers.py

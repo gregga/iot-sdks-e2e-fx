@@ -5,9 +5,7 @@ $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
-$pyscripts = Join-Path -Path $path -ChildPath '../../pyscripts' -Resolve
 $hh = Join-Path -Path $path -ChildPath '../../horton_helpers' -Resolve
-
 
 function IsWin32 {
     if("$env:OS" -ne "") {

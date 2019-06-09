@@ -24,8 +24,6 @@ function IsWin32 {
     return $false
 }
 
-$isWin32 = IsWin32
-
 $edge_cert = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
 
 #export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
@@ -40,7 +38,7 @@ else {
 }
 
 $out = @()
-if($isWin32) {
+if(IsWin32) {
     $out = python $pyscripts/get_environment_variables.py "powershell"
 }
 else {

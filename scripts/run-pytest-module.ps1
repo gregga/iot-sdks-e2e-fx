@@ -41,8 +41,6 @@ if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 
-$isWin32 = IsWin32
-
 try {
     $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
     if("$cert_val" -ne "") {
@@ -54,11 +52,12 @@ catch {
 }
 
 set-location $root_dir/scripts
+
 get-environment.ps1
 
 set-location $testpath
 write-host "###### pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
-if($isWin32) {
+if(IsWin32) {
     python -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
 }
 else {

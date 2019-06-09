@@ -29,9 +29,7 @@ function IsWin32 {
     return $false
 }
 
-$isWin32 = IsWin32
-
-if($isWin32) {
+if(IsWin32) {
     python -m pip install --upgrade pip
     python -m pip install -I docker
     python -m pip install -I colorama     
@@ -53,16 +51,10 @@ if("$variant" -ne "") { $args += "--variant ""$variant"""}
 
 Write-Host "build-docker-image $args"
 
-if($isWin32) {
+if(IsWin32) {
     python $pyscripts/build_docker_image.py $args
 }
 else {
     sudo -H -E python3 $pyscripts/build_docker_image.py $args
-    #$out = sudo -H -E python3 $pyscripts/build_docker_image.py $args
-    #foreach($o in $out) {
-    #    Write-Host $o -ForegroundColor Blue
-    #}    
 }
-
- 
 

@@ -16,10 +16,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-
-#$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }},xml
 $junit_file = "$build_dir/TEST-$log_folder_name.xml".Trim()
-
 
 function IsWin32 {
     if("$env:OS" -ne "") {
@@ -30,8 +27,6 @@ function IsWin32 {
     }
     return $false
 }
-
-$isWin32 = IsWin32
 
 $resultsdir="$build_dir/results/logs/$log_folder_name"
 if( -Not (Test-Path -Path $resultsdir ) )
@@ -44,10 +39,10 @@ else {
     New-Item -ItemType directory -Path $resultsdir
 }
 
-if($isWin32) {
-    python -m pip install --upgrade pip
-    python -m pip install -I docker
-    python -m pip install -I colorama     
+if(IsWin32) {
+    #python -m pip install --upgrade pip
+    #python -m pip install -I docker
+    #python -m pip install -I colorama     
 }
 else {
     #sudo -H -E python3 -m pip install --no-cache-dir --upgrade pip
@@ -68,7 +63,7 @@ foreach($mod in $modulelist) {
     }
 }
 
-if($isWin32 -eq $false) {
+if(IsWin32 -eq $false) {
     sudo journalctl -u iotedge -n 500 -e
 }
 
@@ -82,10 +77,11 @@ foreach($mod in $modulelist) {
 }
 
 set-location $resultsdir
-$out = ""
+$out = @()
 Write-Host "merging logs for $modlist" -ForegroundColor Green
 Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
-if($isWin32) {
+
+if(IsWin32) {
     Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
     $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
 }
@@ -101,9 +97,7 @@ else {
     #$Write-Host $out
 }
 
-$out = ""
-#$junit_file = "$build_dir/$log_folder_name.xml"
-#$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
+$out = @()
 if(-Not (Test-Path $junit_file)) {
     #Copy-Item $junit_file -Destination "$build_dir"
     Write-Host "NOT Found: $junit_file" -ForegroundColor Red
@@ -114,7 +108,7 @@ Write-Host "injecting merged.log into junit" -ForegroundColor Green
 $log_file = "$resultsdir/merged.log"
 Write-Host "###${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
-if($isWin32) {
+if(IsWin32) {
     $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie
 }
 else {
@@ -133,10 +127,10 @@ else {
     Get-ChildItem '/' -s -Include '*test_iothub_module*' | Where-Object {$_.PSIsContainer -eq $false} | %{$_.FullName}
 }
 
-$files = Get-ChildItem "$build_dir/TEST-*"  | Where-Object { !$_.PSIsContainer }
+$files = Get-ChildItem "$build_dir/TEST-*" | Where-Object { !$_.PSIsContainer }
 if($files) {
     foreach($f in $files) {
         Write-Host "FILE: $f"
     }
-    Move-Item $files "$build_dir/results/logs/$log_folder_name"
+    Move-Item $files "$build_dir/results/logs"
 }

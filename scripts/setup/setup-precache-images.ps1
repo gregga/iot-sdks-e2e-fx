@@ -35,7 +35,6 @@ Write-Host "image_edgehub: $image_edgehub"
 Write-Host "image_friendmod: $image_friendmod"
 Write-Host "######################################"
 
-
 docker login -u $horton_user -p $horton_pw $horton_repo
 docker pull $repo_name/$language-e2e-v3:$test_image
 docker pull $image_edgeagent

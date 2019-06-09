@@ -12,13 +12,6 @@ Param
     [string]$image_name=""
 )
 
-$path = $MyInvocation.MyCommand.Path
-if (!$path) {$path = $psISE.CurrentFile.Fullpath}
-if ( $path) {$path = split-path $path -Parent}
-set-location $path
-$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-
-
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
@@ -28,8 +21,6 @@ function IsWin32 {
     }
     return $false
 }
-
-$isWin32 = IsWin32
 
 if( "$container_name" -eq "" -or "$image_name" -eq "") {
     Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
@@ -52,7 +43,7 @@ $expectedImg = ""
 $running = $false
 foreach($i in 1..24) {
     Write-Host "getting image ID for $image_name run $i"
-    if($isWin32) {
+    if(IsWin32) {
         $expectedImg = docker image inspect $image_name --format="{{.Id}}"
     }
     else {
@@ -60,7 +51,7 @@ foreach($i in 1..24) {
     }
     if("$expectedImg" -ne "") {
         Write-Host "calling docker inspect $container_name" -ForegroundColor Green
-        if($isWin32) {
+        if(IsWin32) {
             $running = docker image inspect --format="{{.State.Running}}" $container_name
         }
         else {
@@ -70,7 +61,7 @@ foreach($i in 1..24) {
         if($running -eq $true) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 
-            if($isWin32) {
+            if(IsWin32) {
                 $actualImg = docker inspect $container_name --format="{{.Image}}"
             }
             else {
