@@ -229,7 +229,7 @@ class BuildDockerImage:
         
                 for image_tag in tags.image_tags:
                     print(
-                        Fore.YELLOW
+                        Fore.YELLOW +
                         "trying to prefetch {}:{}".format(
                             tags.docker_full_image_name, image_tag
                         )
