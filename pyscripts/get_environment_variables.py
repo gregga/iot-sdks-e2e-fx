@@ -46,11 +46,13 @@ if __name__ == "__main__":
         else:
             usage()
     elif len(sys.argv) == 3:
+        print(sys.argv[1])
         if sys.argv[1] == "raw":
-            if os.environ[sys.argv[2]]:
-                print(open(os.environ[sys.argv[2]], "rb"))
-        else:
-            usage()
+            if sys.argv[2]:
+                print(sys.argv[2])
+                print(open(sys.argv[2], "rb"))
+        #else:
+        #    usage()
     else:
         usage()
 
