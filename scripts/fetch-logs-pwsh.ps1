@@ -21,7 +21,6 @@ $junit_file = "$build_dir/TEST-$log_folder_name.xml".Trim()
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
@@ -43,14 +42,6 @@ if(IsWin32) {
     #python -m pip install --upgrade pip
     #python -m pip install -I docker
     #python -m pip install -I colorama     
-}
-else {
-    #sudo -H -E python3 -m pip install --no-cache-dir --upgrade pip
-    #sudo python3 -m pip install --no-cache-dir --upgrade pip
-    #sudo -H -E python3 -m pip install --no-cache-dir -I docker
-    #sudo python3 -m pip install --no-cache-dir -I docker
-    #sudo -H -E python3 -m pip install --no-cache-dir -I colorama
-    #sudo python3 -m pip install --no-cache-dir -I colorama
 }
 
 $languageMod = $langmod + "Mod"
@@ -97,12 +88,6 @@ else {
     #$Write-Host $out
 }
 
-$out = @()
-if(-Not (Test-Path $junit_file)) {
-    #Copy-Item $junit_file -Destination "$build_dir"
-    Write-Host "NOT Found: $junit_file" -ForegroundColor Red
-}
-
 set-location $resultsdir
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
 $log_file = "$resultsdir/merged.log"
@@ -116,15 +101,6 @@ else {
 }
 foreach($o in $out) {
     Write-Host $o
-}
-
-if(Test-Path $junit_file) {
-    #Copy-Item $junit_file -Destination "$build_dir"
-    Write-Host "Found: $junit_file" -ForegroundColor Green
-}
-else {
-    Write-Host "NOT Found: $junit_file" -ForegroundColor Green
-    Get-ChildItem '/' -s -Include '*test_iothub_module*' | Where-Object {$_.PSIsContainer -eq $false} | %{$_.FullName}
 }
 
 $files = Get-ChildItem "$build_dir/TEST-*" | Where-Object { !$_.PSIsContainer }
