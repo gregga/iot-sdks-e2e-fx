@@ -47,7 +47,7 @@ def set_runtime_configuration(scenario, language, transport, local):
         gateway_host_name = os.environ["IOTHUB_E2E_EDGEHUB_DNS_NAME"]
         gateway_host_suffix = ";GatewayHostName=" + gateway_host_name
         if "IOTHUB_E2E_EDGEHUB_CA_CERT" in os.environ:
-            print("BinaryVal=SLYDBG: + os.environ["IOTHUB_E2E_EDGEHUB_CA_CERT"] + "SLYDBG")
+            print("BinaryVal=SLYDBG:" + os.environ["IOTHUB_E2E_EDGEHUB_CA_CERT"] + "SLYDBG")
             runtime_config.ca_certificate = {
                 "cert": base64.b64decode(
                     os.environ["IOTHUB_E2E_EDGEHUB_CA_CERT"]

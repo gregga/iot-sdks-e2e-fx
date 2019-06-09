@@ -15,7 +15,7 @@ Param
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            Write-Host "IsWin32" -ForegroundColor Yellow
+            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
@@ -41,31 +41,40 @@ $expectedImg = ""
 $actualImg = ""
 $expectedImg = ""
 $running = $false
+
+#$allOutput = & myprogram.exe 2>&1
+#$stderr = $allOutput | ?{ $_ -is [System.Management.Automation.ErrorRecord] }
+#$stdout = $allOutput | ?{ $_ -isnot [System.Management.Automation.ErrorRecord] }
+
+$out_progress = "."
+Write-Host "getting image ID for $image_name run $i" -ForegroundColor Green
 foreach($i in 1..24) {
-    Write-Host "getting image ID for $image_name run $i"
+    #Write-Host "getting image ID for $image_name run $i"
     if(IsWin32) {
-        $expectedImg = docker image inspect $image_name --format="{{.Id}}"
+        $expectedImg = & docker image inspect $image_name --format="{{.Id}}"  2>&1
     }
     else {
-        $expectedImg = sudo docker image inspect $image_name --format="{{.Id}}"
+        $expectedImg = & sudo docker image inspect $image_name --format="{{.Id}}" 2>&1
     }
     if("$expectedImg" -ne "") {
-        Write-Host "calling docker inspect $container_name" -ForegroundColor Green
+        if("$out_progress" -eq ".") {
+            Write-Host "calling docker inspect $container_name" -ForegroundColor Green
+        }
         if(IsWin32) {
-            $running = docker image inspect --format="{{.State.Running}}" $container_name
+            $running = & docker image inspect --format="{{.State.Running}}" $container_name 2>&1
         }
         else {
-            $running = sudo docker inspect --format="{{.State.Running}}" $container_name
+            $running = & sudo docker inspect --format="{{.State.Running}}" $container_name 2>&1
         }
 
         if($running -eq $true) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 
             if(IsWin32) {
-                $actualImg = docker inspect $container_name --format="{{.Image}}"
+                $actualImg = & docker inspect $container_name --format="{{.Image}}" 2>&1
             }
             else {
-                $actualImg = sudo docker inspect $container_name --format="{{.Image}}"
+                $actualImg = & sudo docker inspect $container_name --format="{{.Image}}"  2>&1
             }
             Write-Host "Actual ImageId: $actualImg" -ForegroundColor Green
 
@@ -81,7 +90,8 @@ foreach($i in 1..24) {
     else {
         Write-Host "container is unkonwn.  Waiting." -ForegroundColor Yellow
     }
-    Write-Host "Sleeping..."
+    Write-Host "$out_progress" -ForegroundColor Blue
+    $out_progress += "."
     Start-Sleep -s 10
 }
 
