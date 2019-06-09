@@ -86,16 +86,12 @@ foreach($i in 1..47) {
             }
             else {
                 Write-Host "container is not running.  Waiting"  -ForegroundColor Yellow
-                Start-Sleep -s 10
             }
         }
-        else {
-            continue
-        }
-        Write-Host "$out_progress" -ForegroundColor Blue
-        $out_progress += "."
-        Start-Sleep -s 10    
     }
+    Write-Host "$out_progress" -ForegroundColor Blue
+    $out_progress += "."
+    Start-Sleep -s 10    
 }
 
 Write-Host  "container $container_name deployment failed" -ForegroundColor Red
