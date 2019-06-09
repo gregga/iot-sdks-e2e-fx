@@ -3,14 +3,14 @@
 import os
 import json
 import sys
-#import argparse
+import argparse
 import datetime
 import docker
 import docker_tags
 
 from colorama import Fore
 
-#colorama.init(autoreset=True)
+colorama.init(autoreset=True)
 
 class BuildDockerImage:
     def __init__(self, args):
@@ -244,7 +244,7 @@ class BuildDockerImage:
                             print_filtered_docker_line(line)
                         tags.image_tag_to_use_for_cache = image_tag
                         print(
-                            Fore.GREEN
+                            Fore.GREEN +
                             "Found {}.  Using this for image cache".format(image_tag)
                         )
                         return
@@ -267,7 +267,7 @@ class BuildDockerImage:
             print(Fore.GREEN + "Done.  Deploy with the following command:")
             print("Done.  Deploy with the following command:")
             print(
-                Fore.GREEN
+                Fore.GREEN +
                 "./deploy-test-containers.sh --{} {}:{}".format(
                     tags.language, tags.docker_full_image_name, tags.image_tags[0]
                 )
