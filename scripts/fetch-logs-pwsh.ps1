@@ -171,6 +171,9 @@ if(Test-Path $junit_file) {
     #Copy-Item $junit_file -Destination "$build_dir"
     Write-Host "Found: $junit_file" -ForegroundColor Green
 }
+else {
+    Get-ChildItem '/' -s -Include '*test_iothub_module*' | where {$_.PSIsContainer -eq $false} | %{$_.FullName}
+}
 
 $files = Get-ChildItem "$build_dir/TEST-*"
 if($files) {
