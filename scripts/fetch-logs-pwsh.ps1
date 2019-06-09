@@ -104,7 +104,7 @@ else {
 $out = ""
 #$junit_file = "$build_dir/$log_folder_name.xml"
 #$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
-if(!Test-Path $junit_file) {
+if(-Not (Test-Path $junit_file)) {
     #Copy-Item $junit_file -Destination "$build_dir"
     Write-Host "NOT Found: $junit_file" -ForegroundColor Red
 }
