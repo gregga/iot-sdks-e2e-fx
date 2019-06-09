@@ -28,7 +28,7 @@ Param
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            Write-Host "IsWin32" -ForegroundColor Yellow
+            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }

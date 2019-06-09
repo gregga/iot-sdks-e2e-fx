@@ -48,7 +48,7 @@ set-location $root_dir
 # pre-test-steps
 
 Write-Host 'POWERSHELL: install python libs' -ForegroundColor Blue
-scripts/setup/setup-python36.ps1
+#scripts/setup/setup-python36.ps1
 
 if(!$isWin32) {
     Write-Host 'POWERSHELL: install iotedge packages' -ForegroundColor Blue
@@ -62,7 +62,7 @@ $eaimg = "mcr.microsoft.com/azureiotedge-agent:1.0.6"
 $ehimg = "mcr.microsoft.com/azureiotedge-hub:1.0.6"
 $frimg = "$horton_repo/default-friend-module:latest"
 
-set-location $root_dir
+#set-location $root_dir
 
 scripts/setup/setup-precache-images.ps1 $lang $timg $eaimg $ehimg $frimg
 

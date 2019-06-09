@@ -47,11 +47,11 @@ $running = $false
 #$stdout = $allOutput | ?{ $_ -isnot [System.Management.Automation.ErrorRecord] }
 
 $out_progress = "."
-Write-Host "getting image ID for $image_name run $i" -ForegroundColor Green
+Write-Host "getting image ID for .$container_name. and .$image_name. run .$i." -ForegroundColor Green
 foreach($i in 1..24) {
     #Write-Host "getting image ID for $image_name run $i"
     if(IsWin32) {
-        $expectedImg = & docker image inspect $image_name --format="{{.Id}}"  2>&1
+        $expectedImg = docker image inspect $image_name --format="{{.Id}}"  2>&1
     }
     else {
         $expectedImg = & sudo docker image inspect $image_name --format="{{.Id}}" 2>&1
@@ -66,7 +66,6 @@ foreach($i in 1..24) {
         else {
             $running = & sudo docker inspect --format="{{.State.Running}}" $container_name 2>&1
         }
-
         if($running -eq $true) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 

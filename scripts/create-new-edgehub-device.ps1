@@ -23,7 +23,7 @@ $pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            Write-Host "IsWin32" -ForegroundColor Yellow
+            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
@@ -40,7 +40,7 @@ Set-Item "env:IOTHUB-E2E-REPO-PASSWORD" $horton_pw
 Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
 if(IsWin32) {
-    python -m pip install -e $hh
+    #python -m pip install -e $hh
     python $pyscripts/create_new_edgehub_device.py
     #python $pyscripts/deploy_test_containers.py
 }

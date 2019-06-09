@@ -10,7 +10,7 @@ $hh = Join-Path -Path $path -ChildPath '../../horton_helpers' -Resolve
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            Write-Host "IsWin32" -ForegroundColor Yellow
+            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
@@ -18,11 +18,11 @@ function IsWin32 {
 }
 
 if(IsWin32){
-    python -m pip install --upgrade pip
-    python -m  pipinstall --upgrade setuptools
+    #python -m pip install --upgrade pip
+    #python -m  pipinstall --upgrade setuptools
 
     #python -m pip install iotedge
-    python -m pip install -e $hh
+    #python -m pip install -e $hh
 }
 else {
     sudo pip install --upgrade setuptools
