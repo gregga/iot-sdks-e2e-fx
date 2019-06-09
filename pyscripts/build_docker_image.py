@@ -7,9 +7,9 @@ import argparse
 import datetime
 import docker
 import docker_tags
+import colorama
 
-from colorama import Fore
-
+from colorama import Fore,Style,Back
 colorama.init(autoreset=True)
 
 class BuildDockerImage:
