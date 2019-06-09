@@ -47,7 +47,7 @@ $expectedImg = ""
 #$container_name = $container_name.ToLower()
 Write-Host "getting image ID for Image:($image_name) Container:($container_name)" -ForegroundColor Green
 
-foreach($i in 1..37) {
+foreach($i in 1..47) {
 
     if("$out_progress" -eq ".") {
         Write-Host "calling docker inspect ($image_name)" -ForegroundColor Green
@@ -69,7 +69,7 @@ foreach($i in 1..37) {
         else {
             $running = sudo docker inspect --format="{{.State.Running}}" $container_name
         }
-        Write-Host "Container ($container_name) runnin = ($running)" -ForegroundColor Magenta
+        Write-Host "Container ($container_name) running = ($running)" -ForegroundColor Magenta
         if($running) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 
@@ -79,15 +79,18 @@ foreach($i in 1..37) {
             else {
                 $actualImg = sudo docker inspect $container_name --format="{{.Image}}"
             }
-            Write-Host "Actual ImageId: $actualImg" -ForegroundColor Green
-
+            Write-Host "Actual ImageId: ($actualImg)" -ForegroundColor Green
             if($expectedImg -eq $actualImg) {
                 Write-Host "IDs match.  Deployment is complete"  -ForegroundColor Green
                 exit 0
             }
             else {
                 Write-Host "container is not running.  Waiting"  -ForegroundColor Yellow
+                Start-Sleep -s 10
             }
+        }
+        else {
+            continue
         }
         Write-Host "$out_progress" -ForegroundColor Blue
         $out_progress += "."
