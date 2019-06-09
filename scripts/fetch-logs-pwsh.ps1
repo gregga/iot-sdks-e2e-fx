@@ -112,7 +112,7 @@ if(IsWin32) {
     $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie
 }
 else {
-    $out = python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
+    $out = sudo python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
 }
 foreach($o in $out) {
     Write-Host $o
@@ -134,3 +134,4 @@ if($files) {
     }
     Move-Item $files "$build_dir/results/logs"
 }
+exit 0
