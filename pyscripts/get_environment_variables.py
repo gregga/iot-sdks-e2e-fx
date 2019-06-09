@@ -45,6 +45,12 @@ if __name__ == "__main__":
             format = sys.argv[1]
         else:
             usage()
+    elif len(sys.argv) == 3:
+        if sys.argv[1] == "raw":
+            if os.environ[sys.argv[2]]:
+                print(open(os.environ[sys.argv[2]], "rb"))
+        else:
+            usage()
     else:
         usage()
 

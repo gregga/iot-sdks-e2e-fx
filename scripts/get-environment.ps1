@@ -31,7 +31,8 @@ $edge_cert = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
 if(IsWin32 -eq $false) {
     $cert_path = Join-Path -Path "/var/lib/iotedge/hsm/certs" -ChildPath "edge_owner_ca*.pem" -Resolve
     if (Test-Path $cert_path) {
-        $cert_text  = Get-Content $cert_path
+        #$cert_text  = Get-Content $cert_path
+        $cert_text = sudo python3 $pyscripts/get_environment_variables.py "raw" $cert_path
         $Bytes = [System.Text.Encoding]::Unicode.GetBytes($cert_text)
         $EncodedText =[Convert]::ToBase64String($Bytes)
         $EncodedText
