@@ -172,6 +172,7 @@ if(Test-Path $junit_file) {
     Write-Host "Found: $junit_file" -ForegroundColor Green
 }
 else {
+    Write-Host "NOT Found: $junit_file" -ForegroundColor Green
     Get-ChildItem '/' -s -Include '*test_iothub_module*' | where {$_.PSIsContainer -eq $false} | %{$_.FullName}
 }
 
