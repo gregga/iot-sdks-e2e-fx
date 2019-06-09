@@ -12,3 +12,4 @@
 */swagger_generated/
 ~
 pyscripts/create_deploy_horton.py
+scripts/stderr.txt
