@@ -18,7 +18,7 @@ set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 
 #$(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }},xml
-$junit_file = "$build_dir/TEST-$log_folder_name.xml"
+$junit_file = "$build_dir/TEST-$log_folder_name.xml".Trim()
 
 
 function IsWin32 {
@@ -50,12 +50,12 @@ if($isWin32) {
     python -m pip install -I colorama     
 }
 else {
-    sudo -H -E python3 -m pip install --no-cache-dir --upgrade pip
-    sudo python3 -m pip install --no-cache-dir --upgrade pip
-    sudo -H -E python3 -m pip install --no-cache-dir -I docker
-    sudo python3 -m pip install --no-cache-dir -I docker
-    sudo -H -E python3 -m pip install --no-cache-dir -I colorama
-    sudo python3 -m pip install --no-cache-dir -I colorama
+    #sudo -H -E python3 -m pip install --no-cache-dir --upgrade pip
+    #sudo python3 -m pip install --no-cache-dir --upgrade pip
+    #sudo -H -E python3 -m pip install --no-cache-dir -I docker
+    #sudo python3 -m pip install --no-cache-dir -I docker
+    #sudo -H -E python3 -m pip install --no-cache-dir -I colorama
+    #sudo python3 -m pip install --no-cache-dir -I colorama
 }
 
 $languageMod = $langmod + "Mod"
@@ -123,49 +123,6 @@ else {
 foreach($o in $out) {
     Write-Host $o
 }
-#$out | Out-File -Append $resultsdir/$merged.log
-
-#echo "injecting merged.log into junit"
-#pushd $resultsdir && python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $2 -log_file merged.log
-#$if [ $? -ne 0 ]; then
-#  echo "error injecting into junit"
-#fi
-
-#$(Horton.FrameworkRoot)/scripts/fetch-logs.sh ${{ parameters.language }} $(Build.SourcesDirectory)/TEST-${{ parameters.log_folder_name }}.xml
-#mkdir -p $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}
-#mv $(Horton.FrameworkRoot)/results/logs/* $(Build.SourcesDirectory)/results/${{ parameters.log_folder_name }}/
-#mv $(Build.SourcesDirectory)/TEST-* $(Build.SourcesDirectory)/results
-
-#$junit_log_dir = Join-Path -Path $build_dir $junit_name -Resolve
-#$junit_file = Join-Path -Path $junit_log_dir "$junit_file.xml" -Resolve
-
-#if( -Not (Test-Path -Path "$build_dir/results/$log_folder_name" ) )
-#{
-#    New-Item -ItemType directory -Path "$build_dir/results/$log_folder_name"
-#}
-#else {
-#    Get-ChildItem -Path "$build_dir/results/$log_folder_name/*" -Recurse | Remove-Item -Force -Recurse
-#    Remove-Item -Path "$build_dir/results/$log_folder_name" -Force -Recurse
-#    New-Item -ItemType directory -Path "$build_dir/results/$log_folder_name"
-#}
-#$files = Get-ChildItem "$root_dir/results/logs/*"
-#if($files) {
-#    Move-Item $files "$build_dir/results/$log_folder_name"
-#}
-
-#if( -Not (Test-Path -Path "$build_dir/results" ) )
-#{
-#    New-Item -ItemType directory -Path "$build_dir/results"
-#}
-#else {
-#    Get-ChildItem -Path "$build_dir/results/*" -Recurse | Remove-Item -Force -Recurse
-    #Remove-Item -Path "$build_dir/results" -Force -Recurse
-    #New-Item -ItemType directory -Path "$build_dir/results"
-#}
-
-#$junit_file = "$build_dir/$log_folder_name.xml"
-#$junit_save_file = "$build_dir/logs/$log_folder_name.xml"
-#$resultsdir="$build_dir/results/logs/$log_folder_name"
 
 if(Test-Path $junit_file) {
     #Copy-Item $junit_file -Destination "$build_dir"
@@ -173,10 +130,10 @@ if(Test-Path $junit_file) {
 }
 else {
     Write-Host "NOT Found: $junit_file" -ForegroundColor Green
-    Get-ChildItem '/' -s -Include '*test_iothub_module*' | where {$_.PSIsContainer -eq $false} | %{$_.FullName}
+    Get-ChildItem '/' -s -Include '*test_iothub_module*' | Where-Object {$_.PSIsContainer -eq $false} | %{$_.FullName}
 }
 
-$files = Get-ChildItem "$build_dir/TEST-*"
+$files = Get-ChildItem "$build_dir/TEST-*"  | Where-Object { !$_.PSIsContainer }
 if($files) {
     foreach($f in $files) {
         Write-Host "FILE: $f"
