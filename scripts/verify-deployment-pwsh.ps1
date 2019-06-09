@@ -28,7 +28,6 @@ if( "$container_name" -eq "" -or "$image_name" -eq "") {
     exit 1
 }
 
-$container_name = $container_name.ToLower()
 Write-Host "######################################Cntr"
 docker container ps
 Write-Host "######################################Img"
@@ -44,9 +43,12 @@ $expectedImg = ""
 $running = $true
 $out_progress = "."
 $expectedImg = ""
-
+#2>stderr.txt
+$container_name = $container_name.ToLower()
 Write-Host "getting image ID for Image:($image_name) Container:($container_name)" -ForegroundColor Green
-foreach($i in 1..24) {
+
+foreach($i in 1..27) {
+
     if("$out_progress" -eq ".") {
         Write-Host "calling docker inspect ($image_name)" -ForegroundColor Green
     }
@@ -59,12 +61,15 @@ foreach($i in 1..24) {
     }
 
     if("$expectedImg" -ne "") {
+        Write-Host "Got ImageId for ($image_name)=($expectedImg)" -ForegroundColor Blue
+        Write-Host "Inspecting Image ($container_name) for .State.Running" -ForegroundColor Green
         if(IsWin32) {
-            $running = docker image inspect --format="{{.State.Running}}" $container_name 2>stderr.txt
+            $running = docker image inspect --format="{{.State.Running}}" $container_name 
         }
         else {
             $running = sudo docker inspect --format="{{.State.Running}}" $container_name
         }
+        Write-Host "Container ($container_name) runnin = ($running)" -ForegroundColor Magenta
         if($running) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 
@@ -84,11 +89,20 @@ foreach($i in 1..24) {
                 Write-Host "container is not running.  Waiting"  -ForegroundColor Yellow
             }
         }
+        Write-Host "$out_progress" -ForegroundColor Blue
+        $out_progress += "."
+        Start-Sleep -s 10    
     }
-    Write-Host "$out_progress" -ForegroundColor Blue
-    $out_progress += "."
-    Start-Sleep -s 10
 }
 
 Write-Host  "container $container_name deployment failed" -ForegroundColor Red
+Write-Host "######################################Cntr"
+docker container ps
+Write-Host "######################################Img"
+docker image ls
+Write-Host "######################################"
+Write-Host "image_name: $image_name"
+Write-Host "container_name: $container_name"
+Write-Host "######################################"
+
 exit 1
