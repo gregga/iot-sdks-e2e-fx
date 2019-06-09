@@ -44,10 +44,10 @@ $running = $true
 $out_progress = "."
 $expectedImg = ""
 #2>stderr.txt
-$container_name = $container_name.ToLower()
+#$container_name = $container_name.ToLower()
 Write-Host "getting image ID for Image:($image_name) Container:($container_name)" -ForegroundColor Green
 
-foreach($i in 1..27) {
+foreach($i in 1..37) {
 
     if("$out_progress" -eq ".") {
         Write-Host "calling docker inspect ($image_name)" -ForegroundColor Green
