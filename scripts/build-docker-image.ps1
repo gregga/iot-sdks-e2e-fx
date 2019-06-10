@@ -29,11 +29,13 @@ function IsWin32 {
 }
 
 if(IsWin32) {
+    python -m pip install -r $pyscripts/requirements.txt
     #python -m pip install --upgrade pip
     #python -m pip install -I docker
     #python -m pip install -I colorama     
 }
 else {
+    python3 -m pip install -r $pyscripts/requirements.txt
     #sudo -H -E python3 -m pip install --upgrade pip
     sudo python3 -m pip install --upgrade pip
     #sudo -H -E python3 -m pip install -I docker
