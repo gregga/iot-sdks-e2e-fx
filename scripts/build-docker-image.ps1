@@ -35,19 +35,19 @@ if(IsWin32) {
     #python -m pip install -I colorama     
 }
 else {
-    python3 -m pip install -r $pyscripts/requirements.txt
+    sudo -H -E python3 -m pip install -r $pyscripts/requirements.txt
     #sudo -H -E python3 -m pip install --upgrade pip
-    sudo python3 -m pip install --upgrade pip
+    sudo -H -E python3 -m pip install --upgrade pip
     #sudo -H -E python3 -m pip install -I docker
-    sudo python3 -m pip install -I docker
+    sudo -H -E python3 -m pip install -I docker
     #sudo -H -E python3 -m pip install -I colorama
-    sudo python3 -m pip install -I colorama
+    sudo -H -E python3 -m pip install -I colorama
 }
 
 if(IsWin32) {
     python $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
 }
 else {
-    sudo python3 $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
+    sudo -H -E python3 $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
 }
 
