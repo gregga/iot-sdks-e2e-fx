@@ -40,24 +40,11 @@ if __name__ == "__main__":
             envionment = "windows"
         else:
             format = "linux"
-
     elif len(sys.argv) == 2:
-        if sys.argv[1] in ["windows", "linux", "powershell", "pycharm", "raw"]:
-            if sys.argv[1] == "raw":
-                if sys.argv[2]:
-                    print(open(sys.argv[2], "rb"))
-            else:    
-                format = sys.argv[1]
+        if sys.argv[1] in ["windows", "linux", "powershell", "pycharm"]:
+            format = sys.argv[1]
         else:
             usage()
-    elif len(sys.argv) == 3:
-        print(sys.argv[1])
-        if sys.argv[1] == "raw":
-            if sys.argv[2]:
-                print(sys.argv[2])
-                print(open(sys.argv[2], "rb"))
-        #else:
-        #    usage()
     else:
         usage()
 

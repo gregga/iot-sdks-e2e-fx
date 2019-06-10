@@ -23,7 +23,7 @@ function IsWin32 {
     return $false
 }
 
-$edge_cert = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
+$edge_cert1 = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
 
 #export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
 
@@ -41,13 +41,15 @@ if(IsWin32 -eq $false) {
     }
 }
 
+$edge_cert2 = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
+
 # force re-fetch of the device ID
 #unset IOTHUB_E2E_EDGEHUB_DEVICE_ID
 if( "$env:IOTHUB_E2E_EDGEHUB_CA_CERT" -eq "") {
     Write-Host "ERROR: IOTHUB_E2E_EDGEHUB_CA_CERT not set" -ForegroundColor Red
 }
 else {
-    #Remove-Item Env:IOTHUB_E2E_EDGEHUB_CA_CERT
+    Remove-Item Env:IOTHUB_E2E_EDGEHUB_CA_CERT
 }
 
 $out = @()
@@ -55,7 +57,8 @@ if(IsWin32) {
     $out = python $pyscripts/get_environment_variables.py "powershell"
 }
 else {
-    $out = sudo -H -E python3 $pyscripts/get_environment_variables.py "powershell"
+#    $out = sudo -H -E python3 $pyscripts/get_environment_variables.py "powershell"
+    $out = sudo -python3 $pyscripts/get_environment_variables.py "powershell"
 }
 
 foreach($o in $out) {
@@ -65,6 +68,20 @@ foreach($o in $out) {
         Set-Item -Path Env:$var_name -Value $var_value
     }
 }
+
+$edge_cert3 = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
+
+Write-Host "######################################" -ForegroundColor Yellow
+if($edge_cert3.Length() -gt 12) {
+    Write-Host "EC3: " + $edge_cert3.SubString(0,12)
+}
+if($edge_cert2.Length() -gt 12) {
+    Write-Host "EC2: " + $edge_cert2.SubString(0,12)
+}
+if($edge_cert1.Length() -gt 12) {
+    Write-Host "EC1: " + $edge_cert1.SubString(0,12)
+}
+#Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $edge_cert
 
 if("$env:IOTHUB_E2E_EDGEHUB_CA_CERT" -eq "") {
     Write-Host "Reverting to previous IOTHUB_E2E_EDGEHUB_CA_CERT" -ForegroundColor Red
