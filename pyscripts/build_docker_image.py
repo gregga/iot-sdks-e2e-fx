@@ -15,13 +15,17 @@ colorama.init(autoreset=True)
 default_repo = "(Azure/azure-iot-sdk-BLAH)"
 all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
 
+myargs = []
+for arg in sys.argv[1:]:
+    myargs.append(arg)
+
 parser = argparse.ArgumentParser(description="build docker image for testing")
-#parser.add_argument('--language', type=str, required=True, choices=all_languages, help="language to build")
-parser.add_argument('--language', type=str, required=True, help="language to build")
+parser.add_argument('--language', type=str, required=True, choices=all_languages, help="language to build")
+#parser.add_argument('--language', type=str, required=True, help="language to build")
 parser.add_argument('--repo', type=str, required=True, help="repo with source")
 parser.add_argument('--commit', type=str, default="master", help="commit to apply (ref or branch)")
 parser.add_argument('--variant', type=str, nargs="?", const="", help="Docker image variant (blank for default)")
-args = parser.parse_args()
+args = parser.parse_args(myargs)
 
 if args.repo == default_repo:
     if args.language == "pythonpreview":
