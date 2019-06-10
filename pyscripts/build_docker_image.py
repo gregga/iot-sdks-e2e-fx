@@ -16,20 +16,10 @@ default_repo = "(Azure/azure-iot-sdk-BLAH)"
 all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
 
 parser = argparse.ArgumentParser(description="build docker image for testing")
-parser.add_argument(
-    "--language",
-    help="language to build",
-    type=str,
-    required=True,
-    choices=all_languages,
-)
-parser.add_argument("--repo", help="repo with source", type=str, default=default_repo)
-parser.add_argument(
-    "--commit", help="commit to apply (ref or branch)", type=str, default="master"
-)
-parser.add_argument(
-    "--variant", help="Docker image variant (blank for default)", type=str, nargs="?", const=""
-)
+parser.add_argument('--language', type=str, required=True, choices=all_languages, help="language to build")
+parser.add_argument('--repo', type=str, required=True, help="repo with source")
+parser.add_argument('--commit', type=str, default="master", help="commit to apply (ref or branch)")
+parser.add_argument('--variant', type=str, nargs="?", const="", help="Docker image variant (blank for default)")
 args = parser.parse_args()
 
 if args.repo == default_repo:
