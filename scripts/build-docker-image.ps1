@@ -35,11 +35,11 @@ if(IsWin32) {
 }
 else {
     #sudo -H -E python3 -m pip install --upgrade pip
-    #sudo python3 -m pip install --upgrade pip
+    sudo python3 -m pip install --upgrade pip
     #sudo -H -E python3 -m pip install -I docker
-    #sudo python3 -m pip install -I docker
+    sudo python3 -m pip install -I docker
     #sudo -H -E python3 -m pip install -I colorama
-    #sudo python3 -m pip install -I colorama
+    sudo python3 -m pip install -I colorama
 }
 
 $args = ""
