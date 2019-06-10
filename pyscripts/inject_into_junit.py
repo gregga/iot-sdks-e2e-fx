@@ -18,44 +18,15 @@ class InjectIntoJunit:
     def __init__(self, args):
 
         # Parse args
-        #parser = argparse.ArgumentParser(description="Inject Into Junit")
-        #parser.add_argument('-junit_file', required=True, nargs=1, help="filename of junit file")
-        #parser.add_argument('-log_file', required=True, nargs=1, help="filename of log file")
-        #arguments = parser.parse_args(args)
+        parser = argparse.ArgumentParser(description="Inject Into Junit")
+        parser.add_argument('-junit_file', required=True, nargs=1, help="filename of junit file")
+        parser.add_argument('-log_file', required=True, nargs=1, help="filename of log file")
+        arguments = parser.parse_args(args)
 
-        got_arg = False
-        index = 0
-        junit_file = ""
-        log_file = ""
-        cmd_args = " ".join(args)
-        all_args = cmd_args.split()
-        arg_len = len(all_args)
-
-        for arg in all_args:
-            index += 1
-            if got_arg:
-                got_arg = False
-                continue
-
-            if arg == "-junit_file":
-                if index >= arg_len: break
-                junit_file += all_args[index] + " "
-                got_junit = True
-                got_arg = True
-                continue
-
-            if arg == "-log_file":
-                if index >= arg_len: break
-                log_file = all_args[index] + " "
-                got_log = True
-                got_arg = True
-                continue
-
-
-        #junit_path = arguments.junit_file[0]
-        #merge_log_path = arguments.log_file[0]
-        junit_path = junit_file
-        merge_log_path = log_file
+        junit_path = arguments.junit_file[0]
+        merge_log_path = arguments.log_file[0]
+        #junit_path = junit_file
+        #merge_log_path = log_file
         junit_base_path = junit_path.lower().split(".xml")
         junit_save_path = junit_base_path[0] + "_MERGED.xml"
 
