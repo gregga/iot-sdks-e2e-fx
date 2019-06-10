@@ -43,9 +43,9 @@ else {
 }
 
 $args = ""
-if("$language" -ne "") { $args += "-language $language "}
-if("$repo" -ne "") { $args += "-repo $repo "}
-if("$commit" -ne "") { $args += "-commit $commit "}
+if("$language" -ne "") { $args += "--language $language "}
+if("$repo" -ne "") { $args += "--repo $repo "}
+if("$commit" -ne "") { $args += "--commit $commit "}
 if("$variant" -ne "") { $args += "--variant $variant "}
 
 Write-Host "build-docker-image $args"
