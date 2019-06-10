@@ -3,11 +3,11 @@
 
 param(
     [Parameter(Position = 0)]
-    $language="",
+    $language,
     [Parameter(Position = 1)]
-    $repo="",
+    $repo,
     [Parameter(Position = 2)]
-    $commit="",
+    $commit,
     [Parameter(Position = 3)]
     $variant=""
 )
@@ -43,9 +43,9 @@ else {
 }
 
 $args = ""
-if("$language" -ne "") { $args += "--language $language "}
-if("$repo" -ne "") { $args += "--repo $repo "}
-if("$commit" -ne "") { $args += "--commit $commit "}
+if("$language" -ne "") { $args += "-language $language "}
+if("$repo" -ne "") { $args += "-repo $repo "}
+if("$commit" -ne "") { $args += "-commit $commit "}
 if("$variant" -ne "") { $args += "--variant $variant "}
 
 Write-Host "build-docker-image $args"
