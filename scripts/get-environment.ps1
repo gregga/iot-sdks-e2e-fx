@@ -72,13 +72,13 @@ foreach($o in $out) {
 $edge_cert3 = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
 
 Write-Host "######################################" -ForegroundColor Yellow
-if($edge_cert3.Length() -gt 12) {
+if($edge_cert3.Length -gt 12) {
     Write-Host "EC3: " + $edge_cert3.SubString(0,12)
 }
-if($edge_cert2.Length() -gt 12) {
+if($edge_cert2.Length -gt 12) {
     Write-Host "EC2: " + $edge_cert2.SubString(0,12)
 }
-if($edge_cert1.Length() -gt 12) {
+if($edge_cert1.Length -gt 12) {
     Write-Host "EC1: " + $edge_cert1.SubString(0,12)
 }
 #Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $edge_cert
