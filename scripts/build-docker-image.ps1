@@ -3,13 +3,13 @@
 
 param(
     [Parameter(Position = 0)]
-    $language,
+    [string]$language,
     [Parameter(Position = 1)]
-    $repo,
+    [string]$repo,
     [Parameter(Position = 2)]
-    $commit,
+    [string]$commit,
     [Parameter(Position = 3)]
-    $variant=""
+    [string]$variant=""
 )
 
 $path = $MyInvocation.MyCommand.Path
@@ -42,18 +42,10 @@ else {
     sudo python3 -m pip install -I colorama
 }
 
-$args = ""
-if("$language" -ne "") { $args += "--language $language "}
-if("$repo" -ne "") { $args += "--repo $repo "}
-if("$commit" -ne "") { $args += "--commit $commit "}
-if("$variant" -ne "") { $args += "--variant $variant "}
-
-Write-Host "build-docker-image $args"
-
 if(IsWin32) {
-    python $pyscripts/build_docker_image.py $args
+    python $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
 }
 else {
-    sudo -H -E python3 $pyscripts/build_docker_image.py $args
+    sudo python3 $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
 }
 
