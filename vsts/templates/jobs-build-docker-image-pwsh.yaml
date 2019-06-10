@@ -93,7 +93,6 @@ jobs:
 
   - powershell: $(Horton.FrameworkRoot)/scripts/build-docker-image.ps1 ${{ parameters.language }} $(NormalizedRepo) "master" ${{ parameters.variant }}
     displayName: "POWERSHELL: build docker image ${{ parameters.language }} $(NormalizedRepo) ${CommitToPass} ${{ parameters.variant }}"
-    condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
       IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
       IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
