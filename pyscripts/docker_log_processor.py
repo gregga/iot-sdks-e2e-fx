@@ -20,60 +20,25 @@ class DockerLogProcessor:
 
     def __init__(self, args):
         
-        got_arg = False
-        index = 0
-        static_file = ""
-        got_static = False
-        modulename = ""
-        filterfile = ""
-        cmd_args = " ".join(args)
-        all_args = cmd_args.split()
-        arg_len = len(all_args)
+        parser = argparse.ArgumentParser(description="Docker Log Processor")
+        group = parser.add_mutually_exclusive_group(required=True)
+        group.add_argument('-staticfile', action='append', nargs='+', help="filename to read from")
+        group.add_argument('-modulename', action='append', nargs='+', help="docker modulename to read from")
+        parser.add_argument('-filterfile', nargs=1, help="filename of json filters")
+        arguments = parser.parse_args(args)
 
-        for arg in all_args:
-            index += 1
-            if got_arg:
-                got_arg = False
-                continue
-
-            if arg == "-staticfile":
-                if index >= arg_len: break
-                static_file += all_args[index] + " "
-                got_static = True
-                got_arg = True
-                continue
-
-            if arg == "-modulename":
-                if index >= arg_len: break
-                modulename = all_args[index] + " "
-                got_arg = True
-                continue
-
-            if arg == "-filterfile":
-                if index >= arg_len: break
-                filterfile = all_args[index] + " "
-                got_arg = True
-                continue
-
-        #parser = argparse.ArgumentParser(description="Docker Log Processor")
-        #group = parser.add_mutually_exclusive_group(required=True)
-        #group.add_argument('-staticfile', action='append', nargs='+', help="filename to read from")
-        #group.add_argument('-modulename', action='append', nargs='+', help="docker modulename to read from")
-        #parser.add_argument('-filterfile', nargs=1, help="filename of json filters")
-        #arguments = parser.parse_args(args)
-
-        #if arguments.staticfile:
-        if got_static:
-            self.process_static_log(static_file.split(), filterfile)
-            #self.process_static_log(arguments.staticfile, arguments.filterfile)
+        if arguments.staticfile:
+        #if got_static:
+            #self.process_static_log(static_file.split(), filterfile)
+            self.process_static_log(arguments.staticfile, arguments.filterfile)
         else:
             self.queue = Queue()
             self.logger_thread = Thread(target = self.process_queue)
             self.logger_thread.start()
             self.watcher_processes = []
 
-            #for container_name in arguments.modulename:
-            for container_name in modulename:
+            for container_name in arguments.modulename:
+            #for container_name in modulename:
                 print("Getting Log for: " + container_name)
                 new_process =  Process(target = self.get_log_from_container, args=(container_name, self.queue))
                 new_process.start()
@@ -243,8 +208,8 @@ class DockerLogProcessor:
         # find the max_name_len of every staticfile filename basename
         for static_filename in static_filenames:
             if static_filename:
-                base_filename = os.path.basename(static_filename)
-                #base_filename = os.path.basename(static_filename[0])
+                #base_filename = os.path.basename(static_filename)
+                base_filename = os.path.basename(static_filename[0])
                 name_len = len(base_filename)
                 if name_len > max_name_len:
                     max_name_len = name_len
@@ -252,7 +217,7 @@ class DockerLogProcessor:
         # read and process every static file
         for static_filename in static_filenames:
             if static_filename:
-                #static_filename = static_filename[0]
+                static_filename = static_filename[0]
                 module_name = os.path.basename(static_filename)
                 print("Getting log from file: " + static_filename)
                 # Pad the filename so that each is the same length
