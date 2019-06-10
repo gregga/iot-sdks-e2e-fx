@@ -5,6 +5,13 @@ parameters:
   forced_image: ''
   job_tag: 'linux'
   variant: ''
+  repo_address: $(IOTHUB-E2E-REPO-ADDRESS)
+  repo_user: $(IOTHUB-E2E-REPO-USER)
+  repo_password: $(IOTHUB-E2E-REPO-PASSWORD)
+  image_edgeHub: mcr.microsoft.com/azureiotedge-hub:1.0.6
+  image_edgeAgent: mcr.microsoft.com/azureiotedge-agent:1.0.6
+  image_friendMod: $(IOTHUB-E2E-REPO-ADDRESS)/default-friend-module:latest
+  test_image: ''
 
 jobs:
 - job: 'build_${{ parameters.job_tag }}_container'
@@ -88,19 +95,18 @@ jobs:
     displayName: "POWERSHELL: build docker image ${{ parameters.language }} $(NormalizedRepo) ${CommitToPass} ${{ parameters.variant }}"
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
     env: 
-    IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
-    IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
-    IOTHUB_E2E_REPO_USER: $(IOTHUB-E2E-REPO-USER)
-    IOTHUB_E2E_REPO_PASSWORD: $(IOTHUB-E2E-REPO-PASSWORD)
-    IOTEDGE_DEBUG_LOG: $(IOTEDGE_DEBUG_LOG)
-    IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
-    NormalizedRepo: $(NormalizedRepo)
-    CommitToPass: $(CommitToPass)
-    Commit: ${{ parameters.commit }}
-    ForcedImage: ${{ parameters.forced_image }}
-    Repo: ${{ parameters.repo }}
-    Lang: $(Lang)
-    Veryant: ${{ parameters.variant }}
+      IOTHUB_E2E_CONNECTION_STRING: $(IOTHUB-E2E-CONNECTION-STRING)
+      IOTHUB_E2E_REPO_ADDRESS: $(IOTHUB-E2E-REPO-ADDRESS)
+      IOTHUB_E2E_REPO_USER: $(IOTHUB-E2E-REPO-USER)
+      IOTHUB_E2E_REPO_PASSWORD: $(IOTHUB-E2E-REPO-PASSWORD)
+      IOTEDGE_DEBUG_LOG: $(IOTEDGE_DEBUG_LOG)
+      NormalizedRepo: $(NormalizedRepo)
+      CommitToPass: $(CommitToPass)
+      Commit: ${{ parameters.commit }}
+      ForcedImage: ${{ parameters.forced_image }}
+      Repo: ${{ parameters.repo }}
+      Lang: $(Lang)
+      Veryant: ${{ parameters.variant }}
     condition: and(succeeded(), eq(variables['buildImage'],'yes'))
 
   - task: PublishBuildArtifacts@1
