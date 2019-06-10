@@ -17,11 +17,11 @@ all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
 
 myargs = []
 for arg in sys.argv[1:]:
-    myargs.append(arg)
+    myargs.append(arg.strip())
 
 parser = argparse.ArgumentParser(description="build docker image for testing")
-parser.add_argument('--language', type=str, required=True, choices=all_languages, help="language to build")
-#parser.add_argument('--language', type=str, required=True, help="language to build")
+#parser.add_argument('--language', type=str, required=True, choices=all_languages, help="language to build")
+parser.add_argument('--language', type=str, required=True, help="language to build")
 parser.add_argument('--repo', type=str, required=True, help="repo with source")
 parser.add_argument('--commit', type=str, default="master", help="commit to apply (ref or branch)")
 parser.add_argument('--variant', type=str, nargs="?", const="", help="Docker image variant (blank for default)")
