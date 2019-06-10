@@ -75,22 +75,17 @@ steps:
   displayName: 'POWERSHELL: Verify deploymet ${{ parameters.language }}Mod ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v3:${{ parameters.test_image }}'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 ${{ parameters.language }}Mod
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-container-running.ps1 ${{ parameters.language }}Mod
   workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'POWERSHELL: Verify that ${{ parameters.language }}Mod is responding'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
-- powershell: $(Horton.FrameworkRoot)/scripts/setup/verify-container-running.ps1 friendMod
+- powershell: $(Horton.FrameworkRoot)/scripts/verify-container-running.ps1 friendMod
   workingDirectory: $(Horton.FrameworkRoot)
   displayName: 'POWERSHELL: Verify that friendMod is responding'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - powershell: |
-    Start-Sleep -s 30
-    Write-Host "######################################Cntr"
-    docker container ps
-    Write-Host "######################################Img"
-    docker image ls
-  
+    Start-Sleep -s 30  
   displayName: 'POWERSHELL: give edgeHub 30 seconds to start up'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
