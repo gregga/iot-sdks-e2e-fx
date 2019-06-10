@@ -20,5 +20,5 @@ if(IsWin32) {
     python $pyscripts/remove_edgehub_device.py
 }
 else {
-    sudo python3 $pyscripts/remove_edgehub_device.py
+    sudo -H -E python3 $pyscripts/remove_edgehub_device.py
 }

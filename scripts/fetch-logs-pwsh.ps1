@@ -97,7 +97,7 @@ if(IsWin32) {
     $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie
 }
 else {
-    $out = sudo python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
+    $out = sudo -H -E python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
 }
 foreach($o in $out) {
     Write-Host $o

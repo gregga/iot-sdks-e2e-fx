@@ -120,9 +120,9 @@ if($foundPy)
     }
     else {
             Write-Host "Installing python 3.6..." -ForegroundColor Yellow
-            sudo add-apt-repository ppa:deadsnakes/ppa        
-            sudo apt update
-            sudo apt install python3.6
+            sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
+            sudo -H -E apt update
+            sudo -H -E apt install python3.6
     }
     if($LASTEXITCODE -eq 0)
     {
@@ -136,9 +136,9 @@ if($foundPy)
 }
 
 if ($IsWin32 -eq $false) {
-    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
-    sudo update-alternatives --set python3 /usr/bin/python3.6
+    sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+    sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+    sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
 }
 
 $gotPip3 = $false
@@ -154,7 +154,7 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
-        sudo apt-get install pip
+        sudo -H -E apt-get install pip
     }
     if($LASTEXITCODE -eq 0)
     {
@@ -174,7 +174,7 @@ if($gotPip3) {
         python -m pip install --upgrade pip
     }
     else {
-        python3 -m pip install --upgrade pip
+        sudo -H -E python3 -m pip install --upgrade pip
     }
     if($LASTEXITCODE -eq 0)
     {
@@ -198,9 +198,9 @@ if($IsWin32) {
     python -m pip install ruamel
 }
 else{
-    sudo python3 -m pip install  setuptools
-    sudo python3 -m pip install -e python_glue
-    sudo -python3 -m pip install ruamel
+    sudo -H -E python3 -m pip install  setuptools
+    sudo -H -E python3 -m pip install -e python_glue
+    sudo -H -E -python3 -m pip install ruamel
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -219,10 +219,10 @@ if($IsWin32) {
     python -m pip install colorama
 }
 else{
-    sudo python3 -m pip install docker
-    sudo python3 -m pip install docker-py
-    sudo python3 -m pip install docker-compose
-    sudo python3 -m pip install colorama
+    sudo -H -E python3 -m pip install docker
+    sudo -H -E python3 -m pip install docker-py
+    sudo -H -E python3 -m pip install docker-compose
+    sudo -H -E python3 -m pip install colorama
 }
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
@@ -251,7 +251,7 @@ if($IsWin32) {
     python -m pip install -r requirements.txt
 }
 else{
-    sudo python3 -m pip install -r requirements.txt
+    sudo -H -E python3 -m pip install -r requirements.txt
 }
 if($LASTEXITCODE -eq 0)
 {

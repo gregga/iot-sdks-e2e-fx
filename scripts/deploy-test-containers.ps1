@@ -31,6 +31,6 @@ if(IsWin32) {
     python $pyscripts/deploy_test_containers.py --friend --$lang $container_name
 }
 else {
-    sudo python3 $pyscripts/deploy_test_containers.py --friend --$lang $container_name
+    sudo -H -E python3 $pyscripts/deploy_test_containers.py --friend --$lang $container_name
 }
 

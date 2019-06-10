@@ -35,6 +35,6 @@ if(IsWin32) {
 }
 else {
     #sudo -H -E python3 -m pip install -e $hh
-    sudo python3 $pyscripts/create_new_edgehub_device.py
-    sudo systemctl restart iotedge
+    sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
+    sudo -H -E systemctl restart iotedge
 }
