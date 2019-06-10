@@ -25,8 +25,6 @@ class InjectIntoJunit:
 
         junit_path = arguments.junit_file[0]
         merge_log_path = arguments.log_file[0]
-        #junit_path = junit_file
-        #merge_log_path = log_file
         junit_base_path = junit_path.lower().split(".xml")
         junit_save_path = junit_base_path[0] + "_MERGED.xml"
 
