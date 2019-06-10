@@ -17,7 +17,6 @@ $pyscripts = Join-Path -Path $root_dir -ChildPath '/pyscripts' -Resolve
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
@@ -29,16 +28,16 @@ $edge_cert = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
 #export IOTHUB_E2E_EDGEHUB_CA_CERT=$(sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0)
 
 if(IsWin32 -eq $false) {
-    $cert_path = Join-Path -Path "/var/lib/iotedge/hsm/certs" -ChildPath "edge_owner_ca*.pem" -Resolve
-    if (Test-Path $cert_path) {
-        #$cert_text  = Get-Content $cert_path
-        $cert_text = sudo python3 $pyscripts/get_environment_variables.py "raw" $cert_path
-        $Bytes = [System.Text.Encoding]::Unicode.GetBytes($cert_text)
-        $EncodedText =[Convert]::ToBase64String($Bytes)
-        $EncodedText
-        if( "$EncodedText" -ne "") {
-            Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
-        }
+    #$cert_path = Join-Path -Path "/var/lib/iotedge/hsm/certs" -ChildPath "edge_owner_ca*.pem" -Resolve
+    #if (Test-Path $cert_path) {
+    #    #$cert_text  = Get-Content $cert_path
+    #    $cert_text = sudo python3 $pyscripts/get_environment_variables.py "raw" $cert_path
+    #    $Bytes = [System.Text.Encoding]::Unicode.GetBytes($cert_text)
+    #    $EncodedText =[Convert]::ToBase64String($Bytes)
+    $EncodedText = sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+    if( "$EncodedText" -ne "") {
+        Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
+    
     }
 }
 
