@@ -28,8 +28,4 @@ else {
     sudo pip install --upgrade setuptools
     sudo apt-get install -y iotedge
     sudo chmod 666 /etc/iotedge/config.yaml
-
-    sudo -H -E pip install --upgrade setuptools
-    sudo -H -E apt-get install -y iotedge
-    sudo -H -E chmod 666 /etc/iotedge/config.yaml
 }

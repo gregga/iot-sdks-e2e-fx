@@ -29,5 +29,5 @@ Param
         sudo python3 $pyscripts/ensure-container.py $container_name
     }
     
-sudo -H -E python3 $pyscripts/ensure-container.py $container_name
+sudo python3 $pyscripts/ensure-container.py $container_name
 

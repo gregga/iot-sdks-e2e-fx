@@ -16,28 +16,17 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 set-location $root_dir
-
 $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 $pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
     return $false
 }
-
-$horton_user = $env:IOTHUB_E2E_REPO_USER
-$horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
-$horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS
-
-# export to global ENV
-Set-Item "env:IOTHUB-E2E-REPO-USER" $horton_user
-Set-Item "env:IOTHUB-E2E-REPO-PASSWORD" $horton_pw
-Set-Item "env:IOTHUB-E2E-REPO-ADDRESS" $horton_repo
 
 if(IsWin32) {
     #python -m pip install -e $hh
@@ -46,6 +35,6 @@ if(IsWin32) {
 }
 else {
     #sudo -H -E python3 -m pip install -e $hh
-    sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
-    sudo -H -E  systemctl restart iotedge
+    sudo python3 $pyscripts/create_new_edgehub_device.py
+    sudo systemctl restart iotedge
 }

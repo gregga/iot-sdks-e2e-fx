@@ -19,7 +19,6 @@ $pyscripts = Join-Path -Path $root_dir -ChildPath '/pyscripts' -Resolve
 function IsWin32 {
     if("$env:OS" -ne "") {
         if ($env:OS.Indexof('Windows') -ne -1) {
-            #Write-Host "IsWin32" -ForegroundColor Yellow
             return $true
         }
     }
@@ -32,6 +31,6 @@ if(IsWin32) {
     python $pyscripts/deploy_test_containers.py --friend --$lang $container_name
 }
 else {
-    sudo -H -E python3 $pyscripts/deploy_test_containers.py --friend --$lang $container_name
+    sudo python3 $pyscripts/deploy_test_containers.py --friend --$lang $container_name
 }
 
