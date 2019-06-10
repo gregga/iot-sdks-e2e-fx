@@ -120,11 +120,10 @@ if($foundPy)
     }
     else {
             Write-Host "Installing python 3.6..." -ForegroundColor Yellow
-            sudo -H -E sudo add-apt-repository ppa:deadsnakes/ppa        
-            sudo -H -E apt update
-            sudo -H -E apt install python3.6
+            sudo add-apt-repository ppa:deadsnakes/ppa        
+            sudo apt update
+            sudo apt install python3.6
     }
-
     if($LASTEXITCODE -eq 0)
     {
         Write-Host "python3.6 installed successfully" -ForegroundColor Green
@@ -132,7 +131,7 @@ if($foundPy)
     else 
     {
         Write-Host "python install failed"  -ForegroundColor Red
-        exit 1
+        #exit 1
     }
 }
 
@@ -140,10 +139,6 @@ if ($IsWin32 -eq $false) {
     sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
     sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
     sudo update-alternatives --set python3 /usr/bin/python3.6
-    $out = python3 -V
-    foreach($o in $out){
-        Write-Host $o -ForegroundColor Magenta
-    }
 }
 
 $gotPip3 = $false
@@ -156,40 +151,30 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
         python -m ensurepip
         #$out = sudo apt-get install -y; if ($LASTEXITCODE -ne 0) { $out }
         #$out = sudo apt-get install -y pip setuptools wheel
-        if($LASTEXITCODE -eq 0)
-        {
-            Write-Host "pip3 installed successfully" -ForegroundColor Green
-            $gotPip3 = $true
-        } 
-        else 
-        {
-            Write-Host "pip3 install failed"  -ForegroundColor Red
-            #exit 1
-        }
     }
     else {
         Write-Host "Installing pip3..." -ForegroundColor Yellow
         sudo apt-get install pip
-        if($LASTEXITCODE -eq 0)
-        {
-            Write-Host "pip3 installed successfully" -ForegroundColor Green
-            $gotPip3 = $true
-        } 
-        else 
-        {
-            Write-Host "pip3 install failed"  -ForegroundColor Red
-            exit 1
-        }
+    }
+    if($LASTEXITCODE -eq 0)
+    {
+        Write-Host "pip3 installed successfully" -ForegroundColor Green
+        $gotPip3 = $true
+    } 
+    else 
+    {
+        Write-Host "pip3 install failed"  -ForegroundColor Red
+        #exit 1
     }
 }
 
 if($gotPip3) {
     Write-Host "Updating pip" -ForegroundColor Yellow
     if($IsWin32) {
-        python -m pip install --user --upgrade pip
+        python -m pip install --upgrade pip
     }
     else {
-        python3 -m pip install --user --upgrade pip
+        python3 -m pip install --upgrade pip
     }
     if($LASTEXITCODE -eq 0)
     {
@@ -200,61 +185,22 @@ if($gotPip3) {
         Write-Host "pip update failed"  -ForegroundColor Red
         #exit 1
     }
-
-    Write-Host "Updating Pip3" -ForegroundColor Yellow 
-    if($IsWin32) {
-        python -m pip install -y --upgrade pip3
-    }
-    else{
-        python3.6 -m pip install -y --upgrade pip3
-    }
-    if($LASTEXITCODE -eq 0)
-    {
-        Write-Host "pip3 updated successfully" -ForegroundColor Green
-    } 
-    else 
-    {
-        Write-Host "pip3 updated failed"  -ForegroundColor Red
-        #exit 1
-    }
 }
 
-$out = ls /usr/bin/python*
-foreach($o in $out){
-    Write-Host $o -ForegroundColor Yellow
-}
-
-Write-Host "Installing pip3 libraries" -ForegroundColor Yellow
-if($IsWin32) {
-    python -m ensurepip
-    python -m pip install --user --upgrade pip
-}
-else{
-    sudo -H -E apt install -y python3-pip
-    sudo -H -E python3.6 -m pip install --user --upgrade pip
-}
-if($LASTEXITCODE -eq 0)
-{
-    Write-Host "python3-pip Success" -ForegroundColor Green
-} 
-else 
-{
-    Write-Host "python3-pip FAIL"  -ForegroundColor Red
-    #exit 1
-}
+ls /usr/bin/python*
 
 Write-Host "Installing python libraries" -ForegroundColor Yellow
 set-location "$root_dir/ci-wrappers/pythonpreview/wrapper"
 
 if($IsWin32) {
-    python -m pip install --user setuptools
-    python -m pip install --user -e python_glue
-    python -m pip install --user ruamel
+    python -m pip install setuptools
+    python -m pip install -e python_glue
+    python -m pip install ruamel
 }
 else{
-    sudo -H -E python3.6 -m pip install --user setuptools
-    sudo -H -E python3.6 -m pip install --user -e python_glue
-    sudo -H -E python3.6 -m pip install --user ruamel
+    sudo python3 -m pip install  setuptools
+    sudo python3 -m pip install -e python_glue
+    sudo -python3 -m pip install ruamel
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -266,33 +212,27 @@ else
     #exit 1
 }
 
-#if($IsWin32) {
-#    python -m pip uninstall -y docker
-#    python -m pip uninstall -y docker-py
-#    python -m pip uninstall -y docker-compose
-#    python -m pip install docker
-#    python -m pip install docker-py
-#    python -m pip install docker-compose
-#    python -m pip install colorama
-#}
-#else{
-#    sudo -H -E python3 -m pip uninstall -y docker
-#    sudo -H -E python3 -m pip uninstall -y docker-py
-#    sudo -H -E python3 -m pip uninstall -y docker-compose
-#    sudo -H -E python3 -m pip install docker
-#    sudo -H -E python3 -m pip install docker-py
-#    sudo -H -E python3 -m pip install docker-compose
-#    sudo -H -E python3 -m pip install colorama
-#}
+if($IsWin32) {
+    python -m pip install docker
+    python -m pip install docker-py
+    python -m pip install docker-compose
+    python -m pip install colorama
+}
+else{
+    sudo python3 -m pip install docker
+    sudo python3 -m pip install docker-py
+    sudo python3 -m pip install docker-compose
+    sudo python3 -m pip install colorama
+}
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
 set-location $root_dir
 
 if($IsWin32) {
-    python -m pip install --user -e horton_helpers
+    python -m pip install -e horton_helpers
 }
 else{
-    sudo -H -E python3.6 -m pip install --user -e horton_helpers
+    sudo python3 -m pip install -e horton_helpers
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -301,17 +241,17 @@ if($LASTEXITCODE -eq 0)
 else 
 {
     Write-Host "horton_helpers install failed"  -ForegroundColor Red
-    exit 1
+    #exit 1
 }
 
 Write-Host "Installing requirements for Horton test runner" -ForegroundColor Yellow
 set-location $root_dir/test-runner
 
 if($IsWin32) {
-    python -m pip install --user -r requirements.txt
+    python -m pip install -r requirements.txt
 }
 else{
-    sudo -H -E python3.6 -m pip install --user -r requirements.txt
+    sudo python3 -m pip install -r requirements.txt
 }
 if($LASTEXITCODE -eq 0)
 {
@@ -320,7 +260,7 @@ if($LASTEXITCODE -eq 0)
 else 
 {
     Write-Host "Horton test runner install failed"  -ForegroundColor Red
-    exit 1
+    #exit 1
 }
 
 Write-Host "Python3 and Python libraries installed successfully" -ForegroundColor Green
