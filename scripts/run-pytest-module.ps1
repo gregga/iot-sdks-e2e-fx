@@ -74,7 +74,7 @@ if("$cert_val" -ne "") {
     
 }
 else {
-    Write-Host "NULL XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
+    Write-Host "(NULL) XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
 }
 
 $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
