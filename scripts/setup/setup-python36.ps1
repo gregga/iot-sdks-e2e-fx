@@ -226,8 +226,8 @@ else{
     sudo -H -E python3 -m pip install colorama
 
     # restart docker
-    sudo -H -E docker-machine restart default
-    sudo -H -E eval $(docker-machine env default)
+    #sudo -H -E docker-machine restart default
+    #sudo -H -E eval $(docker-machine env default)
 }
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
