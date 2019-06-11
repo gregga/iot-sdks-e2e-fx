@@ -11,23 +11,12 @@ Param
     [string]$log_folder_name
 )
 
-$path = $MyInvocation.MyCommand.Path
-if (!$path) {$path = $psISE.CurrentFile.Fullpath}
-if ( $path) {$path = split-path $path -Parent}
-set-location $path
+. ./pwsh-helpers.ps1
+$path = CurrentPath
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $junit_file = "$build_dir/TEST-$log_folder_name.xml".Trim()
-
-function IsWin32 {
-    if("$env:OS" -ne "") {
-        if ($env:OS.Indexof('Windows') -ne -1) {
-            return $true
-        }
-    }
-    return $false
-}
-
 $resultsdir="$build_dir/results/logs/$log_folder_name"
+
 if( -Not (Test-Path -Path $resultsdir ) )
 {
     New-Item -ItemType directory -Path $resultsdir
@@ -72,13 +61,8 @@ $out = @()
 Write-Host "merging logs for $modlist" -ForegroundColor Green
 Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 
-if(IsWin32) {
-    Write-Host "docker_log_processor: [$arglist]" -ForegroundColor Yellow
-    $out = python ${root_dir}/pyscripts/docker_log_processor.py $arglist
-}
-else {
-    $out = python3 ${root_dir}/pyscripts/docker_log_processor.py $arglist
-}
+$py = PyCmd "${root_dir}/pyscripts/docker_log_processor.py $arglist"; $out = Invoke-Expression  $py
+
 if ($LASTEXITCODE -ne 0) {
     Write-Host "error merging logs" -ForegroundColor Red
     Write-Host $out
@@ -89,19 +73,11 @@ else {
 }
 
 set-location $resultsdir
-Write-Host "injecting merged.log into junit" -ForegroundColor Green
 $log_file = "$resultsdir/merged.log"
-Write-Host "###${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
+Write-Host "injecting merged.log into junit" -ForegroundColor Green
+Write-Host "{root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
-if(IsWin32) {
-    $out = python ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie
-}
-else {
-    $out = sudo -H -E python3 ${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file
-}
-foreach($o in $out) {
-    Write-Host $o
-}
+$py = PyCmd "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie"; $out = Invoke-Expression  $py
 
 $files = Get-ChildItem "$build_dir/TEST-*" | Where-Object { !$_.PSIsContainer }
 if($files) {

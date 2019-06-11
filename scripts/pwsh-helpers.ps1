@@ -19,4 +19,11 @@ function PyCmd($py_cmd) {
     }
 }
 
+function CurrentPath {
+    $path = $MyInvocation.MyCommand.Path
+    if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+    if ( $path) {$path = split-path $path -Parent}
+    return $path
+
+}
 

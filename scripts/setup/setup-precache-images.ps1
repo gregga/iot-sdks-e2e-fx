@@ -24,10 +24,6 @@ Param
     [string]$image_friendmod="4"
 )
 
-$horton_user = $env:IOTHUB_E2E_REPO_USER
-$horton_pw = $env:IOTHUB_E2E_REPO_PASSWORD
-$horton_repo = $env:IOTHUB_E2E_REPO_ADDRESS
-
 Write-Host "######################################"
 Write-Host "pull: :$repo_name/$language-e2e-v3:$test_image" + ":"
 Write-Host "image_edgeagent: $image_edgeagent"
@@ -35,7 +31,7 @@ Write-Host "image_edgehub: $image_edgehub"
 Write-Host "image_friendmod: $image_friendmod"
 Write-Host "######################################"
 
-docker login -u $horton_user -p $horton_pw $horton_repo
+docker login -u $env:IOTHUB_E2E_REPO_USER -p $env:IOTHUB_E2E_REPO_PASSWORD $env:IOTHUB_E2E_REPO_ADDRESS
 docker pull $repo_name/$language-e2e-v3:$test_image
 docker pull $image_edgeagent
 docker pull $image_edgehub

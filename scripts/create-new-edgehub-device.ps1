@@ -11,30 +11,23 @@ Param
     [string]$arg2=""
 )
 
-$path = $MyInvocation.MyCommand.Path
-if (!$path) {$path = $psISE.CurrentFile.Fullpath}
-if ( $path) {$path = split-path $path -Parent}
-$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-set-location $root_dir
-$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
+. ./pwsh-helpers.ps1
+$path = CurrentPath
 $pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 
-function IsWin32 {
-    if("$env:OS" -ne "") {
-        if ($env:OS.Indexof('Windows') -ne -1) {
-            return $true
-        }
-    }
-    return $false
-}
+#$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 
 if(IsWin32) {
     #python -m pip install -e $hh
-    python $pyscripts/create_new_edgehub_device.py
+    #python $pyscripts/create_new_edgehub_device.py
+    $py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
     #python $pyscripts/deploy_test_containers.py
 }
 else {
+    #SLYDBG ??
     #sudo -H -E python3 -m pip install -e $hh
-    sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
+
+    #sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
+    $py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
     sudo -H -E systemctl restart iotedge
 }

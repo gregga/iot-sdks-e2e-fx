@@ -12,15 +12,7 @@ Param
     [string]$image_name=""
 )
 
-function IsWin32 {
-    if("$env:OS" -ne "") {
-        if ($env:OS.Indexof('Windows') -ne -1) {
-            #Write-Host "IsWin32" -ForegroundColor Yellow
-            return $true
-        }
-    }
-    return $false
-}
+. ./pwsh-helpers.ps1
 
 if( "$container_name" -eq "" -or "$image_name" -eq "") {
     Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
@@ -28,26 +20,17 @@ if( "$container_name" -eq "" -or "$image_name" -eq "") {
     exit 1
 }
 
-Write-Host "######################################Cntr"
-docker container ps
-Write-Host "######################################Img"
-docker image ls
-Write-Host "######################################"
-Write-Host "image_name: $image_name"
-Write-Host "container_name: $container_name"
-Write-Host "######################################"
-
 $expectedImg = ""
 $actualImg = ""
 $expectedImg = ""
 $running = $true
 $out_progress = "."
 $expectedImg = ""
-#2>stderr.txt
+
 #$container_name = $container_name.ToLower()
 Write-Host "getting image ID for Image:($image_name) Container:($container_name)" -ForegroundColor Green
 
-foreach($i in 1..47) {
+foreach($i in 1..37) {
 
     if("$out_progress" -eq ".") {
         Write-Host "calling docker inspect ($image_name)" -ForegroundColor Green
@@ -93,15 +76,5 @@ foreach($i in 1..47) {
     $out_progress += "."
     Start-Sleep -s 10    
 }
-
-Write-Host  "container $container_name deployment failed" -ForegroundColor Red
-Write-Host "######################################Cntr"
-docker container ps
-Write-Host "######################################Img"
-docker image ls
-Write-Host "######################################"
-Write-Host "image_name: $image_name"
-Write-Host "container_name: $container_name"
-Write-Host "######################################"
 
 exit 1
