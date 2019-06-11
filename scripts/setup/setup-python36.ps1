@@ -214,13 +214,13 @@ else
 
 if($IsWin32) {
     python -m pip install docker
-    python -m pip install docker-py
+    #python -m pip install docker-py
     python -m pip install docker-compose
     python -m pip install colorama
 }
 else{
     sudo -H -E python3 -m pip install docker
-    sudo -H -E python3 -m pip install docker-py
+    #sudo -H -E python3 -m pip install docker-py
     sudo -H -E python3 -m pip install docker-compose
     sudo -H -E python3 -m pip install colorama
 }
