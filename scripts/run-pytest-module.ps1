@@ -25,8 +25,10 @@ Param
     [string]$test_extra_args=""
 )
 
-. ./pwsh-helpers.ps1
-$path = CurrentPath
+$path = $MyInvocation.MyCommand.Path
+if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+if ( $path) {$path = split-path $path -Parent}
+. $path/pwsh-helpers.ps1
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 

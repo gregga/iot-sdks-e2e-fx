@@ -7,8 +7,10 @@ Param
     [string]$arg1
 )
 
-. ./pwsh-helpers.ps1
-$path = CurrentPath
+$path = $MyInvocation.MyCommand.Path
+if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+if ( $path) {$path = split-path $path -Parent}
+. $path/pwsh-helpers.ps1
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath '/pyscripts' -Resolve
 

@@ -12,7 +12,10 @@ Param
     [string]$image_name=""
 )
 
-. ./pwsh-helpers.ps1
+$path = $MyInvocation.MyCommand.Path
+if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+if ( $path) {$path = split-path $path -Parent}
+. $path/pwsh-helpers.ps1
 
 if( "$container_name" -eq "" -or "$image_name" -eq "") {
     Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red

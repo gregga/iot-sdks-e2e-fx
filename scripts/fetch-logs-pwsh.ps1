@@ -11,8 +11,10 @@ Param
     [string]$log_folder_name
 )
 
-. ./pwsh-helpers.ps1
-$path = CurrentPath
+$path = $MyInvocation.MyCommand.Path
+if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+if ( $path) {$path = split-path $path -Parent}
+. $path/pwsh-helpers.ps1
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $junit_file = "$build_dir/TEST-$log_folder_name.xml".Trim()
 $resultsdir="$build_dir/results/logs/$log_folder_name"
