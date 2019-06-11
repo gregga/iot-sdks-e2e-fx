@@ -110,8 +110,9 @@ $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
 set-location $root_dir
 
 $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor)
+$update_py = $true
 
-if($false) {
+if($update_py) {
     if($foundPy)
     {
         Write-Host "Python version not found" -ForegroundColor Red

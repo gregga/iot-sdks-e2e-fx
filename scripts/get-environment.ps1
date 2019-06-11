@@ -58,7 +58,7 @@ if(IsWin32) {
 }
 else {
 #    $out = sudo -H -E python3 $pyscripts/get_environment_variables.py "powershell"
-    $out = sudo -python3 $pyscripts/get_environment_variables.py "powershell"
+    $out = sudo -H -E -python3 $pyscripts/get_environment_variables.py "powershell"
 }
 
 foreach($o in $out) {
