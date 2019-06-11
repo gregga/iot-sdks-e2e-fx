@@ -16,20 +16,11 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
 $pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
+$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 
-#$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
+$py = PyCmd "-m pip install -e $hh"; Invoke-Expression  $py
+$py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
 
-if(IsWin32) {
-    #python -m pip install -e $hh
-    #python $pyscripts/create_new_edgehub_device.py
-    $py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
-    #python $pyscripts/deploy_test_containers.py
-}
-else {
-    #SLYDBG ??
-    #sudo -H -E python3 -m pip install -e $hh
-
-    #sudo -H -E python3 $pyscripts/create_new_edgehub_device.py
-    $py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
+if(IsWin32 -eq $false) {
     sudo -H -E systemctl restart iotedge
 }
