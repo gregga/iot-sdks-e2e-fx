@@ -6,7 +6,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
 $scripts = Join-Path -Path $root_dir -ChildPath 'scripts' -Resolve
-. $scripts/../pwsh-helpers.ps1
+. $scripts/pwsh-helpers.ps1
 
 $py = PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
 $py = PyCmd "-m pip install --upgrade setuptools"; Invoke-Expression  $py
