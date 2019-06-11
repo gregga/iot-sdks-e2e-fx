@@ -8,6 +8,7 @@ import base64
 from pathlib import Path
 from pprint import pprint
 from identity_helpers import ensure_edge_environment_variables
+from service_helper import Helper
 import runtime_config_templates
 import runtime_config_serializer
 from containers import all_containers
@@ -36,6 +37,7 @@ def set_runtime_configuration(scenario, language, transport, local):
 
     # connection string for the IoTHub instance that is hosting your edgeHub instance.
     service_connection_string = os.environ["IOTHUB_E2E_CONNECTION_STRING"]
+    service_helper = Helper(service_connection_string)
 
     # deviceId for your edgeHub instance
     edge_device_id = os.environ["IOTHUB_E2E_EDGEHUB_DEVICE_ID"]
@@ -47,7 +49,6 @@ def set_runtime_configuration(scenario, language, transport, local):
         gateway_host_name = os.environ["IOTHUB_E2E_EDGEHUB_DNS_NAME"]
         gateway_host_suffix = ";GatewayHostName=" + gateway_host_name
         if "IOTHUB_E2E_EDGEHUB_CA_CERT" in os.environ:
-            print("BinaryVal=SLYDBG:" + os.environ["IOTHUB_E2E_EDGEHUB_CA_CERT"][0:12] + "SLYDBG")
             runtime_config.ca_certificate = {
                 "cert": base64.b64decode(
                     os.environ["IOTHUB_E2E_EDGEHUB_CA_CERT"]
@@ -85,8 +86,8 @@ def set_runtime_configuration(scenario, language, transport, local):
     if getattr(runtime_config, "test_module", None):
         runtime_config.test_module.device_id = edge_device_id
         runtime_config.test_module.module_id = container_under_test.module_id
-        runtime_config.test_module.connection_string = (
-            container_under_test.connection_string
+        runtime_config.test_module.connection_string = service_helper.get_module_connection_string(
+            runtime_config.test_module.device_id, runtime_config.test_module.module_id
         )
         if use_gateway_host:
             runtime_config.test_module.connection_string += gateway_host_suffix
@@ -117,9 +118,11 @@ def set_runtime_configuration(scenario, language, transport, local):
     if getattr(runtime_config, "friend_module", None):
         runtime_config.friend_module.device_id = edge_device_id
         runtime_config.friend_module.module_id = all_containers["friend"].module_id
-        runtime_config.friend_module.connection_string = all_containers[
-            "friend"
-        ].connection_string
+        runtime_config.friend_module.connection_string = service_helper.get_module_connection_string(
+            runtime_config.friend_module.device_id,
+            runtime_config.friend_module.module_id,
+        )
+
         if use_gateway_host:
             runtime_config.friend_module.connection_string += gateway_host_suffix
         runtime_config.friend_module.rest_uri = friend_mod_rest_uri

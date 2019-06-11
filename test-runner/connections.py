@@ -18,7 +18,6 @@ def connect_test_module_client():
         current_config.test_module.connection_type
         == runtime_config_templates.ENVIRONMENT
     ):
-        print("SLYDBG: client.connect_from_environment")
         client.connect_from_environment(current_config.test_module.transport)
     else:
         client.connect(
