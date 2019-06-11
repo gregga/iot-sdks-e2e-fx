@@ -111,36 +111,37 @@ set-location $root_dir
 
 $foundPy = SearchForPythonVersion($PythonMinVersionMajor, $PythonMinVersionMinor)
 
-if($foundPy)
-{
-    Write-Host "Python version not found" -ForegroundColor Red
-    if ($IsWin32) {
-        Write-Host "Please install python 3.6 on Windows." -ForegroundColor Red
-        #exit 1
-    }
-    else {
-            Write-Host "Installing python 3.6..." -ForegroundColor Yellow
-            sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
-            sudo -H -E apt update
-            sudo -H -E apt install python3.6
-    }
-    if($LASTEXITCODE -eq 0)
+if($false) {
+    if($foundPy)
     {
-        Write-Host "python3.6 installed successfully" -ForegroundColor Green
-    } 
-    else 
-    {
-        Write-Host "python install failed"  -ForegroundColor Red
-        #exit 1
+        Write-Host "Python version not found" -ForegroundColor Red
+        if ($IsWin32) {
+            Write-Host "Please install python 3.6 on Windows." -ForegroundColor Red
+            #exit 1
+        }
+        else {
+                Write-Host "Installing python 3.6..." -ForegroundColor Yellow
+                sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
+                sudo -H -E apt update
+                sudo -H -E apt install python3.6
+        }
+        if($LASTEXITCODE -eq 0)
+        {
+            Write-Host "python3.6 installed successfully" -ForegroundColor Green
+        } 
+        else 
+        {
+            Write-Host "python install failed"  -ForegroundColor Red
+            #exit 1
+        }
+    }
+
+    if ($IsWin32 -eq $false) {
+        sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+        sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
+        sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
     }
 }
-
-if ($IsWin32 -eq $false) {
-    sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
-    sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
-    sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
-}
-
 $gotPip3 = $false
 $Pip3Path = Which("pip3")
 if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
@@ -215,14 +216,18 @@ else
 if($IsWin32) {
     python -m pip install docker
     #python -m pip install docker-py
-    python -m pip install docker-compose
+    #python -m pip install docker-compose
     python -m pip install colorama
 }
 else{
     sudo -H -E python3 -m pip install docker
     #sudo -H -E python3 -m pip install docker-py
-    sudo -H -E python3 -m pip install docker-compose
+    #sudo -H -E python3 -m pip install docker-compose
     sudo -H -E python3 -m pip install colorama
+
+    # restart docker
+    sudo -H -E docker-machine restart default
+    sudo -H -E eval $(docker-machine env default)
 }
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
