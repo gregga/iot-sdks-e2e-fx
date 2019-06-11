@@ -34,7 +34,7 @@ if(IsWin32 -eq $false) {
     #    $cert_text = sudo python3 $pyscripts/get_environment_variables.py "raw" $cert_path
     #    $Bytes = [System.Text.Encoding]::Unicode.GetBytes($cert_text)
     #    $EncodedText =[Convert]::ToBase64String($Bytes)
-    $EncodedText = sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+    $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
     if( "$EncodedText" -ne "") {
         Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
     
