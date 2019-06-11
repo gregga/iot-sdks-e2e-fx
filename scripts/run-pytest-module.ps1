@@ -39,6 +39,11 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+$scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
+$setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
+
+set-location $setuppath
+setup-python36.ps1
 
 try {
     $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
