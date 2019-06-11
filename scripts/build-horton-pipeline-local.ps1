@@ -122,12 +122,12 @@ Write-Host 'POWERSHELL: Fetch logs' -ForegroundColor Green
 
 scripts/fetch-logs-pwsh.ps1 $lang
 
-try {
-    New-Item -Path $build_dir/results/$log_folder -ItemType Directory
-}
-finally {
-    Write-Host "Nope"
-}
+#try {
+#    New-Item -Path $build_dir/results/$log_folder -ItemType Directory
+#}
+#finally {
+#    Write-Host "Nope"
+#}
 
 #try {
 #    New-Item $xtra_params -type directory
