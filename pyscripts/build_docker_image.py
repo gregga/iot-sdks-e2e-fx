@@ -16,11 +16,6 @@ class BuildDockerImage:
 
         colorama.init(autoreset=True)
 
-        myargs = []
-        for ar in args:
-            print("ar: " + ar)
-            myargs.append(ar)
-
         default_repo = "(Azure/azure-iot-sdk-BLAH)"
         all_languages = ["c", "csharp", "python", "pythonpreview", "node", "java"]
 

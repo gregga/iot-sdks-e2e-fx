@@ -19,35 +19,35 @@ set-location $path
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath 'pyscripts' -Resolve
 
-function IsWin32 {
-    if("$env:OS" -ne "") {
-        if ($env:OS.Indexof('Windows') -ne -1) {
-            return $true
-        }
-    }
-    return $false
-}
+. ./pwsh-helpers.ps1
+
+$py = PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
+$py = PyCmd "-m pip install -r $pyscripts/requirements.txt"; Invoke-Expression  $py
+$py = PyCmd "-m pip install -I docker"; Invoke-Expression  $py
+$py = PyCmd "-m pip install -I colorama"; Invoke-Expression  $py
+
 
 if(IsWin32) {
-    python -m pip install -r $pyscripts/requirements.txt
+    #python -m pip install -r $pyscripts/requirements.txt
     #python -m pip install --upgrade pip
     #python -m pip install -I docker
     #python -m pip install -I colorama     
 }
 else {
-    sudo -H -E python3 -m pip install -r $pyscripts/requirements.txt
+    #sudo -H -E python3 -m pip install -r $pyscripts/requirements.txt
     #sudo -H -E python3 -m pip install --upgrade pip
-    sudo -H -E python3 -m pip install --upgrade pip
+    #sudo -H -E python3 -m pip install --upgrade pip
     #sudo -H -E python3 -m pip install -I docker
-    sudo -H -E python3 -m pip install -I docker
+    #sudo -H -E python3 -m pip install -I docker
     #sudo -H -E python3 -m pip install -I colorama
-    sudo -H -E python3 -m pip install -I colorama
+    #sudo -H -E python3 -m pip install -I colorama
 }
 
 if(IsWin32) {
-    python $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
+    #python $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
 }
 else {
-    sudo -H -E python3 $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
+    #sudo -H -E python3 $pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant
 }
+$py = PyCmd "$pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant"; Invoke-Expression  $py
 
