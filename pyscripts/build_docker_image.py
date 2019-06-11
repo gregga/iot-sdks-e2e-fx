@@ -34,7 +34,7 @@ class BuildDockerImage:
         parser.add_argument(
             "--variant", help="Docker image variant (blank for default)", type=str, nargs="?", const=""
         )
-        args = parser.parse_args(myargs)
+        args = parser.parse_args(args)
 
         if args.repo == default_repo:
             if args.language == "pythonpreview":
