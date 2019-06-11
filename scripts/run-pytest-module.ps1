@@ -40,7 +40,7 @@ if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 $scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
-$setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
+#$setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
 
 #set-location $setuppath
 #setup-python36.ps1
@@ -66,6 +66,10 @@ if(IsWin32 -eq $false) {
     
     }
 }
+
+$cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
+$cert_val = $cert_val.SubString(0,18)
+Write-Host "XOTHUB_E2E_EDGEHUB_CA_CERX($cert_val)" -ForegroundColor Red -BackgroundColor Yellow
 
 set-location $testpath
 write-host "###### pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
