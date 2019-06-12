@@ -22,8 +22,8 @@ if(IsWin32 -eq $false) {
     $py = PyCmd "-m pip install -e $hh"; Invoke-Expression  $py
 }
 
-$py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
+#$py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
 
-if(IsWin32 -eq $false) {
+#if(IsWin32 -eq $false) {
     sudo -H -E systemctl restart iotedge
-}
+#}

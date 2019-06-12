@@ -46,13 +46,13 @@ set-location $root_dir/scripts
 
 ./get-environment.ps1
 
-if(IsWin32 -eq $false) {
+#if(IsWin32 -eq $false) {
     $EncodedText = sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
     if( "$EncodedText" -ne "") {
         Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
     
     }
-}
+#}
 
 $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
 if( "$EncodedText" -ne "") {

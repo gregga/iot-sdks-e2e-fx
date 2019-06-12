@@ -45,9 +45,9 @@ foreach($mod in $modulelist) {
     }
 }
 
-if(IsWin32 -eq $false)  {
+#if(IsWin32 -eq $false)  {
     sudo journalctl -u iotedge -n 500 -e
-}
+#}
 
 $arglist = ""
 $modlist = ""
