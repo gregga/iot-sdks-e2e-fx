@@ -34,9 +34,9 @@ function PyEnvironment-Set {
     #if (!$path) { $path = split-path -Path $MyInvocation.MyCommand.Path -Parent }
     #if (!$path) { $path = split-path -Path $psISE.CurrentFile.Fullpath -Parent }
     $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-    $hh = Join-Path -Path $root_dir -ChildPath '/horton_helpers' -Resolve
-    $py_dir =  Join-Path -Path $root_dir -ChildPath  "/pyscripts" -Resolve
-    $test_dir =  Join-Path -Path $root_dir -ChildPath "/testscripts" -Resolve
+    $hh = Join-Path -Path $root_dir -ChildPath 'horton_helpers' -Resolve
+    $py_dir =  Join-Path -Path $root_dir -ChildPath  "pyscripts" -Resolve
+    $test_dir =  Join-Path -Path $root_dir -ChildPath "test-runner" -Resolve
 
     if($isWin32 -eq $false) {
         sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
@@ -52,7 +52,7 @@ function PyEnvironment-Set {
         $py = PyCmd-Run "-m pip install -e horton_helpers"; Invoke-Expression  $py
         set-location = $test_dir
         $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
-        sudo -H -E python3 -m pip install pytest
+        #sudo -H -E python3 -m pip install pytest
     }
 }
 
