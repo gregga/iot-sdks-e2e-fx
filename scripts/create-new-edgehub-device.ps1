@@ -16,7 +16,7 @@ if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
 $pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
-$hh = Join-Path -Path $path -ChildPath '..horton_helpers' -Resolve
+$hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 
 if(IsWin32 -eq $false) {
     $py = PyCmd "-m pip install -e $hh"; Invoke-Expression  $py
