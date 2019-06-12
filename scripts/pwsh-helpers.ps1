@@ -34,7 +34,7 @@ function PyEnvironment-Set {
     if (!$path) { $path = split-path -Path $MyInvocation.MyCommand.Path -Parent }
     if (!$path) { $path = split-path -Path $psISE.CurrentFile.Fullpath -Parent }
     $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
-    $hh = Join-Path -Path $root_dir -ChildPath 'horton_helpers' -Resolve
+    $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
     if($isWin32 -eq $false) {
         sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
         sudo -H -E apt update
