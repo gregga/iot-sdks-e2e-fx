@@ -68,4 +68,4 @@ if( "$EncodedText" -ne "") {
 
 set-location $testpath
 write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
-$py = PyCmd " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"; Invoke-Expression  $py
+$py = PyCmd " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o"; Invoke-Expression  $py
