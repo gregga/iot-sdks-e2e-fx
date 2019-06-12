@@ -31,8 +31,10 @@ $running = $true
 $out_progress = "."
 $expectedImg = ""
 
-$container_name = $container_name.ToLower()
-$image_name = $image_name.ToLower()
+if($isWin32) {
+    $container_name = $container_name.ToLower()
+    $image_name = $image_name.ToLower()
+}
 Write-Host "getting image ID for Image:($image_name) Container:($container_name)" -ForegroundColor Green
 
 foreach($i in 1..37) {
