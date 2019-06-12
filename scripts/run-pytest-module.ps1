@@ -66,6 +66,8 @@ if( "$EncodedText" -ne "") {
 
 }
 
+set-location $testpath
+write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
 if($isWin32 -eq $false) {
     sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
     sudo -H -E apt update
@@ -73,8 +75,9 @@ if($isWin32 -eq $false) {
     sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
     sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
     sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
+    sudo -H -E python3.6 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o
+}
+else {
+    $py = PyCmd " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o"; Invoke-Expression  $py  
 }
 
-set-location $testpath
-write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
-$py = PyCmd " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o"; Invoke-Expression  $py
