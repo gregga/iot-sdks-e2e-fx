@@ -43,10 +43,11 @@ function PyEnvironment-Set {
         sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
         sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
         sudo -H -E pip install --upgrade pip
-        set-location = $root_dir/testscripts
+        set-location = $root_dir/pyscripts
         $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
-        #$hh = Join-Path -Path $root_dir -ChildPath '../horton_helpers' -Resolve
+        set-location = $root_dir/horton_helpers
         $py = PyCmd-Run "-m pip install -e $hh"; Invoke-Expression  $py
+        set-location = $root_dir/testscripts
         $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
         sudo -H -E python3 -m pip install pytest
     }
