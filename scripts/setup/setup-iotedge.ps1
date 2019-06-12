@@ -11,7 +11,8 @@ $scripts = Join-Path -Path $root_dir -ChildPath 'scripts' -Resolve
 $py = PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
 $py = PyCmd "-m pip install --upgrade setuptools"; Invoke-Expression  $py
 
-if(IsWin32 -eq $false) {
-    sudo apt-get install -y iotedge
-    sudo chmod 666 /etc/iotedge/config.yaml
-}
+#if(IsWin32 -eq $false) {
+    Write-Host "Installing iotedge..." -ForegroundColor Yellow
+    sudo -H -E apt-get install -y iotedge
+    sudo -H -E chmod 666 /etc/iotedge/config.yaml
+#}
