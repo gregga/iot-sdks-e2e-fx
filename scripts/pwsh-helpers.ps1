@@ -19,11 +19,11 @@ function PyCmd-Run($py_cmd) {
     }
 }
 
-function CurrenthPat-Get {
+function CurrenthPath-Get {
     $path = ""
     if (!$path) { $path = $MyInvocation.InvocationName }
-    if (!$path) { $path = split-path $MyInvocation.MyCommand.Path -Parent }
-    if (!$path) { $path = split-path $psISE.CurrentFile.Fullpath -Parent }
+    if (!$path) { $path = split-path -Path $MyInvocation.MyCommand.Path -Parent }
+    if (!$path) { $path = split-path -Path $psISE.CurrentFile.Fullpath -Parent }
     if (!$path) { $path = ($pwd).path }
     return $path
 }
@@ -31,8 +31,8 @@ function CurrenthPat-Get {
 function PyEnvironment-Set {
     $isWin32 = IsWin32
     $path = ($pwd).path
-    if (!$path) { $path = split-path $MyInvocation.MyCommand.Path -Parent }
-    if (!$path) { $path = split-path $psISE.CurrentFile.Fullpath -Parent }
+    if (!$path) { $path = split-path -Path $MyInvocation.MyCommand.Path -Parent }
+    if (!$path) { $path = split-path -Path $psISE.CurrentFile.Fullpath -Parent }
     $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
     $hh = Join-Path -root_dir $path -ChildPath 'horton_helpers' -Resolve
     if($isWin32 -eq $false) {
