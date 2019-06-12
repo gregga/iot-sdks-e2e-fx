@@ -10,7 +10,7 @@ parameters:
   repo_password: $(IOTHUB-E2E-REPO-PASSWORD)
   repo_connect: $(IOTHUB-E2E-CONNECTION-STRING)
 
-#steps:
+steps:
 #- task: UsePythonVersion@0
 #  inputs:
 #    versionSpec: '3.x'
