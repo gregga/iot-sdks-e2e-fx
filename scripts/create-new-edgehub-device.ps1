@@ -39,7 +39,8 @@ else {
         $devNamePos = $o.IndexOf($devTag)
         if($devNamePos -ge 0) {
             $oLen = $o.Length
-            $deviceName = $o.Substring($devNamePos + ($devTagLen - 1), $oLen)
+            $endPos = $oLen - ($devNamePos + $devTagLen)
+            $deviceName = $o.Substring($startPos, $endPos)
             if( "$deviceName" -ne "") {
                 break
             }

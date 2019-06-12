@@ -20,19 +20,20 @@ function PyCmd-Run($py_cmd) {
 }
 
 function CurrenthPat-Get {
-    $path = $MyInvocation.MyCommand.PSScriptRoot
+    $path = ""
     if (!$path) { $path = $MyInvocation.InvocationName }
     if (!$path) { $path = split-path $MyInvocation.MyCommand.Path -Parent }
     if (!$path) { $path = split-path $psISE.CurrentFile.Fullpath -Parent }
     if (!$path) { $path = ($pwd).path }
     return $path
-
 }
 
 function PyEnvironment-Set {
     $isWin32 = IsWin32
-    $path = CurrentPath
-    if($isWin32 -eq $false) {
+    $path = ($pwd).path
+    if (!$path) { $path = split-path $MyInvocation.MyCommand.Path -Parent }
+    if (!$path) { $path = split-path $psISE.CurrentFile.Fullpath -Parent }
+   if($isWin32 -eq $false) {
         sudo -H -E add-apt-repository ppa:deadsnakes/ppa        
         sudo -H -E apt update
         sudo -H -E apt install python3.6
