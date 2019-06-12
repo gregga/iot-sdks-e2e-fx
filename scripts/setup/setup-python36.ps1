@@ -10,7 +10,7 @@ if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
 $scripts = Join-Path -Path $root_dir -ChildPath 'scripts' -Resolve
 . $scripts/pwsh-helpers.ps1
-$isWin32 = IssWin32
+$isWin32 = IsWin32
 
 function CheckVerString([string] $pyVerStr) {
 
