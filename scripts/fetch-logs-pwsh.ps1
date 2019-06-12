@@ -71,6 +71,7 @@ if ($LASTEXITCODE -ne 0) {
     foreach($o in $out) {
         Write-Host $o
     }
+}
 else {
     $out | Out-File $resultsdir/merged.log
     #$Write-Host $out
