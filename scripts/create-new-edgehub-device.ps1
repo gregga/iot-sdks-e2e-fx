@@ -23,8 +23,30 @@ if($isWin32 -eq $false) {
     $py = PyCmd-Run "-m pip install -e $hh"; Invoke-Expression  $py
 }
 
-$py = PyCmd-Run  "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
+$py = PyCmd-Run "$pyscripts/create_new_edgehub_device.py"; $out = Invoke-Expression  $py
+foreach($o in $out) {
+    Write-Host $o
+}
 
 if($isWin32 -eq $false) {
     sudo -H -E systemctl restart iotedge
+}
+else {
+    $devTag = "new edgeHub device created with device_id"
+    $devTagLen = $devTag.Length
+    $deviceName = ""
+    foreach($o in $out) {
+        $devNamePos = $o.IndexOf($devTag)
+        if($devNamePos -ge 0) {
+            $oLen = $o.Length
+            $deviceName = $o.Substring($devNamePos + ($devTagLen - 1), $oLen)
+            if( "$deviceName" -ne "") {
+                break
+            }
+        }
+    }
+    if( "$deviceName" -ne "") {
+        Write-Host "Setting IOTHUB_E2E_EDGEHUB_DEVICE_ID=$deviceName" -ForegroundColor Yellow
+        Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_DEVICE_ID -Value $deviceName
+    }    
 }

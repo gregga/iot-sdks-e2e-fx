@@ -15,6 +15,8 @@ if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath '/pyscripts' -Resolve
+$hh = Join-Path -Path $root_dir -ChildPath '/horton_helpers' -Resolve
+$Env:Path += "$hh"
 
 Write-Host "deploy_test_container.py --friend --$lang $container_name" -ForegroundColor Yellow
 

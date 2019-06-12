@@ -56,8 +56,7 @@ if($isWin32 -eq $false) {
     if( "$env:IOTHUB_E2E_EDGEHUB_CA_CERT" -eq "") {
         $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
         if( "$EncodedText" -ne "") {
-            Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
-            }
+                Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
         }
     }
 }

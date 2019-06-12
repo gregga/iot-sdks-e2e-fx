@@ -68,8 +68,9 @@ $py = PyCmd-Run "${root_dir}/pyscripts/docker_log_processor.py $arglist"; $out =
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "error merging logs" -ForegroundColor Red
-    Write-Host $out
-}
+    foreach($o in $out) {
+        Write-Host $o
+    }
 else {
     $out | Out-File $resultsdir/merged.log
     #$Write-Host $out
@@ -81,6 +82,9 @@ Write-Host "injecting merged.log into junit" -ForegroundColor Green
 Write-Host "{root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
 $py = PyCmd-Run "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie"; $out = Invoke-Expression  $py
+foreach($o in $out) {
+    Write-Host $o
+}
 
 $files = Get-ChildItem "$build_dir/TEST-*" | Where-Object { !$_.PSIsContainer }
 if($files) {

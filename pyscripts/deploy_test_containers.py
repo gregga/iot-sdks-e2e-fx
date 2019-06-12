@@ -6,9 +6,6 @@
 
 import os
 import sys
-scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
-os.chdir(scriptPath)
-sys.path.append("../horton_helpers")
 import string
 import argparse
 from identity_helpers import ensure_edge_environment_variables
