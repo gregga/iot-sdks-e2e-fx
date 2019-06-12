@@ -32,6 +32,11 @@ if ( $path) {$path = split-path $path -Parent}
 $isWin32 = IsWin32
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+$scriptpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+$setuppath = Join-Path -scriptpath $path -ChildPath 'setup' -Resolve
+
+set-location $setuppath
+setup-python36.ps1
 
 try {
     $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
