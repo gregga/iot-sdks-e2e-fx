@@ -35,8 +35,8 @@ $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 $scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
 $setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
 
-set-location $setuppath
-& ./setup-python36.ps1
+#set-location $setuppath
+#& ./setup-python36.ps1
 
 try {
     $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
@@ -50,20 +50,13 @@ catch {
 
 set-location $root_dir/scripts
 
-./get-environment.ps1
+#./get-environment.ps1
 
 if($isWin32 -eq $false) {
-    $EncodedText = sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+    $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
     if( "$EncodedText" -ne "") {
         Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
-    
-    }
-}
-
-$EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
-if( "$EncodedText" -ne "") {
-    Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
-
+        }
 }
 
 set-location $testpath
@@ -75,6 +68,7 @@ if($isWin32 -eq $false) {
     sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
     sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
     sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
+    sudo -H -E pip install --upgrade pip
     $py = PyCmd "-m pip install -r requirements.txt"; Invoke-Expression  $py
     sudo -H -E python3 -m pip install pytest
     sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o
