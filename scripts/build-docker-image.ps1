@@ -20,10 +20,10 @@ if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath 'pyscripts' -Resolve
 
-$py = PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
-$py = PyCmd "-m pip install -r $pyscripts/requirements.txt"; Invoke-Expression  $py
-$py = PyCmd "-m pip install -I docker"; Invoke-Expression  $py
-$py = PyCmd "-m pip install -I colorama"; Invoke-Expression  $py
+$py = Run-PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
+$py = Run-PyCmd "-m pip install -r $pyscripts/requirements.txt"; Invoke-Expression  $py
+$py = Run-PyCmd "-m pip install -I docker"; Invoke-Expression  $py
+$py = Run-PyCmd "-m pip install -I colorama"; Invoke-Expression  $py
 
-$py = PyCmd "$pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant"; Invoke-Expression  $py
+$py = Run-PyCmd "$pyscripts/build_docker_image.py --language $language --repo $repo --commit $commit --variant $variant"; Invoke-Expression  $py
 

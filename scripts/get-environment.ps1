@@ -35,7 +35,7 @@ else {
 }
 
 $out = @()
-$py = PyCmd "$pyscripts/get_environment_variables.py powershell"; $out = Invoke-Expression  $py
+$py = Run-PyCmd "$pyscripts/get_environment_variables.py powershell"; $out = Invoke-Expression  $py
 
 foreach($o in $out) {
     $var_name,$var_value = $o.split('=')

@@ -18,5 +18,5 @@ $pyscripts = Join-Path -Path $root_dir -ChildPath '/pyscripts' -Resolve
 
 Write-Host "deploy_test_container.py --friend --$lang $container_name" -ForegroundColor Yellow
 
-$py = PyCmd "$pyscripts/deploy_test_containers.py --friend --$lang $container_name"; Invoke-Expression  $py
+$py = Run-PyCmd "$pyscripts/deploy_test_containers.py --friend --$lang $container_name"; Invoke-Expression  $py
 
