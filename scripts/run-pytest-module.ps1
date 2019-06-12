@@ -28,7 +28,7 @@ Param
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path -Path $path -Parent}
-Set-Location = $path
+Set-Location $path
 . $path/pwsh-helpers.ps1
 $isWin32 = IsWin32
 #$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
@@ -66,5 +66,5 @@ PyEnvironment-Set
 
 write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
 set-location $testpath
-$py = PyCmd-Run " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o"; Invoke-Expression  $py  
+$py = PyCmd-Run " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o "; Invoke-Expression  $py  
 
