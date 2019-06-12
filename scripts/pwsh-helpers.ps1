@@ -45,7 +45,7 @@ function PyEnvironment-Set {
         sudo -H -E pip install --upgrade pip
         set-location = $root_dir/pyscripts
         $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
-        set-location = $root_dir/horton_helpers
+        set-location = $hh
         $py = PyCmd-Run "-m pip install -e $hh"; Invoke-Expression  $py
         set-location = $root_dir/testscripts
         $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
