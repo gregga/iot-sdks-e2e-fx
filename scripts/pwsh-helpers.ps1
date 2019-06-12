@@ -42,7 +42,7 @@ function PyEnvironment-Set {
         sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
         sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
         sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
-        sudo -H -E pip install --upgrade pip
+        #sudo -H -E pip install --upgrade pip
         set-location = $root_dir/pyscripts
         $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
         set-location = $hh
