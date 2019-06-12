@@ -32,7 +32,7 @@ if ( $path) {$path = split-path $path -Parent}
 $isWin32 = IsWin32
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
-$scriptpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+$scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
 $setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
 
 set-location $setuppath
