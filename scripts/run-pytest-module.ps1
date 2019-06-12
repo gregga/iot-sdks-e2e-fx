@@ -36,7 +36,7 @@ $scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
 $setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
 
 set-location $setuppath
-setup-python36.ps1
+& ./setup-python36.ps1
 
 try {
     $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
