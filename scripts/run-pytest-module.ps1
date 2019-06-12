@@ -70,6 +70,8 @@ if($isWin32 -eq $false) {
     sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
     sudo -H -E pip install --upgrade pip
     $py = PyCmd "-m pip install -r requirements.txt"; Invoke-Expression  $py
+    $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
+    $py = PyCmd "-m pip install -e $hh"; Invoke-Expression  $py
     sudo -H -E python3 -m pip install pytest
     sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o
 }
