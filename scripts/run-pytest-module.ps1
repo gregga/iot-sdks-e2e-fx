@@ -33,7 +33,7 @@ $isWin32 = IsWin32
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 $scriptpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
-$setuppath = Join-Path -scriptpath $path -ChildPath 'setup' -Resolve
+$setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
 
 set-location $setuppath
 setup-python36.ps1
