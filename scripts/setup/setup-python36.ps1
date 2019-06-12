@@ -10,6 +10,7 @@ if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
 $scripts = Join-Path -Path $root_dir -ChildPath 'scripts' -Resolve
 . $scripts/pwsh-helpers.ps1
+$isWin32 = IssWin32
 
 function CheckVerString([string] $pyVerStr) {
 
@@ -76,7 +77,7 @@ function SearchForPythonVersion()
 }
 
 function which([string]$cmd) {
-    if(IsWin32) {
+    if($isWin32) {
         $cmd += '.exe'
     }
     Write-Host "Looking for $cmd in path..." -ForegroundColor Yellow
@@ -105,7 +106,7 @@ if($update_py) {
     if($foundPy -eq $false)
     {
         Write-Host "Python version not found" -ForegroundColor Red
-        if (IsWin32) {
+        if ($isWin32) {
             Write-Host "Please install python 3.6 on Windows." -ForegroundColor Red
             #exit 1
         }
@@ -126,7 +127,7 @@ if($update_py) {
         }
     }
 
-    if(IsWin32 -eq $true) {
+    if($isWin32 -eq $true) {
         Write-Host "python3.6 installed successfully" -ForegroundColor Green
     } 
     else {
@@ -144,7 +145,7 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
     $py = PyCmd "-m ensurepip"; Invoke-Expression  $py
     $py = PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
 
-    if(IsWin32 -eq $false) {
+    if($isWin32 -eq $false) {
         sudo -H -E apt-get install pip
     }
     if($LASTEXITCODE -eq 0)

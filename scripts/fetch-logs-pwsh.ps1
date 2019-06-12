@@ -15,6 +15,7 @@ $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
+$isWin32 = IsWin32
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $junit_file = "$build_dir/TEST-$log_folder_name.xml".Trim()
 $resultsdir="$build_dir/results/logs/$log_folder_name"
@@ -29,7 +30,7 @@ else {
     New-Item -ItemType directory -Path $resultsdir
 }
 
-if(IsWin32) {
+if($isWin32) {
     #python -m pip install --upgrade pip
     #python -m pip install -I docker
     #python -m pip install -I colorama     
@@ -45,7 +46,7 @@ foreach($mod in $modulelist) {
     }
 }
 
-#if(IsWin32 -eq $false)  {
+#if($isWin32 -eq $false)  {
     sudo journalctl -u iotedge -n 500 -e
 #}
 

@@ -15,15 +15,16 @@ $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
+$isWin32 = IsWin32
 $pyscripts = Join-Path -Path $path -ChildPath '../pyscripts' -Resolve
 $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
 
-if(IsWin32 -eq $false) {
+if($isWin32 -eq $false) {
     $py = PyCmd "-m pip install -e $hh"; Invoke-Expression  $py
 }
 
 #$py = PyCmd "$pyscripts/create_new_edgehub_device.py"; Invoke-Expression  $py
 
-#if(IsWin32 -eq $false) {
+if($isWin32 -eq $false) {
     sudo -H -E systemctl restart iotedge
-#}
+}

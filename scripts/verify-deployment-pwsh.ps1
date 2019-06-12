@@ -16,6 +16,7 @@ $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
+$isWin32 = IsWin32
 
 if( "$container_name" -eq "" -or "$image_name" -eq "") {
     Write-Host "Usage: verify-deployment [container_name] [image_name]" -ForegroundColor Red
@@ -39,7 +40,7 @@ foreach($i in 1..37) {
         Write-Host "calling docker inspect ($image_name)" -ForegroundColor Green
     }
 
-    if(IsWin32) {
+    if($isWin32) {
         $expectedImg = docker image inspect $image_name --format="{{.Id}}"
     }
     else {
@@ -49,7 +50,7 @@ foreach($i in 1..37) {
     if("$expectedImg" -ne "") {
         Write-Host "Got ImageId for ($image_name)=($expectedImg)" -ForegroundColor Blue
         Write-Host "Inspecting Image ($container_name) for .State.Running" -ForegroundColor Green
-        if(IsWin32) {
+        if($isWin32) {
             $running = docker image inspect --format="{{.State.Running}}" $container_name 
         }
         else {
@@ -59,7 +60,7 @@ foreach($i in 1..37) {
         if($running) {
             Write-Host "Container is running.  Checking image" -ForegroundColor Green
 
-            if(IsWin32) {
+            if($isWin32) {
                 $actualImg = docker inspect $container_name --format="{{.Image}}"
             }
             else {

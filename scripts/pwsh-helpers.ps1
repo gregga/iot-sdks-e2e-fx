@@ -11,7 +11,7 @@ function IsWin32 {
 }
 
 function PyCmd($py_cmd) {
-    if(IsWin32) {
+    if($isWin32) {
         return "python $py_cmd"
     }
     else { 

@@ -7,12 +7,13 @@ if ( $path) {$path = split-path $path -Parent}
 $root_dir = Join-Path -Path $path -ChildPath '../..' -Resolve
 $scripts = Join-Path -Path $root_dir -ChildPath 'scripts' -Resolve
 . $scripts/pwsh-helpers.ps1
+$isWin32 = IsWin32
 
 $py = PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
 $py = PyCmd "-m pip install --upgrade setuptools"; Invoke-Expression  $py
 
-#if(IsWin32 -eq $false) {
+if($isWin32 -eq $false) {
     Write-Host "Installing iotedge..." -ForegroundColor Yellow
     sudo -H -E apt-get install -y iotedge
     sudo -H -E chmod 666 /etc/iotedge/config.yaml
-#}
+}

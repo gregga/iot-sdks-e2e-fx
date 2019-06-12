@@ -11,18 +11,19 @@ $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path $path -Parent}
 . $path/pwsh-helpers.ps1
+$isWin32 = IsWin32
 $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath '/pyscripts' -Resolve
 
 $edge_cert = "$env:IOTHUB_E2E_EDGEHUB_CA_CERT"
 
-#if(IsWin32 -eq $false) {
+if($isWin32 -eq $false) {
     $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
     if( "$EncodedText" -ne "") {
         Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
     
     }
-#}
+}
 
 # force re-fetch of the device ID
 #unset IOTHUB_E2E_EDGEHUB_DEVICE_ID
