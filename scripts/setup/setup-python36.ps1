@@ -142,8 +142,8 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
 {
     Write-Host "Pip3 not found" -ForegroundColor Red
     Write-Host "Installing pip3..." -ForegroundColor Yellow
-    $py = Run-PyCmd "-m ensurepip"; Invoke-Expression  $py
-    $py = Run-PyCmd "-m pip install --upgrade pip"; Invoke-Expression  $py
+    $py = PyCmd-Run "-m ensurepip"; Invoke-Expression  $py
+    $py = PyCmd-Run "-m pip install --upgrade pip"; Invoke-Expression  $py
 
     if($isWin32 -eq $false) {
         sudo -H -E apt-get install pip
@@ -184,9 +184,9 @@ if($null -ne $Pip3Path -and $Pip3Path.Length -lt 1)
 Write-Host "Installing python libraries" -ForegroundColor Yellow
 set-location "$root_dir/ci-wrappers/pythonpreview/wrapper"
 
-$py = Run-PyCmd "-m pip install setuptools"; Invoke-Expression  $py
-$py = Run-PyCmd "-m pip install -e python_glue"; Invoke-Expression  $py
-$py = Run-PyCmd "-m pip install ruamel"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install setuptools"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install -e python_glue"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install ruamel"; Invoke-Expression  $py
 if($LASTEXITCODE -eq 0)
 {
     Write-Host "python libraries installed successfully" -ForegroundColor Green
@@ -197,12 +197,12 @@ else
     #exit 1
 }
 
-$py = Run-PyCmd "-m pip install docker"; Invoke-Expression  $py
-$py = Run-PyCmd "-m pip install colorama"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install docker"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install colorama"; Invoke-Expression  $py
 
 Write-Host "Installing horton_helpers" -ForegroundColor Yellow
 set-location $root_dir
-$py = Run-PyCmd "-m pip install -e $root_dir/horton_helpers"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install -e $root_dir/horton_helpers"; Invoke-Expression  $py
 if($LASTEXITCODE -eq 0)
 {
     Write-Host "horton_helpers installed successfully" -ForegroundColor Green
@@ -215,7 +215,7 @@ else
 
 Write-Host "Installing requirements for Horton test runner" -ForegroundColor Yellow
 set-location $root_dir/test-runner
-$py = Run-PyCmd "-m pip install -r requirements.txt"; Invoke-Expression  $py
+$py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
 if($LASTEXITCODE -eq 0)
 {
     Write-Host "Horton test runner installed successfully" -ForegroundColor Green

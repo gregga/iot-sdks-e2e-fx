@@ -10,7 +10,7 @@ function IsWin32 {
     return $false
 }
 
-function Run-PyCmd($py_cmd) {
+function PyCmd-Run($py_cmd) {
     if($isWin32) {
         return "python $py_cmd"
     }
@@ -19,7 +19,7 @@ function Run-PyCmd($py_cmd) {
     }
 }
 
-function CurrentPath {
+function CurrenthPat-Get {
     $path = $MyInvocation.MyCommand.PSScriptRoot
     if (!$path) { $path = $MyInvocation.InvocationName }
     if (!$path) { $path = split-path $MyInvocation.MyCommand.Path -Parent }
@@ -29,7 +29,7 @@ function CurrentPath {
 
 }
 
-function EnsureEnvironment {
+function PyEnvironment-Set {
     $isWin32 = IsWin32
     $path = CurrentPath
     if($isWin32 -eq $false) {
@@ -40,9 +40,9 @@ function EnsureEnvironment {
         sudo -H -E update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
         sudo -H -E update-alternatives --set python3 /usr/bin/python3.6
         sudo -H -E pip install --upgrade pip
-        $py = Run-PyCmd "-m pip install -r requirements.txt"; Invoke-Expression  $py
+        $py = PyCmd-Run "-m pip install -r requirements.txt"; Invoke-Expression  $py
         $hh = Join-Path -Path $path -ChildPath '../horton_helpers' -Resolve
-        $py = Run-PyCmd "-m pip install -e $hh"; Invoke-Expression  $py
+        $py = PyCmd-Run "-m pip install -e $hh"; Invoke-Expression  $py
         sudo -H -E python3 -m pip install pytest
     }
 }
