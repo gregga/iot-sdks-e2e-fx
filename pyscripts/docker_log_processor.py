@@ -19,7 +19,8 @@ import sys
 class DockerLogProcessor:
 
     def __init__(self, args):
-        
+
+        # Parse args     
         parser = argparse.ArgumentParser(description="Docker Log Processor")
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('-staticfile', action='append', nargs='+', help="filename to read from")
@@ -28,8 +29,6 @@ class DockerLogProcessor:
         arguments = parser.parse_args(args)
 
         if arguments.staticfile:
-        #if got_static:
-            #self.process_static_log(static_file.split(), filterfile)
             self.process_static_log(arguments.staticfile, arguments.filterfile)
         else:
             self.queue = Queue()
@@ -38,7 +37,6 @@ class DockerLogProcessor:
             self.watcher_processes = []
 
             for container_name in arguments.modulename:
-            #for container_name in modulename:
                 print("Getting Log for: " + container_name)
                 new_process =  Process(target = self.get_log_from_container, args=(container_name, self.queue))
                 new_process.start()
@@ -208,7 +206,6 @@ class DockerLogProcessor:
         # find the max_name_len of every staticfile filename basename
         for static_filename in static_filenames:
             if static_filename:
-                #base_filename = os.path.basename(static_filename)
                 base_filename = os.path.basename(static_filename[0])
                 name_len = len(base_filename)
                 if name_len > max_name_len:

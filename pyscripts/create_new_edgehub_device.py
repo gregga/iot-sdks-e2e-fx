@@ -4,13 +4,13 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 
-import os
-import sys
 from edgehub_factory import createNewHubInstance
 from connection_string import connection_string_to_sas_token
 from config_yaml import ConfigFile
 from identity_helpers import ensure_edge_environment_variables
 from service_helper import Helper
+import os
+import sys
 
 ensure_edge_environment_variables()
 
@@ -21,7 +21,6 @@ if "IOTHUB_E2E_CONNECTION_STRING" not in os.environ:
     sys.exit(1)
 
 service_connection_string = os.environ["IOTHUB_E2E_CONNECTION_STRING"]
-print("----scs: " + service_connection_string)
 host = connection_string_to_sas_token(service_connection_string)["host"]
 print("Creating new device on hub {}".format(host))
 

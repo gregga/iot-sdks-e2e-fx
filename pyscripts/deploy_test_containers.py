@@ -4,14 +4,14 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 
-import os
-import sys
-import string
-import argparse
 from identity_helpers import ensure_edge_environment_variables
 from connection_string import connection_string_to_sas_token
 from edgehub_factory import useExistingHubInstance
 from containers import all_containers
+import os
+import sys
+import string
+import argparse
 
 ensure_edge_environment_variables()
 
