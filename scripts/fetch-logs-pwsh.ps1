@@ -30,12 +30,6 @@ else {
     New-Item -ItemType directory -Path $resultsdir
 }
 
-if($isWin32) {
-    #python -m pip install --upgrade pip
-    #python -m pip install -I docker
-    #python -m pip install -I colorama     
-}
-
 $languageMod = $langmod + "Mod"
 $modulelist = @( $languageMod, "friendMod", "edgeHub", "edgeAgent")
 foreach($mod in $modulelist) {
@@ -46,9 +40,9 @@ foreach($mod in $modulelist) {
     }
 }
 
-#if($isWin32 -eq $false)  {
+if($isWin32 -eq $false)  {
     sudo journalctl -u iotedge -n 500 -e
-#}
+}
 
 $arglist = ""
 $modlist = ""
@@ -62,7 +56,7 @@ foreach($mod in $modulelist) {
 set-location $resultsdir
 $out = @()
 Write-Host "merging logs for $modlist" -ForegroundColor Green
-Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
+#Write-Host "${root_dir}/pyscripts/docker_log_processor.py $arglist"
 
 $py = PyCmd-Run "${root_dir}/pyscripts/docker_log_processor.py $arglist"; $out = Invoke-Expression  $py
 
@@ -80,7 +74,7 @@ else {
 set-location $resultsdir
 $log_file = "$resultsdir/merged.log"
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
-Write-Host "{root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
+#Write-Host "{root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_file"
 
 $py = PyCmd-Run "${root_dir}/pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $log_fie"; $out = Invoke-Expression  $py
 foreach($o in $out) {

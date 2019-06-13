@@ -23,6 +23,7 @@ if($isWin32 -eq $false) {
     $py = PyCmd-Run "-m pip install -e $hh"; Invoke-Expression  $py
 }
 
+$out = @()
 $py = PyCmd-Run "$pyscripts/create_new_edgehub_device.py"; $out = Invoke-Expression  $py
 foreach($o in $out) {
     Write-Host $o
