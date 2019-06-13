@@ -6,9 +6,6 @@
 
 import os
 import sys
-scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
-os.chdir(scriptPath)
-sys.path.append("../horton_helpers")
 from edgehub_factory import createNewHubInstance
 from connection_string import connection_string_to_sas_token
 from config_yaml import ConfigFile
