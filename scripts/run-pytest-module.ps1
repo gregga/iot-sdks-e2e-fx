@@ -38,7 +38,7 @@ if ( $path) {$path = split-path -Path $path -Parent}
 Set-Location $path
 . $path/pwsh-helpers.ps1
 $isWin32 = IsWin32
-#$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
+$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
 
 try {
@@ -52,7 +52,8 @@ catch {
 }
 set-location $root_dir/scripts
 ./get-environment.ps1
-if(IsWin32 -eq $false) {
+
+if($isWin32 -eq $false) {
     $EncodedText = sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
     if( "$EncodedText" -ne "") {
         Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
@@ -60,7 +61,6 @@ if(IsWin32 -eq $false) {
 }
 
 $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
-
 if("$cert_val" -ne "") {
     $cert_val = $cert_val.SubString(0,18)
     Write-Host "XOTHUB_E2E_EDGEHUB_CA_CERX($cert_val)" -ForegroundColor Red -BackgroundColor Yellow
@@ -68,23 +68,25 @@ if("$cert_val" -ne "") {
 else {
     Write-Host "(NULL) XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
 }
-$EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
-if( "$EncodedText" -ne "") {
-    Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
-}
-$cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
 
-if("$cert_val" -ne "") {
-    $cert_val = $cert_val.SubString(0,18)
-    Write-Host "XOTHUB_E2E_EDGEHUB_CA_CERX($cert_val)" -ForegroundColor Red -BackgroundColor Yellow
-}
-else {
-    Write-Host "NULL XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
-}
+#$EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+#if( "$EncodedText" -ne "") {
+#    Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
+#}
+
+#$cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
+#
+#if("$cert_val" -ne "") {
+#    $cert_val = $cert_val.SubString(0,18)
+#    Write-Host "XOTHUB_E2E_EDGEHUB_CA_CERX($cert_val)" -ForegroundColor Red -BackgroundColor Yellow
+#}
+#else {
+#    Write-Host "NULL XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
+#}
 
 set-location $testpath
 write-host "###### pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
-if(IsWin32) {
+if($isWin32) {
     python -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o
 }
 else {
