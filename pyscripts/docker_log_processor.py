@@ -20,7 +20,7 @@ class DockerLogProcessor:
 
     def __init__(self, args):
 
-        # Parse args     
+        # Parse args
         parser = argparse.ArgumentParser(description="Docker Log Processor")
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument('-staticfile', action='append', nargs='+', help="filename to read from")
