@@ -25,6 +25,13 @@ Param
     [string]$test_extra_args=""
 )
 
+#$path = $MyInvocation.MyCommand.Path
+#if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+#if ( $path) {$path = split-path $path -Parent}
+#$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
+#$testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+#$scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
+
 $path = $MyInvocation.MyCommand.Path
 if (!$path) {$path = $psISE.CurrentFile.Fullpath}
 if ( $path) {$path = split-path -Path $path -Parent}
@@ -33,38 +40,99 @@ Set-Location $path
 $isWin32 = IsWin32
 #$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
-#$scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
-#$setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
 
-#set-location $setuppath
-#& ./setup-python36.ps1
-
-#try {
-#    $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
-#    if("$cert_val" -ne "") {
-#        Write-Host "found IOTHUB_E2E_EDGEHUB_CA_CERT"
-#    }
-#}
-#catch {
-#    Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
-#}
-
-#set-location $root_dir/scripts
-
-#./get-environment.ps1
-
-if($isWin32 -eq $false) {
-    if( "$env:IOTHUB_E2E_EDGEHUB_CA_CERT" -eq "") {
-        $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
-        if( "$EncodedText" -ne "") {
-                Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
-        }
+try {
+    $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
+    if("$cert_val" -ne "") {
+        Write-Host "found IOTHUB_E2E_EDGEHUB_CA_CERT"
+    }
+}
+catch {
+    Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
+}
+set-location $root_dir/scripts
+./get-environment.ps1
+if(IsWin32 -eq $false) {
+    $EncodedText = sudo cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+    if( "$EncodedText" -ne "") {
+        Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
     }
 }
 
-PyEnvironment-Set
+$cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
 
-write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
+if("$cert_val" -ne "") {
+    $cert_val = $cert_val.SubString(0,18)
+    Write-Host "XOTHUB_E2E_EDGEHUB_CA_CERX($cert_val)" -ForegroundColor Red -BackgroundColor Yellow
+}
+else {
+    Write-Host "(NULL) XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
+}
+$EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+if( "$EncodedText" -ne "") {
+    Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
+}
+$cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
+
+if("$cert_val" -ne "") {
+    $cert_val = $cert_val.SubString(0,18)
+    Write-Host "XOTHUB_E2E_EDGEHUB_CA_CERX($cert_val)" -ForegroundColor Red -BackgroundColor Yellow
+}
+else {
+    Write-Host "NULL XOTHUB_E2E_EDGEHUB_CA_CERX" -ForegroundColor Red -BackgroundColor Yellow   
+}
+
 set-location $testpath
-$py = PyCmd-Run " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o "; Invoke-Expression  $py  
+write-host "###### pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
+if(IsWin32) {
+    python -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o
+}
+else {
+    sudo -H -E python3 -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args
+}
 
+
+if($false) {
+    $path = $MyInvocation.MyCommand.Path
+    if (!$path) {$path = $psISE.CurrentFile.Fullpath}
+    if ( $path) {$path = split-path -Path $path -Parent}
+    Set-Location $path
+    . $path/pwsh-helpers.ps1
+    $isWin32 = IsWin32
+    #$root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
+    $testpath = Join-Path -Path $path -ChildPath '../test-runner' -Resolve
+    #$scriptpath = Join-Path -Path $path -ChildPath '../scripts' -Resolve
+    #$setuppath = Join-Path -Path $scriptpath -ChildPath 'setup' -Resolve
+
+    #set-location $setuppath
+    #& ./setup-python36.ps1
+
+    #try {
+    #    $cert_val = $env:IOTHUB_E2E_EDGEHUB_CA_CERT
+    #    if("$cert_val" -ne "") {
+    #        Write-Host "found IOTHUB_E2E_EDGEHUB_CA_CERT"
+    #    }
+    #}
+    #catch {
+    #    Write-Host "NOT found IOTHUB_E2E_EDGEHUB_CA_CERT"
+    #}
+
+    #set-location $root_dir/scripts
+
+    #./get-environment.ps1
+
+    if($isWin32 -eq $false) {
+        if( "$env:IOTHUB_E2E_EDGEHUB_CA_CERT" -eq "") {
+            $EncodedText = sudo -H -E  cat /var/lib/iotedge/hsm/certs/edge_owner_ca*.pem | base64 -w 0
+            if( "$EncodedText" -ne "") {
+                    Set-Item -Path Env:IOTHUB_E2E_EDGEHUB_CA_CERT -Value $EncodedText
+            }
+        }
+    }
+
+    #PyEnvironment-Set
+
+    write-host "pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o $test_extra_args"
+    set-location $testpath
+    $py = PyCmd-Run " -u -m pytest -v --scenario $test_scenario --transport=$test_transport --$test_lang-wrapper --junitxml=$test_junitxml -o $test_o "; Invoke-Expression  $py  
+}
