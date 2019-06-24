@@ -96,7 +96,6 @@ class InjectIntoJunit:
 
         got_start = False
         for log_line in log_lines:
-            log_line = self.filter_esc_to_ascii7(log_line.strip())
             if(got_start == False and log_start_tag in log_line):
                 got_start = True
             if(got_start):
