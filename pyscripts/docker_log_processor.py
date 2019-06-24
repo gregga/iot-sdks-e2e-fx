@@ -162,12 +162,7 @@ class DockerLogProcessor:
 
         all_fields_one = self.split(date_one, delimiters)
         all_fields_two = self.split(date_two, delimiters)
-        #fields_two_len = len(all_fields_two)
-        #if fields_two_len < 1:
-        #    return date_one
-
         for field1 in all_fields_one:
-            #if field1 == all_fields_two[field_count] and field_count != 6 and field_count < fields_two_len:
             if field1 == all_fields_two[field_count]:
                 for _ in field1:
                     time_delta_str += " "
@@ -275,9 +270,6 @@ class DockerLogProcessor:
                                 log_data = ""
                                 num_parts = len(log_line_parts)
 
-                            if log_line_parts:
-                                log_data = ""
- 
                                 # Handle case where more than one timestamp
                                 if num_parts > 2:
                                     for part in range(1, num_parts):    
@@ -285,7 +277,6 @@ class DockerLogProcessor:
                                 else:
                                     if num_parts == 2:
                                         log_data = log_line_parts[1]
-
                                 if num_parts >= 2:
                                     try:
                                         log_time = DockerLogProcessor.format_date_and_time(log_line_parts[0], "%Y-%m-%d %H:%M:%S.%f")
@@ -297,9 +288,9 @@ class DockerLogProcessor:
         # Sort the merged static file lines by timestamp
         loglines.sort(key=lambda x: x.timestamp)
         last_timestamp = datetime.now() + timedelta(days=-364)
+        line_count = 0
 
         # display the results to stdout
-        line_count = 0
         for log_line in loglines:
             logline_timestamp = log_line.timestamp
             if (
@@ -322,7 +313,7 @@ class DockerLogProcessor:
                 + log_line.log_data
             )
             last_timestamp = logline_timestamp
-
+            
             try:
                 print(out_line)
             except Exception:
@@ -373,3 +364,4 @@ class LogLineObject:
 
 if __name__ == "__main__":
     log_processor = DockerLogProcessor(sys.argv[1:])
+    
