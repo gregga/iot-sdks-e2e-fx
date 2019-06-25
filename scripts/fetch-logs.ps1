@@ -21,7 +21,7 @@ $root_dir = Join-Path -Path $path -ChildPath '..' -Resolve
 $pyscripts = Join-Path -Path $root_dir -ChildPath 'pyscripts' -Resolve
 $resultsdir="$build_dir/results/logs/$log_folder_name"
 $junit_file = "$build_dir/TEST-$log_folder_name.xml"
-$ErrorActionPreference = 'SilentlyContinue'
+
 Write-Host "Fetching Logs for $log_folder_name" -ForegroundColor Green
 
 if( -Not (Test-Path -Path $resultsdir ) )
@@ -42,7 +42,6 @@ foreach($mod in $modulelist) {
         $modFile ="$resultsdir/$mod.log"
         $modulefiles += $modFile
         Write-Host "Getting log for $mod" -ForegroundColor Green
-
         Invoke-PyCmd "$pyscripts/get_container_log.py --container $mod" | Set-Content -Path $modFile
     }
 }
@@ -59,6 +58,7 @@ foreach($modFile in $modulefiles) {
     }   
 }
 Invoke-PyCmd "$pyscripts/docker_log_processor.py $arglist" | Set-Content -Path $resultsdir/merged.log
+Get-Content $resultsdir/merged.log
 
 Write-Host "injecting merged.log into junit" -ForegroundColor Green
 Invoke-PyCmd "$pyscripts/inject_into_junit.py -junit_file $junit_file -log_file $resultsdir/merged.log"
