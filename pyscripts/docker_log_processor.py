@@ -316,4 +316,3 @@ class LogLineObject:
 
 if __name__ == "__main__":
     log_processor = DockerLogProcessor(sys.argv[1:])
-    
